@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Equity Research Hub</title>
+  <meta name="description" content="Personal equity research workspace: organize companies, auto-populated financials, searchable typed and handwritten notes with annotations.">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232a78d6'/%3E%3Cpath d='M7 22l6-6 4 4 8-9' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    // apply theme before paint
+    (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {} })();
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="logo"></span><span>Research Hub</span></div>
+      <nav class="nav" aria-label="Main">
+        <a href="#/" data-route="dashboard"></a>
+        <a href="#/companies" data-route="companies"></a>
+        <a href="#/notes" data-route="notes"></a>
+        <a href="#/settings" data-route="settings"></a>
+      </nav>
+      <div class="side-section">
+        <div class="side-title">Pinned</div>
+        <div id="pinned" class="pinned-list"></div>
+      </div>
+      <div class="side-section">
+        <div class="side-title">Tags</div>
+        <div id="tagcloud" class="tagcloud"></div>
+      </div>
+      <div class="side-foot" id="sideFoot"></div>
+    </aside>
+    <div class="main-col">
+      <header class="topbar">
+        <button class="icon-btn only-mobile" id="menuBtn" aria-label="Menu"></button>
+        <div class="search-wrap">
+          <input id="globalSearch" type="search" placeholder="Search companies, notes, annotations…  (press / )" autocomplete="off" aria-label="Search">
+          <div id="searchDrop" class="search-drop" hidden></div>
+        </div>
+        <button class="btn primary" id="addCompanyBtn"></button>
+        <button class="btn" id="newNoteBtn"></button>
+        <button class="icon-btn" id="themeBtn" aria-label="Toggle theme"></button>
+      </header>
+      <main id="main" tabindex="-1"></main>
+    </div>
+  </div>
+  <div id="modalRoot"></div>
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

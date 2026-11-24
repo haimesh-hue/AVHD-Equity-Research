@@ -1,0 +1,13 @@
+# Tickers refreshed automatically by the "Update company data" GitHub Action.
+# One per line (or comma separated). Lines starting with # are ignored.
+# Tip: Settings → "Watchlist for the data Action" in the app gives you the list for your whole library.
+AAPL
+MSFT
+GOOGL
+AMZN
+NVDA
+META
+BRK-B
+COST
+V
+JPM

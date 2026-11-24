@@ -1,0 +1,48 @@
+name: Update company data
+
+on:
+  schedule:
+    - cron: "17 22 * * 1-5"   # weekdays, after the US market close
+  workflow_dispatch:
+    inputs:
+      tickers:
+        description: "Tickers to add to the watchlist and fetch now (comma or space separated, optional)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch SEC filings, financials and prices
+        env:
+          # SEC asks automated clients to identify themselves. Set a repository secret SEC_USER_AGENT
+          # like "Your Name you@example.com"; otherwise a GitHub noreply address is used.
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT || format('Equity Research Hub {0}@users.noreply.github.com', github.repository_owner) }}
+          INPUT_TICKERS: ${{ github.event.inputs.tickers }}
+        run: |
+          if [ -n "$INPUT_TICKERS" ]; then
+            python scripts/update_data.py --add $INPUT_TICKERS
+          else
+            python scripts/update_data.py
+          fi
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git commit -m "Update company data $(date -u +%F)"
+          git push
