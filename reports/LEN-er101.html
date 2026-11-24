@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lennar (LEN) | Equity Research 101</title>
+<style>
+:root{--bg:#f7f6f2;--card:#fff;--ink:#1d1f23;--ink2:#4a4f57;--muted:#7b818a;--line:#e3e1da;--acc:#2c5d8f;--accsoft:#e6eef7;--good:#2e7d4f;--bad:#b23b3b;--warn:#a86b12;--mono:"SF Mono",Menlo,Consolas,monospace}
+@media (prefers-color-scheme:dark){:root{--bg:#15171a;--card:#1d2024;--ink:#eceae4;--ink2:#c3c6cc;--muted:#8b9099;--line:#2e3238;--acc:#7fb0e0;--accsoft:#22313f;--good:#6fc28f;--bad:#e07a7a;--warn:#e0b060}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif}
+header{background:var(--card);border-bottom:1px solid var(--line);padding:22px 20px 14px}
+.wrap{max-width:1080px;margin:0 auto}
+h1{margin:0;font-size:26px;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:16px}
+.kpi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.kpi b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.kpi span{font-size:12px;color:var(--muted)}
+nav{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav a{display:inline-block;padding:10px 12px;font-size:13px;color:var(--ink2);text-decoration:none;border-bottom:2px solid transparent}
+nav a.on{color:var(--acc);border-color:var(--acc)}
+main{padding:18px 16px 60px}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:0 0 16px}
+section h2{margin:0 0 4px;font-size:19px}
+.q{color:var(--muted);font-size:13px;margin:0 0 12px;font-style:italic}
+.read{background:var(--accsoft);border-left:3px solid var(--acc);padding:10px 12px;border-radius:6px;margin:12px 0 0;font-size:14px}
+.read b{color:var(--acc)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto;margin:6px 0}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{font-weight:600;color:var(--ink2);background:var(--bg);font-size:12px}
+td:first-child,th:first-child,td.l,th.l{text-align:left}
+td.cnote,td[colspan]{white-space:normal}
+tr.hl td{background:var(--accsoft);font-weight:600}
+.pos{color:var(--good)}.neg{color:var(--bad)}.na{color:var(--muted)}
+.est{color:var(--warn);font-size:11px;vertical-align:super}
+ul{margin:6px 0;padding-left:20px}li{margin:3px 0}
+.tl{border-left:2px solid var(--line);margin:8px 0 0 6px;padding-left:14px}
+.tl div{position:relative;margin:0 0 8px;font-size:14px}
+.tl div:before{content:"";position:absolute;left:-20px;top:7px;width:9px;height:9px;border-radius:50%;background:var(--acc)}
+.tl b{display:inline-block;min-width:46px}
+.pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--ink2);margin-right:4px}
+.chart{position:relative}
+.chart svg{width:100%;height:auto;display:block}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--card);font-size:12px;padding:5px 8px;border-radius:6px;opacity:0;transition:opacity .1s;white-space:nowrap}
+.ctitle{font-size:13px;font-weight:600;margin:4px 0}
+.cnote{font-size:11px;color:var(--muted)}
+.scen{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:760px){.scen{grid-template-columns:1fr}}
+.sc{border:1px solid var(--line);border-radius:10px;padding:12px}
+.sc h3{margin:0 0 6px;font-size:15px}
+.sc .px{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
+.sc label{display:block;font-size:12px;color:var(--muted);margin-top:8px}
+.sc input[type=range]{width:100%}
+.toggle{font-size:12px;color:var(--ink2);cursor:pointer;user-select:none}
+.foot{font-size:12px;color:var(--ink2)}
+.foot ol{padding-left:18px}
+details summary{cursor:pointer;font-weight:600;font-size:14px}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 12px;font-size:13px;margin:8px 0}
+dt{font-weight:600}dd{margin:0;color:var(--ink2)}
+.disc{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1 id="ttl"></h1>
+  <div class="sub" id="subt"></div>
+  <div class="kpis" id="kpis"></div>
+</div></header>
+<nav><div class="wrap" id="nav"></div></nav>
+<main class="wrap">
+
+<section id="s1"><h2>1. Business overview</h2><p class="q">What does it do, how does it make money, and how did it get here?</p>
+  <div class="grid2">
+    <div>
+      <p id="bizText"></p>
+      <div class="tbl"><table id="segTbl"></table></div>
+    </div>
+    <div><div class="ctitle">Timeline</div><div class="tl" id="timeline"></div></div>
+  </div>
+  <div class="read" id="r1"></div>
+</section>
+
+<section id="s2"><h2>2. Moat</h2><p class="q">Why does it earn its returns, and can competitors copy it?</p>
+  <div class="grid2"><div><div class="ctitle">Real advantages</div><ul id="moatPlus"></ul></div><div><div class="ctitle">What limits the moat</div><ul id="moatMinus"></ul></div></div>
+  <div class="read" id="r2"></div>
+</section>
+
+<section id="s3"><h2>3. Drivers</h2><p class="q">What is revenue made of (volume x price x mix) and which KPIs move it?</p>
+  <div class="tbl"><table id="bridgeTbl"></table></div>
+  <div class="grid2" style="margin-top:10px">
+    <div class="chart" id="chGM"></div>
+    <div class="chart" id="chDel"></div>
+  </div>
+  <div class="tbl"><table id="kpiTbl"></table></div>
+  <div class="read" id="r3"></div>
+</section>
+
+<section id="s4"><h2>4. Earnings report summary: Q3 FY2026 (quarter ended 31 Aug 2026)</h2><p class="q">What did the latest quarter show, and is the business getting better or worse?</p>
+  <div class="ctitle">Headline results ($M except per share)</div>
+  <div class="tbl"><table id="headTbl"></table></div>
+  <div class="ctitle" style="margin-top:14px">Metric scorecard <span class="toggle" id="gwToggle">[ROIC basis: incl. goodwill, click to switch]</span></div>
+  <div class="tbl"><table id="scoreTbl"></table></div>
+  <div class="read" id="r4"></div>
+  <details style="margin-top:12px"><summary>Methodology footnote</summary><div class="foot" id="method"></div></details>
+</section>
+
+<section id="s5"><h2>5. Valuation</h2><p class="q">What is the market paying, versus its own history and peers?</p>
+  <div class="grid2">
+    <div class="tbl"><table id="valTbl"></table></div>
+    <div class="tbl"><table id="histTbl"></table></div>
+  </div>
+  <div class="read" id="r5"></div>
+</section>
+
+<section id="s6"><h2>6. Industry and competitors</h2><p class="q">Is the industry growing, and how does Lennar stack up?</p>
+  <ul id="indList"></ul>
+  <div class="tbl"><table id="peerTbl"></table></div>
+  <div class="cnote" id="peerNote"></div>
+  <div class="read" id="r6"></div>
+</section>
+
+<section id="s7"><h2>7. Management</h2><p class="q">Who runs it, what do they plan, how much do they own, how do they allocate capital?</p>
+  <div class="grid2"><div><dl id="mgmt"></dl></div><div><div class="ctitle">Capital allocation, last 12 months</div><ul id="capAlloc"></ul></div></div>
+  <div class="read" id="r7"></div>
+</section>
+
+<section id="s8"><h2>8. Risks</h2><p class="q">What specifically would break the story?</p>
+  <ul id="risks"></ul>
+  <div class="read" id="r8"></div>
+</section>
+
+<section id="s9"><h2>9. Scenarios: FY2027</h2><p class="q">Bear / base / bull, with analyst consensus as the anchor. Move the sliders to test your own view.</p>
+  <div class="scen" id="scen"></div>
+  <div class="read" id="r9"></div>
+</section>
+
+<section id="s10"><h2>10. Takeaways</h2><p class="q">What to remember and what to check next.</p>
+  <div class="grid2"><div><div class="ctitle">Remember</div><ul id="tk1"></ul></div><div><div class="ctitle">Check next</div><ul id="tk2"></ul></div></div>
+</section>
+
+<section id="s11"><h2>Glossary and sources</h2>
+  <details><summary>Glossary</summary><dl id="gloss"></dl></details>
+  <details style="margin-top:8px" open><summary>Sources</summary><div class="foot"><ol id="srcs"></ol></div></details>
+  <p class="disc" id="disc"></p>
+</section>
+</main>
+
+<script>
+/* =====================================================================
+   DATA SCHEMA
+   meta: company identity, price and as-of date
+   bal:  point-in-time balances ($M): homebuilding debt, homebuilding cash, stockholders' equity
+   periods: raw flows per period ($M; per-share in $). Keys:
+     rev, revPY (same period one year earlier), homeSales, homeCost, ebit (company non-GAAP EBIT =
+     pretax + interest expensed), pretax, tax, ni, eps, epsAdj, ocf, capex, da, sbc, buyback,
+     open/close (balance keys), ann (annualisation factor), est (list of fields that are estimates)
+   Everything else (margins, NOPAT, ROIC, FCF, multiples) is computed below.
+   ===================================================================== */
+const DATA = {
+  meta:{name:"Lennar Corporation", ticker:"LEN (Class A) / LEN.B (Class B)", exchange:"NYSE", ccy:"USD",
+    fy:"Fiscal year ends 30 November", price:82.34, priceDate:"17 Nov 2026 close", sharesOut:237.900,
+    sharesDate:"31 Aug 2026 (207.9M Class A + 30.0M Class B)", goodwill:3442.359, divAnnual:2.00,
+    hq:"Miami, Florida", employees:"about 13,000"},
+  bal:{
+    "2024-08-31":{debt:2263.256,cash:4037.405,eq:27412.520},
+    "2025-05-31":{debt:2791.987,cash:1168.143,eq:22579.080},
+    "2025-08-31":{debt:3523.766,cash:1406.215,eq:22570.320},
+    "2025-11-30":{debt:4084.686,cash:3441.324,eq:21959.417},
+    "2026-02-28":{debt:4065.459,cash:2085.384,eq:21879.376},
+    "2026-05-31":{debt:4047.487,cash:1816.248,eq:21620.638},
+    "2026-08-31":{debt:4297.251,cash:1150.115,eq:21558.959}},
+  periods:{
+    q3_26:{label:"Q3 FY26",rev:8046.119,revPY:8810.278,homeSales:7733.588,homeCost:6512.260,ebit:444.639,pretax:387.079,tax:101.592,ni:283.876,eps:1.19,epsAdj:1.23,ocf:-104.3,capex:13.6,da:35.9,sbc:27.8,buyback:256,shRet:3.0,dil:237.756,open:"2026-05-31",close:"2026-08-31",ann:4,est:["capex","sbc"]},
+    q2_26:{label:"Q2 FY26",rev:7939.872,revPY:8377.502,homeSales:7595.039,homeCost:6412.619,ebit:465.114,pretax:413.187,tax:105.058,ni:304.772,eps:1.24,epsAdj:1.31,ocf:-284.4,capex:18.9,da:35.3,sbc:27.8,buyback:447,shRet:5.0,dil:240.776,open:"2026-02-28",close:"2026-05-31",ann:4,est:["sbc"]},
+    q3_25:{label:"Q3 FY25",rev:8810.278,revPY:9416.042,homeSales:8213.580,homeCost:6779.563,ebit:831.157,pretax:790.703,tax:190.892,ni:590.967,eps:2.29,epsAdj:2.00,ocf:-158.6,capex:32.2,da:34.2,sbc:25.5,buyback:512.4,shRet:null,dil:255.601,open:"2025-05-31",close:"2025-08-31",ann:4,est:[]},
+    ttm:{label:"TTM Aug-26",rev:31973.076,revPY:34766.213,homeSales:30456.393,homeCost:25599.859,ebit:1982.231,pretax:1785.760,tax:460.827,ni:1308.268,eps:5.29,epsAdj:5.45,ocf:937.8,capex:126.0,da:139.6,sbc:143.0,buyback:992.8,shRet:null,dil:null,open:"2025-08-31",close:"2026-08-31",ann:1,est:[]},
+    pttm:{label:"TTM Aug-25",rev:34766.213,revPY:null,homeSales:32743.392,homeCost:26470.505,ebit:3724.830,pretax:3588.754,tax:878.536,ni:2684.156,eps:10.12,epsAdj:10.07,ocf:-568.2,capex:144.8,da:129.7,sbc:161.0,buyback:2335.5,shRet:null,dil:null,open:"2024-08-31",close:"2025-08-31",ann:1,est:[]}
+  },
+  quarterly:[ // operating KPIs from press releases
+    {q:"Q3 FY25",gm:17.5,del:21584,asp:383,orders:23004},
+    {q:"Q4 FY25",gm:17.0,del:23034,asp:386,orders:20018},
+    {q:"Q1 FY26",gm:15.2,del:16863,asp:374,orders:18515},
+    {q:"Q2 FY26",gm:15.6,del:20519,asp:371,orders:21749},
+    {q:"Q3 FY26",gm:15.8,del:20840,asp:372,orders:20879},
+    {q:"Q4 FY26 guide",gm:15.75,del:22500,asp:375,orders:20000,guide:true,gmR:"15.5-16.0%",delR:"22,000-23,000"}
+  ],
+  consensus:{fy26eps:4.78,fy26rev:31.4,q4eps:1.44,q4rev:8.61,fwdPE_zacks:17.52,peg:3.21,pegInd:2.08,indFwdPE:14.37,
+    pt:77.27,ptLow:58,ptHigh:115,rating:"Hold / Sell skew: 2 bullish, 9 neutral, 10 bearish (Seeking Alpha); Zacks Rank #5",
+    asof:"17 Nov 2026"},
+  history:{pe:{now:15.41,avg:9.99},evebit:{now:12.31,avg:9.96},asof:"23 Sep 2026 (Stockoscope; historical average as published)"},
+  peers:[ // Stockoscope, prices as of 23 Sep 2026 close; TTM fundamentals
+    {t:"DHI",n:"D.R. Horton",pe:13.31,ev:11.10,om:11.6,roic:8.5,roe:12.8,nd:1.24,g:-3.5,sh:-3.0,peAvg:11.90},
+    {t:"PHM",n:"PulteGroup",pe:12.08,ev:10.31,om:14.6,roic:11.6,roe:14.7,nd:0.40,g:-7.3,sh:-3.4,peAvg:8.53},
+    {t:"NVR",n:"NVR",pe:15.37,ev:11.19,om:14.9,roic:24.3,roe:31.0,nd:-0.10,g:-10.6,sh:-7.9,peAvg:15.45},
+    {t:"TOL",n:"Toll Brothers",pe:10.79,ev:9.13,om:13.8,roic:9.8,roe:14.2,nd:1.11,g:-1.1,sh:-4.9,peAvg:9.72},
+    {t:"LEN",n:"Lennar (Sep-23)",pe:15.41,ev:12.31,om:5.3,roic:4.0,roe:6.0,nd:1.60,g:-8.0,sh:-7.0,peAvg:9.99,me:true}
+  ],
+  business:{
+    text:"Lennar is the second-largest US homebuilder by deliveries (82,583 homes in FY2025). It buys or options land, builds mostly entry-level and first move-up single-family homes (average price about $372,000 in Q3 FY2026) in roughly two dozen states, and sells them with an 'Everything's Included' feature package. It earns a second, smaller profit pool by writing the mortgage and title policy for most of its own buyers. Since 2025 it runs a 'land-light' model: it owns under 2.5% of about 488,000 homesites it controls, renting land via option contracts (largely with Millrose Properties, spun off in 2025) and paying for lots only when it is ready to build.",
+    segments:[["Homebuilding (homes, land)",21674.374,1364.361],["Financial Services (mortgage, title)",678.615,322.732],["Multifamily",184.538,33.315],["Lennar Other (tech, strategic investments)",67.940,-127.797]],
+    timeline:[["1954","F&R Builders founded in Miami; Leonard Miller joins as partner in 1956"],["1971","Renamed Lennar (LEonard + ARnold Rosen); IPO, NYSE listing in 1972"],["1989","'Everything's Included' launched"],["1997","Stuart Miller (son of founder) becomes CEO"],["2000","Buys U.S. Home, roughly doubling in size"],["2018","Buys CalAtlantic (about $9.3B incl. debt), becomes largest US builder by revenue"],["Feb 2025","Spins off land bank Millrose Properties; buys Rausch Coleman Homes"],["Dec 2025","Co-CEO Jon Jaffe retires; Miller sole CEO, Executive Chairman and President"],["Sep 2026","Q3 FY26: EPS halves YoY; FY26 delivery guide cut to 80-81k homes"]]
+  },
+  moatPlus:[
+    "Scale on cost: construction costs down about 12-13% over two years and cycle time at a record low (116 days in Q3 FY26 per company commentary). Volume gives buying power with trades and suppliers that small builders lack.",
+    "Land-light balance sheet: controlling about 98% of lots by option means less capital tied up in dirt and lower write-down risk, which should lift asset turns once margins normalise.",
+    "Captive mortgage and title: Financial Services earned $323M in 9M FY26 (on $679M revenue) and lets Lennar fund rate buydowns that smaller rivals cannot match.",
+    "Standardised, even-flow production ('Everything's Included', limited options) keeps the factory running at a steady pace."
+  ],
+  moatMinus:[
+    "Homes are a near-commodity: buyers compare on price and payment, and existing-home sellers now compete directly in Lennar's price bands.",
+    "The volume-first strategy hands margin to the customer: incentives of about 12-14% of price in FY26 versus a 4-6% 'normal' level.",
+    "Peers (D.R. Horton, NVR, PulteGroup) have the same scale or the same option-land model and earn far higher margins and ROIC today.",
+    "Option land is not free: lot option fees to land bankers are a cost that sits inside gross margin."
+  ],
+  kpis:[
+    ["Deliveries (homes)","20,840","-3% YoY","Volume: the first lever"],
+    ["Average sales price","$372,000","-3% YoY","Price after incentives and mix"],
+    ["Incentives, % of price","~12%","from ~14% in Q1 FY26","Biggest swing factor for margin"],
+    ["Gross margin, home sales","15.8%","-170bp YoY","Price minus land, build cost, option fees"],
+    ["SG&A, % of home sales","9.2%","+100bp YoY","Operating leverage on lower revenue"],
+    ["New orders (homes)","20,879","-9% YoY","Leading indicator for next 1-2 quarters"],
+    ["Active communities","1,713","+3% YoY","Capacity to sell"]
+  ],
+  mgmt:[
+    ["CEO","Stuart Miller: Executive Chairman, CEO and President. With Lennar since 1982, CEO 1997-2018, Executive Chairman since 2018, Co-CEO from 2023, sole CEO since Jan 2026."],
+    ["CFO","Diane Bessette, CFO since 2019."],
+    ["Ownership","Miller beneficially owns about 2.4M Class A and 21.9M Class B shares (70% of Class B), about 42% of total votes but roughly 10% of the economic interest (Feb 2026 proxy). At $82.34 that stake is worth roughly $2.0B."],
+    ["Plan","'Volume first': hold production near 80k+ homes a year, keep land off balance sheet, cut build costs and cycle times with technology, and wait for incentives to normalise toward 4-6%."],
+    ["Pay","FY2025 total pay $29.5M for Miller, mostly stock awards."],
+    ["Governance","Dual-class shares; 2026 proposals targeting the structure failed. Jaffe (co-CEO) and the COO role were not replaced, so key-person risk is concentrated."]
+  ],
+  risks:[
+    "<b>Mortgage rates stay at or above 7%.</b> Rates rose from about 6.4% to about 7% during Q3 and recent reports cite about 7.5%. Each step up forces bigger buydowns, which come straight out of gross margin.",
+    "<b>Margin floor fails.</b> Q4 guide is 15.5-16.0%. If incentives cannot fall from about 12%, ROIC stays near 5-6%, below any reasonable cost of capital (roughly 9-10% for a cyclical builder).",
+    "<b>Volume strategy turns against it.</b> Inventory of finished homes and work in progress rose from $8.8B to $10.7B in nine months while cash fell from $3.4B to $1.2B. Unsold spec homes in a weak market mean more discounting.",
+    "<b>Leverage creeping up.</b> Net homebuilding debt rose to $3.1B (12.7% of capital) from $0.6B at FY25 year-end, and Lennar drew $650M on its revolver. Buybacks and dividends ($1.36B in 9M FY26) exceeded cash generation.",
+    "<b>Demand shock.</b> NAHB builder confidence fell to 25 in November 2026, the weakest since 2012, with 46% of builders cutting prices.",
+    "<b>Key-person and governance.</b> One person is chairman, CEO and president and controls about 42% of votes.",
+    "<b>Earnings quality noise.</b> Mark-to-market swings on technology investments ($-53M in Q3 FY26, $+99M a year earlier) blur the run rate."
+  ],
+  scen:{
+    bear:{eps:4.25,pe:13.5,why:["Mortgage rate stays 7%+, incentives stay ~12-13%","Gross margin ~14.5-15%, deliveries flat at ~80k","Buybacks slow as leverage rises"]},
+    base:{eps:5.75,pe:13.5,why:["Rates drift lower slowly; incentives ease to ~10%","Gross margin ~16.5%, deliveries ~81-83k","Lands near the consensus price target of $77"]},
+    bull:{eps:8.25,pe:13.5,why:["Rates fall toward 6%; incentives move toward the 4-6% normal level","Gross margin ~18.5% with lower build costs","Deliveries ~85k, buybacks resume at $2B a year"]}
+  },
+  takeaways:[
+    "Lennar is a scale producer of entry-level homes whose returns are now cyclical lows: TTM ROIC about 6% versus 11% a year earlier and 24% at NVR.",
+    "Earnings are being bought with incentives. Every point of incentive reduction is worth roughly $300M of pre-tax profit a year (1% of about $30B of home sales).",
+    "Cash flow is thin: TTM FCF about $0.8B against $1.0B of buybacks and about $0.5B of dividends, so the gap was funded with cash and debt.",
+    "On trailing numbers the stock is not cheap: about 15.6x GAAP earnings versus a historical average near 10x and peers at 11-15x. It trades below book (0.9x), which is the bull case.",
+    "Consensus is skeptical: average target $77 (about 6% below the price), with more Sell than Buy ratings."
+  ],
+  checkNext:[
+    "Q4 FY26 results (mid-December 2026): gross margin vs 15.5-16.0% guide and incentive % vs 12%.",
+    "FY2027 delivery and margin guidance; whether management trades volume for margin.",
+    "Net homebuilding debt and revolver balance at 30 Nov 2026.",
+    "30-year mortgage rate and NAHB index trend into the spring selling season.",
+    "Build a reverse DCF: what margin and ROIC path does $82 imply?"
+  ],
+  reads:{
+    r1:"<b>Read:</b> Over 95% of revenue and essentially all of the profit come from building and selling homes. Lennar is a manufacturing-and-sales machine for starter homes, not a land speculator any more, which is the point of the 2025 Millrose spin-off.",
+    r2:"<b>Read:</b> The moat is cost and scale, not pricing power. That is a real but narrow advantage: it lets Lennar survive a downturn and keep volume, but the current numbers show it does not let Lennar keep margin. Moat strength: moderate, cyclical.",
+    r3:"<b>Read:</b> Q3 home-sales revenue fell 5.8%: about 3.4 points from fewer homes and 2.9 points from lower price. Margin has stabilised around 15-16% for three quarters, but at 2 points below a year ago and 5 to 9 points below peers. Incentives are the KPI to watch.",
+    r4:"<b>Read:</b> Every profitability line roughly halved year on year. Operating margin fell from 9.4% to 5.5%, ROIC from about 10% to about 5%, and operating cash flow is negative for the quarter as inventory builds. Leverage rose from 0.6x to 1.6x net debt/EBITDA. QoQ the picture is flat, not worse: margin and volume are holding at a low level.",
+    r5:"<b>Read:</b> The stock looks cheap on book value (0.9x) and sales, but expensive on depressed earnings: 15.6x trailing and 17x forward versus about 10x history. PEG of 3.2 versus 2.1 for the industry says the market already prices in a recovery. EV/EBITDA of 10.7x is defined using homebuilding debt and cash only.",
+    r6:"<b>Read:</b> The industry is in a demand trough with a long-run supply shortage behind it. Lennar ranks last of five large peers on operating margin and ROIC yet trades at the highest P/E and EV/EBIT. Investors pay for its recovery potential, not its current returns.",
+    r7:"<b>Read:</b> Management owns a lot and thinks long term, and has kept returning cash. But capital returns ($1.36B in 9M FY26) now exceed free cash flow, and the strategy has not yet produced the promised margin recovery. Judge them on the FY27 margin guide.",
+    r8:"<b>Read:</b> The story breaks if rates stay high long enough that Lennar must keep 12%+ incentives into 2027 while it carries more inventory and more debt. That combination would push ROIC further below its cost of capital.",
+    r9:"<b>Read:</b> The current price ($82.34) sits between our base and bull cases, and above the consensus target. The stock prices in a partial margin recovery. Scenario EPS values are our estimates, not consensus; FY26 consensus EPS is $4.78."
+  },
+  sources:[
+    ["Lennar Q3 FY2026 earnings release (8-K Ex. 99.1), SEC EDGAR, 16 Sep 2026","https://www.sec.gov/Archives/edgar/data/0000920760/000162828026062287/ex991-2026831x8kq3.htm"],
+    ["Lennar 10-Q for quarter ended 31 Aug 2026 (cash flow, share count), SEC EDGAR","https://www.sec.gov/Archives/edgar/data/0000920760/000162828026064557/len-20260831.htm"],
+    ["Lennar Q2 FY2026 earnings release, SEC EDGAR, 11 Jun 2026","https://www.sec.gov/Archives/edgar/data/0000920760/000162828026042551/ex991-2026531x8kq1.htm"],
+    ["Lennar Q1 FY2026 earnings release (Ex. 99.1 via Boardroom Alpha)","https://app.boardroomalpha.com/sec_feed/2026/QTR1/0001628280-26-017308/ex991-2026228x8kq1.htm"],
+    ["Lennar Q4 and FY2025 earnings release, SEC EDGAR, 16 Dec 2025","https://www.sec.gov/Archives/edgar/data/920760/000162828025057408/ex991-20251130x8kq4.htm"],
+    ["Lennar Q3 FY2024 earnings release, SEC EDGAR","https://www.sec.gov/Archives/edgar/data/920760/000162828024040938/ex991-2024831x8kq3.htm"],
+    ["Quarterly cash flow data (Weiss Ratings; OpenCapital)","https://weissratings.com/en/stock/len-nyse/cash-flow/quarterly"],
+    ["Lennar 2026 proxy (DEF 14A), ownership","https://www.sec.gov/Archives/edgar/data/920760/000119312526073504/d940888ddef14a.htm"],
+    ["Lennar company profile and history","https://investors.lennar.com/company-profile"],
+    ["Zacks via Yahoo Finance: price, consensus, PEG, 17 Nov 2026","https://finance.yahoo.com/markets/stocks/articles/lennar-len-registers-bigger-fall-221502229.html"],
+    ["Yahoo Finance quote: analyst price targets","https://uk.finance.yahoo.com/quote/LEN/"],
+    ["Stockoscope: five-homebuilder comparison, 24 Sep 2026","https://stockoscope.com/blog/homebuilders-dhi-len-nvr-phm-tol-comparison"],
+    ["HousingWire: NAHB HMI November 2026","https://www.housingwire.com/articles/homebuilder-confidence-november-2026/"],
+    ["Builder: Jon Jaffe retirement","https://www.builderonline.com/builder-100/leadership/lennar-co-ceo-and-president-jonathan-jaffe-to-retire/"],
+    ["Pulse 2.0 / Stocktwits: Q3 FY26 call commentary (incentives, homesites, rates, Q4 EPS guide)","https://pulse2.com/lennar-reports-8-billion-in-q3-revenue-and-20840-home-deliveries/"]
+  ]
+};
+
+/* ======================= CALCULATIONS ======================= */
+const B=DATA.bal, P=DATA.periods, M=DATA.meta;
+let exGW=false;
+function ic(k){const b=B[k];return b.debt+b.eq-b.cash;}
+function calc(p){
+  const avgIC=(ic(p.open)+ic(p.close))/2, gw=M.goodwill;
+  const taxR=p.tax/p.pretax, nopat=p.ebit*(1-taxR), ebitda=p.ebit+p.da, fcf=p.ocf-p.capex;
+  const nd=B[p.close].debt-B[p.close].cash;
+  return {growth:p.revPY?p.rev/p.revPY-1:null, gp:p.homeSales-p.homeCost, gpm:(p.homeSales-p.homeCost)/p.homeSales,
+    om:p.ebit/p.rev, taxR, nopat, nopatM:nopat/p.rev, avgIC, avgICx:avgIC-gw,
+    roic:nopat*p.ann/avgIC, roicx:nopat*p.ann/(avgIC-gw), s2c:p.rev*p.ann/avgIC,
+    fcf, fcfM:fcf/p.rev, conv:fcf/nopat, ebitda, nd, ndE:nd/(ebitda*p.ann), sbcR:p.sbc/p.rev, nopatAnn:nopat*p.ann};
+}
+const C={}; for(const k in P) C[k]=calc(P[k]);
+function incr(a,b){ // incremental ROIC from period b to a (annualised NOPAT / avg IC)
+  const dN=C[a].nopatAnn-C[b].nopatAnn, dI=(exGW?C[a].avgICx-C[b].avgICx:C[a].avgIC-C[b].avgIC);
+  if(dI<=0 || Math.abs(dI)/C[a].avgIC<0.02) return null; return dN/dI;
+}
+const val=(()=>{const mc=M.price*M.sharesOut, b=B["2026-08-31"], ev=mc+b.debt-b.cash, t=P.ttm, c=C.ttm;
+  return {mc, ev, pe:M.price/t.eps, peAdj:M.price/t.epsAdj, fpe:M.price/DATA.consensus.fy26eps, evE:ev/c.ebitda, evEbit:ev/t.ebit,
+    pb:mc/b.eq, ptb:mc/(b.eq-M.goodwill), dy:M.divAnnual/M.price, ps:mc/t.rev, fcfy:c.fcf/mc};})();
+
+/* ======================= FORMATTERS ======================= */
+const f0=n=>n==null||isNaN(n)?'<span class="na">n/a</span>':Math.round(n).toLocaleString('en-US');
+const f1=n=>n==null||isNaN(n)?'<span class="na">n/a</span>':n.toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1});
+const f2=n=>n==null||isNaN(n)?'<span class="na">n/a</span>':n.toFixed(2);
+const pct=(n,d=1)=>n==null||!isFinite(n)?'<span class="na">n/a</span>':(n*100).toFixed(d)+'%';
+const xx=(n,d=1)=>n==null||!isFinite(n)?'<span class="na">n/a</span>':n.toFixed(d)+'x';
+const sgn=(v,txt)=>`<span class="${v>0?'pos':v<0?'neg':''}">${txt}</span>`;
+const chg=(a,b)=>{if(a==null||b==null||b===0)return '<span class="na">n/a</span>'; if((a<0)!==(b<0)||b<0) return '<span class="na">n.m.</span>'; const v=a/b-1; return sgn(v,(v>0?'+':'')+(v*100).toFixed(1)+'%');};
+const pp=(a,b)=>{if(a==null||b==null||!isFinite(a)||!isFinite(b))return '<span class="na">n/a</span>'; const v=Math.abs((a-b)*100)<0.05?0:(a-b)*100; return sgn(v,(v>0?'+':'')+v.toFixed(1)+'pp');};
+const dx=(a,b)=>{if(a==null||b==null||!isFinite(a)||!isFinite(b))return '<span class="na">n/a</span>'; const v=a-b; return (v>0?'+':'')+v.toFixed(2)+'x';};
+const E=(k,field)=>P[k].est.includes(field)?'<span class="est">est</span>':'';
+const $=id=>document.getElementById(id);
+
+/* ======================= RENDER ======================= */
+function render(){
+ $('ttl').textContent=`${M.name}  |  ${M.ticker.split(' ')[0]}`;
+ $('subt').textContent=`${M.exchange}: ${M.ticker}  ·  Reporting currency ${M.ccy}  ·  ${M.fy}  ·  Price $${M.price} (${M.priceDate})  ·  Latest results: Q3 FY2026 (quarter to 31 Aug 2026)`;
+ const k=[["$"+M.price.toFixed(2),"Share price, "+M.priceDate],["$"+(val.mc/1000).toFixed(1)+"B","Market cap"],["$"+(val.ev/1000).toFixed(1)+"B","Enterprise value"],[xx(val.pe),"P/E, TTM GAAP"],[xx(val.evE),"EV/EBITDA, TTM"],[pct(C.ttm.roic),"ROIC, TTM"],[pct(val.dy),"Dividend yield"],["$"+DATA.consensus.pt.toFixed(0),"Avg analyst target"]];
+ $('kpis').innerHTML=k.map(a=>`<div class="kpi"><b>${a[0]}</b><span>${a[1]}</span></div>`).join('');
+ const secs=[["s1","Business"],["s2","Moat"],["s3","Drivers"],["s4","Earnings"],["s5","Valuation"],["s6","Industry"],["s7","Management"],["s8","Risks"],["s9","Scenarios"],["s10","Takeaways"],["s11","Sources"]];
+ $('nav').innerHTML=secs.map(s=>`<a href="#${s[0]}" data-s="${s[0]}">${s[1]}</a>`).join('');
+ for(const r in DATA.reads) $(r).innerHTML=DATA.reads[r];
+
+ // 1 business
+ $('bizText').textContent=DATA.business.text;
+ const segT=DATA.business.segments.reduce((a,s)=>a+s[1],0);
+ $('segTbl').innerHTML=`<tr><th class="l">Segment, 9M FY2026</th><th>Revenue $M</th><th>% of total</th><th>Operating earnings $M</th></tr>`+
+  DATA.business.segments.map(s=>`<tr><td>${s[0]}</td><td>${f0(s[1])}</td><td>${pct(s[1]/segT)}</td><td>${s[2]<0?'<span class="neg">'+f0(s[2])+'</span>':f0(s[2])}</td></tr>`).join('')+
+  `<tr><td colspan="4" class="l cnote">Before corporate G&A ($432M) and charitable foundation ($58M). Source: Q3 FY26 release.</td></tr>`;
+ $('timeline').innerHTML=DATA.business.timeline.map(t=>`<div><b>${t[0]}</b> ${t[1]}</div>`).join('');
+
+ // 2 moat
+ $('moatPlus').innerHTML=DATA.moatPlus.map(x=>`<li>${x}</li>`).join('');
+ $('moatMinus').innerHTML=DATA.moatMinus.map(x=>`<li>${x}</li>`).join('');
+
+ // 3 drivers: revenue bridge
+ const d0=21584,d1=20840,a0=383,a1=372, vol=d1/d0-1, pr=a1/a0-1;
+ $('bridgeTbl').innerHTML=`<tr><th class="l">Home-sales revenue bridge, Q3 FY25 to Q3 FY26</th><th>Q3 FY25</th><th>Q3 FY26</th><th>Change</th></tr>
+ <tr><td>Homes delivered (volume)</td><td>${f0(d0)}</td><td>${f0(d1)}</td><td>${sgn(vol,pct(vol))}</td></tr>
+ <tr><td>Average sales price, $000 (price, incl. incentives)</td><td>${a0}</td><td>${a1}</td><td>${sgn(pr,pct(pr))}</td></tr>
+ <tr><td>Mix: West deliveries (highest ASP, $571k) fell 8%; East (+2%) grew</td><td>West 4,926</td><td>West 4,529</td><td>${sgn(-1,'negative mix')}</td></tr>
+ <tr class="hl"><td>Home-sales revenue, $M</td><td>${f0(P.q3_25.homeSales)}</td><td>${f0(P.q3_26.homeSales)}</td><td>${chg(P.q3_26.homeSales,P.q3_25.homeSales)}</td></tr>`;
+ $('kpiTbl').innerHTML=`<tr><th class="l">KPI that moves revenue and profit</th><th>Q3 FY26</th><th>Trend</th><th class="l">Why it matters</th></tr>`+DATA.kpis.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="l">${r[3]}</td></tr>`).join('');
+ barChart('chGM',DATA.quarterly.map(q=>({x:q.q,y:q.gm,g:q.guide,t:q.guide?`Guide ${q.gmR}`:q.gm.toFixed(1)+'%'})),'Gross margin on home sales, %',v=>v.toFixed(1)+'%',12);
+ barChart('chDel',DATA.quarterly.map(q=>({x:q.q,y:q.del,g:q.guide,t:q.guide?`Guide ${q.delR}`:q.del.toLocaleString()+` homes, ASP $${q.asp}k`})),'Homes delivered per quarter',v=>(v/1000).toFixed(1)+'k',0);
+
+ // 4 earnings
+ const cols=["q3_26","q3_25","q2_26"];
+ const hrow=(name,f,isEps)=>{const v=k=>f(k); const a=v("q3_26"),b=v("q3_25"),q=v("q2_26"),t=v("ttm"),pt=v("pttm");
+   const fm=isEps?f2:f1; return `<tr><td>${name}</td><td>${fm(a)}</td><td>${fm(b)}</td><td>${fm(q)}</td><td>${chg(a,q)}</td><td>${chg(a,b)}</td><td>${fm(t)}</td><td>${fm(pt)}</td><td>${chg(t,pt)}</td></tr>`;};
+ $('headTbl').innerHTML=`<tr><th class="l">Line item</th><th>Q3 FY26</th><th>Q3 FY25</th><th>Q2 FY26</th><th>QoQ %</th><th>YoY %</th><th>TTM Aug-26</th><th>TTM Aug-25</th><th>TTM %</th></tr>`+
+  hrow("Revenue",k=>P[k].rev)+hrow("Gross profit, home sales",k=>C[k].gp)+hrow("Operating income (EBIT)",k=>P[k].ebit)+
+  hrow("EPS, GAAP diluted ($)",k=>P[k].eps,true)+hrow("EPS, adjusted ($)",k=>P[k].epsAdj,true)+
+  hrow("Operating cash flow",k=>P[k].ocf)+hrow("Free cash flow"+'<span class="est">Q3 FY26 est</span>',k=>C[k].fcf);
+ renderScore();
+ $('method').innerHTML=`<ul>
+ <li><b>Periods.</b> Q3 FY26 = three months to 31 Aug 2026. TTM Aug-26 = FY2025 minus 9M FY25 plus 9M FY26; TTM Aug-25 built the same way from FY2024. Quarterly ratios are annualised (x4). QoQ compares Q3 FY26 with Q2 FY26.</li>
+ <li><b>Organic revenue growth</b> = reported total revenue growth. Rausch Coleman (acquired Feb 2025) is in both Q3 FY25 and Q3 FY26, so the quarterly figure is organic; the TTM figure is not adjusted for the months before Feb 2025 and modestly overstates organic decline. No FX exposure.</li>
+ <li><b>Operating income</b> = Lennar's reported EBIT (pretax earnings plus interest expensed, incl. interest in cost of homes sold). It includes mark-to-market on technology investments ($-53M Q3 FY26; $+99M Q3 FY25). Gross profit = sales of homes minus cost of homes sold.</li>
+ <li><b>NOPAT</b> = EBIT x (1 - effective tax rate for the period: ${pct(C.q3_26.taxR)} Q3 FY26, ${pct(C.ttm.taxR)} TTM).</li>
+ <li><b>Invested capital</b> = homebuilding debt + stockholders' equity - homebuilding cash (financing side). Financial Services warehouse debt ($1.6B) is excluded because it funds mortgages held for sale, not operations. Operating leases excluded (immaterial for a builder). Average of opening and closing balance. Ex-goodwill version removes $3.44B of goodwill (mostly CalAtlantic).</li>
+ <li><b>ROIC</b> = annualised NOPAT / average invested capital. <b>Incremental ROIC</b> = change in annualised NOPAT / change in average invested capital; shown as n.m. when capital fell or changed by under 2%. Multi-year view: from TTM Aug-25 to TTM Aug-26 NOPAT fell $${f0(C.pttm.nopat-C.ttm.nopat)}M while average capital fell only $${f0(C.pttm.avgIC-C.ttm.avgIC)}M, so returns on existing capital collapsed rather than new capital being invested; the 2025 Millrose spin-off (which removed land and equity) also distorts any comparison across Feb 2025.</li>
+ <li><b>Sales / capital</b> = annualised revenue / average invested capital. <b>FCF</b> = operating cash flow - net additions to operating properties and equipment. Q3 FY26 standalone capex is not cleanly derivable from filings (9M net capex $41M), so one third of 9M is used and marked est. Quarterly OCF for Q2 FY26 and Q3 FY25 from data providers; Q3 FY26 derived as 9M ($-822M) less Q1 and Q2. <b>FCF conversion</b> = FCF / NOPAT.</li>
+ <li><b>Net debt / EBITDA</b> = (homebuilding debt - homebuilding cash) / EBITDA (EBIT + D&A); quarterly EBITDA annualised.</li>
+ <li><b>Buybacks</b> = cash spent on repurchases. TTM excludes 8.0M shares retired non-cash via the Millrose exchange offer in Q4 FY25. Net share change uses diluted average shares.</li>
+ <li><b>Acquisition ROIC</b>: no acquisitions in FY26; Rausch Coleman's contribution and price were not disclosed, so not determinable.</li>
+ <li><b>SBC / revenue</b>: 9M FY26 SBC $118M; Q1 $62M is disclosed, Q2 and Q3 split evenly (est).</li></ul>`;
+
+ // 5 valuation
+ const cs=DATA.consensus;
+ $('valTbl').innerHTML=`<tr><th class="l">Multiple (price $${M.price}, ${M.priceDate})</th><th>Value</th></tr>
+ <tr><td>Market cap ($M) = price x ${M.sharesOut}M shares</td><td>${f0(val.mc)}</td></tr>
+ <tr><td>EV ($M) = mkt cap + HB debt - HB cash</td><td>${f0(val.ev)}</td></tr>
+ <tr class="hl"><td>P/E, TTM GAAP EPS $${P.ttm.eps}</td><td>${xx(val.pe)}</td></tr>
+ <tr><td>P/E, TTM adjusted EPS $${P.ttm.epsAdj}</td><td>${xx(val.peAdj)}</td></tr>
+ <tr><td>Forward P/E, FY26 consensus EPS $${cs.fy26eps} (est)</td><td>${xx(val.fpe)}</td></tr>
+ <tr class="hl"><td>EV/EBITDA, TTM EBITDA $${f0(C.ttm.ebitda)}M</td><td>${xx(val.evE)}</td></tr>
+ <tr><td>EV/EBIT, TTM</td><td>${xx(val.evEbit)}</td></tr>
+ <tr class="hl"><td>PEG (Zacks; industry ${cs.pegInd})</td><td>${cs.peg.toFixed(2)}</td></tr>
+ <tr><td>P/Book (P/tangible book)</td><td>${xx(val.pb,2)} (${xx(val.ptb,2)})</td></tr>
+ <tr><td>FCF yield, TTM</td><td>${pct(val.fcfy)}</td></tr>
+ <tr><td>Dividend yield ($2.00/yr)</td><td>${pct(val.dy)}</td></tr>`;
+ const H=DATA.history;
+ $('histTbl').innerHTML=`<tr><th class="l">Versus own history (Stockoscope)</th><th>Then</th><th>Hist. avg</th><th>Premium</th></tr>
+ <tr><td>P/E (23 Sep 2026)</td><td>${xx(H.pe.now)}</td><td>${xx(H.pe.avg)}</td><td>+${pct(H.pe.now/H.pe.avg-1,0)}</td></tr>
+ <tr><td>EV/EBIT (23 Sep 2026)</td><td>${xx(H.evebit.now)}</td><td>${xx(H.evebit.avg)}</td><td>+${pct(H.evebit.now/H.evebit.avg-1,0)}</td></tr>
+ <tr><td>P/E today (Nov 17)</td><td>${xx(val.pe)}</td><td>${xx(H.pe.avg)}</td><td>+${pct(val.pe/H.pe.avg-1,0)}</td></tr>
+ <tr><th class="l">Versus consensus (${cs.asof})</th><th colspan="3"></th></tr>
+ <tr><td>Avg price target (low / high)</td><td colspan="3">$${cs.pt} ($${cs.ptLow} / $${cs.ptHigh})</td></tr>
+ <tr><td>Upside to avg target</td><td colspan="3">${sgn(cs.pt/M.price-1,pct(cs.pt/M.price-1))}</td></tr>
+ <tr><td>FY26 consensus EPS / revenue</td><td colspan="3">$${cs.fy26eps} / $${cs.fy26rev}B</td></tr>
+ <tr><td>Q4 FY26 consensus EPS / revenue</td><td colspan="3">$${cs.q4eps} / $${cs.q4rev}B (company guide $1.30-1.65)</td></tr>
+ <tr><td colspan="4" class="l cnote">${cs.rating}. Historical averages as published by Stockoscope; a low P/E average reflects peak-cycle earnings in 2021-2023.</td></tr>`;
+
+ // 6 industry & peers
+ $('indList').innerHTML=[
+  "<b>Near term, weak:</b> NAHB/Wells Fargo builder confidence fell to 25 in Nov 2026, lowest since April 2012; 46% of builders cut prices and 68% used incentives. 30-year mortgage rates are cited around 7-7.5%.",
+  "<b>Margins compressing across the group:</b> Q3 gross margins, Lennar 15.8% (from 17.5%), KB Home 16.5%, Meritage 17.4%, Toll 23.9%, PulteGroup 24.8%. D.R. Horton guides FY27 closings flat to down 6% and Q1 FY27 margin to 18-18.5%.",
+  "<b>Long run, supportive:</b> the US has under-built homes for over a decade and existing owners are locked into low-rate mortgages, so new homes take an outsized share of sales once affordability improves. Growth prospects hinge on rates, not on demand for shelter.",
+  "<b>Structure:</b> the top builders keep gaining share from small private builders who lack cheap capital, mortgage arms and land options."
+ ].map(x=>`<li>${x}</li>`).join('');
+ $('peerTbl').innerHTML=`<tr><th class="l">Company</th><th>P/E</th><th>P/E hist. avg</th><th>EV/EBIT</th><th>Op. margin</th><th>ROIC</th><th>ROE</th><th>Net debt/EBITDA</th><th>Rev. growth</th><th>Share count YoY</th></tr>`+
+  DATA.peers.map(p=>`<tr class="${p.me?'hl':''}"><td>${p.n} (${p.t})</td><td>${xx(p.pe)}</td><td>${xx(p.peAvg)}</td><td>${xx(p.ev)}</td><td>${p.om.toFixed(1)}%</td><td>${p.roic.toFixed(1)}%</td><td>${p.roe.toFixed(1)}%</td><td>${xx(p.nd,2)}</td><td>${p.g.toFixed(1)}%</td><td>${p.sh.toFixed(1)}%</td></tr>`).join('')+
+  `<tr><td>Lennar, this page (Nov 17 price, TTM Aug-26)</td><td>${xx(val.pe)}</td><td>${xx(H.pe.avg)}</td><td>${xx(val.evEbit)}</td><td>${pct(C.ttm.om)}</td><td>${pct(C.ttm.roic)}</td><td>${pct(P.ttm.ni/((B["2025-08-31"].eq+B["2026-08-31"].eq)/2))}</td><td>${xx(C.ttm.nd/C.ttm.ebitda,2)}</td><td>${pct(C.ttm.growth)}</td><td>${pct(P.q3_26.dil/P.q3_25.dil-1)}</td></tr>`;
+ $('peerNote').textContent="Peer rows: Stockoscope, prices as of 23 Sep 2026 close, trailing-twelve-month fundamentals on each company's own definitions (EV/EBITDA not published; EV/EBIT shown for all). Lennar's own row uses this page's definitions, so small differences versus the Stockoscope Lennar row are definitional.";
+
+ // 7 management
+ $('mgmt').innerHTML=DATA.mgmt.map(m=>`<dt>${m[0]}</dt><dd>${m[1]}</dd>`).join('');
+ $('capAlloc').innerHTML=[
+  `Buybacks: $${f0(P.ttm.buyback)}M cash in TTM to Aug-26 (plus 8.0M shares retired via the Millrose exchange in Q4 FY25). Diluted shares down ${pct(1-P.q3_26.dil/P.q3_25.dil)} YoY.`,
+  `Dividends: $2.00 per share a year (about $0.5B); 9M FY26 paid $366M.`,
+  `Free cash flow TTM: $${f0(C.ttm.fcf)}M, below buybacks plus dividends of about $1.5B. The gap was funded by running cash down from $3.4B to $1.2B and adding debt.`,
+  `M&A: none in FY26. Last deal Rausch Coleman (Feb 2025, $254M cash outflow for acquisitions in FY25); returns not disclosed.`,
+  `Spin-offs: Millrose (Feb 2025) moved about $5B+ of land off the balance sheet; equity fell from $27.4B (Aug 2024) to $22.6B (Aug 2025).`
+ ].map(x=>`<li>${x}</li>`).join('');
+
+ // 8 risks
+ $('risks').innerHTML=DATA.risks.map(x=>`<li>${x}</li>`).join('');
+
+ // 9 scenarios
+ renderScen();
+
+ // 10 takeaways
+ $('tk1').innerHTML=DATA.takeaways.map(x=>`<li>${x}</li>`).join('');
+ $('tk2').innerHTML=DATA.checkNext.map(x=>`<li>${x}</li>`).join('');
+
+ // glossary & sources
+ const g=[["ASP","Average sales price per home delivered, after incentives."],["Incentives","Discounts and mortgage-rate buydowns paid by the builder, as % of price."],["Backlog","Homes sold but not yet delivered (16,857 at Q3 FY26)."],["Land-light / option","Controlling lots through option contracts and paying for them only when building, instead of owning land."],["NOPAT","Net operating profit after tax: operating income minus the tax it would bear with no debt."],["ROIC","Return on invested capital: NOPAT divided by the debt and equity used to run the business."],["Incremental ROIC","Extra NOPAT earned per extra dollar of capital invested."],["EV","Enterprise value: market cap plus net debt; the price of the whole business."],["PEG","P/E divided by expected EPS growth rate; above 2 means you pay a lot for each point of growth."],["FCF conversion","Free cash flow as a share of NOPAT; tells you whether profits turn into cash."]];
+ $('gloss').innerHTML=g.map(x=>`<dt>${x[0]}</dt><dd>${x[1]}</dd>`).join('');
+ $('srcs').innerHTML=DATA.sources.map(s=>`<li><a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a></li>`).join('');
+ $('disc').textContent="Education and analysis, not investment advice. Figures from the sources listed; estimates are marked. Prices and consensus as of 17 Nov 2026.";
+}
+
+function renderScore(){
+ const R=exGW?'roicx':'roic';
+ const row=(cat,name,fn,type)=>{const a=fn('q3_26'),b=fn('q3_25'),q=fn('q2_26'),t=fn('ttm'),p=fn('pttm');
+  const fm=type==='x'?(v=>xx(v,2)):type==='$'?f0:pct; const d=type==='x'?dx:type==='$'?chg:pp;
+  return `<tr><td class="l">${cat}</td><td class="l">${name}</td><td>${fm(a)}</td><td>${fm(b)}</td><td>${d(a,q)}</td><td>${d(a,b)}</td><td>${fm(t)}</td><td>${fm(p)}</td><td>${d(t,p)}</td></tr>`;};
+ $('gwToggle').textContent=exGW?'[ROIC basis: excl. goodwill, click to switch]':'[ROIC basis: incl. goodwill, click to switch]';
+ $('scoreTbl').innerHTML=`<tr><th class="l">Category</th><th class="l">Metric</th><th>Latest Q (Q3 FY26)</th><th>Prior-yr Q (Q3 FY25)</th><th>QoQ Δ</th><th>YoY Δ</th><th>Latest TTM</th><th>Prior TTM</th><th>Δ</th></tr>`+
+ row("Growth","Organic revenue growth (YoY)",k=>C[k].growth)+
+ row("Profitability","Operating margin",k=>C[k].om)+
+ row("Profitability","NOPAT margin",k=>C[k].nopatM)+
+ row("Capital efficiency","ROIC"+(exGW?" (ex-goodwill)":""),k=>C[k][R])+
+ `<tr><td class="l">Capital efficiency</td><td class="l">Incremental ROIC</td><td class="na">n.m.</td><td class="na">n.m.</td><td class="na">n.m.</td><td class="na">n.m.</td><td class="na">n.m.</td><td class="na">n.m.</td><td class="na">n.m.</td></tr><tr><td></td><td colspan="8" class="l cnote">NOPAT fell ~$1.3B (TTM) while average capital barely moved (-$0.5B): returns on existing capital fell, so the ratio has no meaning. See footnote.</td></tr>`+
+ row("Reinvestment","Sales / capital",k=>C[k].s2c,'x')+
+ row("Cash","FCF margin"+'<span class="est">Q3 FY26 est</span>',k=>C[k].fcfM)+
+ row("Quality","FCF conversion (FCF / NOPAT)",k=>C[k].conv)+
+ row("Balance sheet","Net debt / EBITDA",k=>C[k].ndE,'x')+
+ row("Capital allocation","Buybacks, $M",k=>P[k].buyback,'$')+
+ `<tr><td class="l">Capital allocation</td><td class="l">Shares retired / diluted share change</td><td>3.0M sh</td><td>n/a</td><td>vs 5.0M</td><td>${pct(P.q3_26.dil/P.q3_25.dil-1)}</td><td>$993M</td><td>$2,336M</td><td class="na">see note</td></tr>`+
+ `<tr><td class="l">Capital allocation</td><td class="l">Acquisition ROIC</td><td colspan="7" class="l na">Not determinable: no FY26 deals; Rausch Coleman contribution undisclosed</td></tr>`+
+ row("Dilution","SBC / revenue"+'<span class="est">Q est</span>',k=>P[k].sbc/P[k].rev);
+}
+
+function renderScen(){
+ const S=DATA.scen, cs=DATA.consensus; const names={bear:"Bear",base:"Base",bull:"Bull"};
+ $('scen').innerHTML=Object.keys(S).map(k=>`<div class="sc"><h3>${names[k]}</h3>
+  <div class="px" id="px_${k}"></div><div class="cnote" id="ud_${k}"></div>
+  <label>FY27 EPS (est): <b id="ev_${k}"></b><input type="range" min="2" max="12" step="0.25" value="${S[k].eps}" data-k="${k}" data-f="eps"></label>
+  <label>P/E multiple: <b id="pv_${k}"></b><input type="range" min="8" max="20" step="0.5" value="${S[k].pe}" data-k="${k}" data-f="pe"></label>
+  <ul style="font-size:13px">${S[k].why.map(w=>`<li>${w}</li>`).join('')}</ul></div>`).join('');
+ const upd=()=>{for(const k in S){const v=S[k].eps*S[k].pe; $('px_'+k).textContent='$'+v.toFixed(0); $('ev_'+k).textContent='$'+S[k].eps.toFixed(2); $('pv_'+k).textContent=S[k].pe.toFixed(1)+'x';
+   const u=v/M.price-1; $('ud_'+k).innerHTML=sgn(u,(u>0?'+':'')+(u*100).toFixed(0)+'% vs $'+M.price)+` · consensus target $${cs.pt}`;}};
+ $('scen').querySelectorAll('input').forEach(i=>i.addEventListener('input',e=>{S[e.target.dataset.k][e.target.dataset.f]=+e.target.value;upd();}));
+ upd();
+}
+
+function barChart(id,pts,title,fmt,ymin){
+ const W=460,Hh=210,pl=40,pb=34,pt=24,pr=8, max=Math.max(...pts.map(p=>p.y))*1.08, min=ymin;
+ const bw=(W-pl-pr)/pts.length, y=v=>pt+(Hh-pt-pb)*(1-(v-min)/(max-min));
+ let s=`<svg viewBox="0 0 ${W} ${Hh}" role="img" aria-label="${title}"><defs><pattern id="hatch_${id}" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="var(--accsoft)"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--acc)" stroke-width="1.5"/></pattern></defs>`;
+ for(let i=0;i<=3;i++){const v=min+(max-min)*i/3; s+=`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${pl-4}" y="${y(v)+4}" font-size="10" fill="var(--muted)" text-anchor="end">${fmt(v)}</text>`;}
+ pts.forEach((p,i)=>{const x=pl+i*bw+bw*0.2,w=bw*0.6,top=y(p.y),h=y(min)-top;
+  s+=`<path d="M${x},${top+4} q0,-4 4,-4 h${w-8} q4,0 4,4 v${h-4} h-${w} z" fill="${p.g?`url(#hatch_${id})`:'var(--acc)'}" ${p.g?'stroke="var(--acc)" stroke-width="1"':''}/>`;
+  s+=`<rect x="${pl+i*bw}" y="${pt}" width="${bw}" height="${Hh-pt-pb}" fill="transparent" data-t="${p.x}: ${p.t}"/>`;
+  s+=`<text x="${x+w/2}" y="${top-4}" font-size="10" fill="var(--ink2)" text-anchor="middle">${fmt(p.y)}</text>`;
+  s+=`<text x="${x+w/2}" y="${Hh-pb+14}" font-size="10" fill="var(--muted)" text-anchor="middle">${p.x.replace(' guide','')}</text>`;
+  if(p.g) s+=`<text x="${x+w/2}" y="${Hh-pb+26}" font-size="9" fill="var(--muted)" text-anchor="middle">(guide mid)</text>`;});
+ s+='</svg>';
+ const el=$(id); el.innerHTML=`<div class="ctitle">${title}</div>${s}<div class="tip"></div><div class="cnote">Hatched bar = company guidance midpoint. Source: quarterly releases.</div>`;
+ const tip=el.querySelector('.tip');
+ el.querySelectorAll('rect[data-t]').forEach(r=>{r.addEventListener('mousemove',e=>{const b=el.getBoundingClientRect();tip.textContent=r.dataset.t;tip.style.left=Math.min(e.clientX-b.left+10,b.width-200)+'px';tip.style.top=(e.clientY-b.top-28)+'px';tip.style.opacity=1;});r.addEventListener('mouseleave',()=>tip.style.opacity=0);});
+}
+
+render();
+$('gwToggle').addEventListener('click',()=>{exGW=!exGW;renderScore();});
+const links=[...document.querySelectorAll('nav a')];
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.dataset.s===e.target.id));}}),{rootMargin:"-40% 0px -55% 0px"});
+document.querySelectorAll('section').forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Synopsys (SNPS) Equity Research 101</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f6f2;--card:#fff;--ink:#1d1f24;--mut:#5d6370;--line:#e3e1da;--acc:#1f4e79;--acc2:#c9772e;--pos:#1d7a46;--neg:#b23a3a;--soft:#eef2f7}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,system-ui,sans-serif}
+header{background:var(--acc);color:#fff;padding:28px 20px 22px}
+header .wrap{max-width:1080px;margin:0 auto}
+h1{font-family:"Source Serif 4",Georgia,serif;font-size:30px;margin:0 0 4px}
+.sub{opacity:.85;font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:18px}
+.kpi{background:rgba(255,255,255,.1);border-radius:8px;padding:10px 12px}
+.kpi b{display:block;font-size:20px}
+.kpi span{font-size:12px;opacity:.85}
+nav{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav .wrap{max-width:1080px;margin:0 auto;padding:0 12px}
+nav a{display:inline-block;padding:11px 10px;color:var(--mut);text-decoration:none;font-size:13px;font-weight:500}
+nav a:hover{color:var(--acc)}
+main{max-width:1080px;margin:0 auto;padding:18px 14px 50px}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 22px;margin:16px 0}
+h2{font-family:"Source Serif 4",Georgia,serif;font-size:22px;margin:0 0 4px}
+h2 small{display:block;font:500 13px Inter,sans-serif;color:var(--mut);margin-top:2px}
+h3{font-size:15px;margin:18px 0 6px}
+.read{background:var(--soft);border-left:4px solid var(--acc);padding:10px 14px;border-radius:4px;margin:12px 0}
+.read b{color:var(--acc)}
+table{border-collapse:collapse;width:100%;font-size:13px;margin:8px 0}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+th{background:#f2f1ec;font-weight:600;color:#333}
+td:first-child,th:first-child,td.l,th.l{text-align:left}
+.tbl{overflow-x:auto}
+.pos{color:var(--pos)}.neg{color:var(--neg)}.na{color:#999}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}h1{font-size:24px}section{padding:16px}}
+ul{padding-left:20px;margin:6px 0}li{margin:3px 0}
+.tl{border-left:2px solid var(--line);margin-left:6px;padding-left:16px}
+.tl div{position:relative;margin:8px 0}
+.tl div:before{content:"";position:absolute;left:-22px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--acc)}
+.tl b{color:var(--acc);margin-right:6px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:10px;background:#f0e6da;color:#7a4a17;margin-left:4px}
+.scen{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.scen{grid-template-columns:1fr}}
+.sc{border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.sc h4{margin:0 0 4px;font-size:15px}.sc .px{font-size:24px;font-weight:600}
+.bear{border-top:4px solid var(--neg)}.base{border-top:4px solid var(--acc)}.bull{border-top:4px solid var(--pos)}
+.bar{height:14px;border-radius:3px;background:var(--acc)}
+.foot{font-size:12px;color:var(--mut)}
+.chips button{border:1px solid var(--line);background:#fff;padding:5px 10px;border-radius:14px;font-size:12px;cursor:pointer;margin:2px}
+.chips button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+details{margin:6px 0}summary{cursor:pointer;font-weight:500}
+.disc{font-size:12px;color:var(--mut);border-top:1px solid var(--line);padding-top:10px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1 id="title"></h1>
+  <div class="sub" id="subtitle"></div>
+  <div class="kpis" id="kpis"></div>
+</div></header>
+<nav><div class="wrap">
+  <a href="#overview">1 Business</a><a href="#moat">2 Moat</a><a href="#drivers">3 Drivers</a><a href="#earnings">4 Earnings</a><a href="#valuation">5 Valuation</a><a href="#industry">6 Peers</a><a href="#management">7 Management</a><a href="#risks">8 Risks</a><a href="#scenarios">9 Scenarios</a><a href="#takeaways">10 Takeaways</a><a href="#sources">Sources</a>
+</div></nav>
+<main>
+
+<section id="overview">
+  <h2>1. Business overview<small>What does it do, how does it make money, how did it get here?</small></h2>
+  <div class="grid2">
+    <div>
+      <p id="whatItDoes"></p>
+      <h3>How it makes money (TTM to Jul-2026)</h3>
+      <div id="segBars"></div>
+      <h3>Revenue by type (Q3 FY26)</h3>
+      <div id="typeBars"></div>
+    </div>
+    <div>
+      <h3>Timeline</h3>
+      <div class="tl" id="timeline"></div>
+    </div>
+  </div>
+  <div class="read" id="readOverview"></div>
+</section>
+
+<section id="moat">
+  <h2>2. Moat and USPs<small>Why does it earn its returns, and can competitors copy it?</small></h2>
+  <div class="tbl"><table id="moatTbl"></table></div>
+  <div class="read" id="readMoat"></div>
+</section>
+
+<section id="drivers">
+  <h2>3. Revenue drivers<small>Volume x price x mix, and the KPIs that move it</small></h2>
+  <p id="driverFormula"></p>
+  <div class="tbl"><table id="kpiTbl"></table></div>
+  <div class="read" id="readDrivers"></div>
+</section>
+
+<section id="earnings">
+  <h2>4. Earnings report summary<small id="earnSub"></small></h2>
+  <h3>Headline results ($ millions, except EPS)</h3>
+  <div class="tbl"><table id="headTbl"></table></div>
+  <div class="read" id="readHeadline"></div>
+  <h3>Metric scorecard</h3>
+  <div class="tbl"><table id="scoreTbl"></table></div>
+  <div class="read" id="readScore"></div>
+  <details><summary>Methodology and definitions</summary><div class="foot" id="method"></div></details>
+</section>
+
+<section id="valuation">
+  <h2>5. Valuation<small id="valSub"></small></h2>
+  <div class="tbl"><table id="valTbl"></table></div>
+  <div class="read" id="readVal"></div>
+</section>
+
+<section id="industry">
+  <h2>6. Industry and competitors<small>Growth prospects and peers on fundamentals and valuation</small></h2>
+  <p id="industryText"></p>
+  <div class="tbl"><table id="peerTbl"></table></div>
+  <div class="foot" id="peerNote"></div>
+  <div class="read" id="readPeers"></div>
+</section>
+
+<section id="management">
+  <h2>7. Management and capital allocation<small>Who runs it, what they plan, what they own</small></h2>
+  <div class="tbl"><table id="mgmtTbl"></table></div>
+  <h3>Stated plan (Investor Day, 30 Sep 2026)</h3>
+  <ul id="planList"></ul>
+  <h3>Capital allocation record</h3>
+  <ul id="capList"></ul>
+  <div class="read" id="readMgmt"></div>
+</section>
+
+<section id="risks">
+  <h2>8. Risks<small>The specific things that would break the story</small></h2>
+  <div class="tbl"><table id="riskTbl"></table></div>
+</section>
+
+<section id="scenarios">
+  <h2>9. Scenarios (12-month view)<small id="scenSub"></small></h2>
+  <div class="scen" id="scenCards"></div>
+  <h3>Try your own: FY27 non-GAAP EPS x P/E</h3>
+  <div>EPS $<input id="uEps" type="number" step="0.1" style="width:80px"> &nbsp; P/E <input id="uPe" type="number" step="0.5" style="width:70px"> &nbsp; = <b id="uOut"></b></div>
+  <div class="read" id="readScen"></div>
+</section>
+
+<section id="takeaways">
+  <h2>10. Takeaways<small>What to remember and what to check next</small></h2>
+  <div class="grid2"><div><h3>Remember</h3><ul id="remember"></ul></div><div><h3>Check next</h3><ul id="checkNext"></ul></div></div>
+  <h3>Glossary</h3><div class="foot" id="glossary"></div>
+</section>
+
+<section id="sources">
+  <h2>Sources</h2>
+  <ol id="srcList" class="foot"></ol>
+  <p class="disc">Education and analysis only, not investment advice. Figures are from the sources listed, as of the dates shown; derived ratios are calculated on this page from the raw inputs. Estimates are labelled. Verify before acting.</p>
+</section>
+</main>
+
+<script>
+/* ============================================================
+   DATA: raw inputs only. Ratios are computed below.
+   Units: USD millions unless noted. Fiscal year ends 31 Oct.
+   Periods: q3 = Q3 FY26 (May-Jul 2026), q2 = Q2 FY26 (Feb-Apr 2026),
+            q3py = Q3 FY25 (May-Jul 2025),
+            ttm = Aug-2025..Jul-2026 (Q4 FY25 + 9M FY26),
+            pttm = Aug-2024..Jul-2025 (Q4 FY24 + 9M FY25)
+   ============================================================ */
+const DATA = {
+  company:"Synopsys, Inc.", ticker:"SNPS", exchange:"Nasdaq", currency:"USD",
+  asOf:"12 Nov 2026", priceDate:"9 Nov 2026 close",
+  price:462.88, sharesOut:191.64, /* m, 10-Q cover 24 Aug 2026 */
+  taxRate:0.18, /* normalized = company non-GAAP rate */
+  fin:{
+    rev:{q3:2476.8,q2:2276.0,q3py:1739.7,ttm:9416.5,pttm:6435.3},
+    gp:{q3:1797.4,q2:1646.1,q3py:1359.2,ttm:6815.2,pttm:5091.4},
+    ebit:{q3:357.5,q2:120.4,q3py:165.3,ttm:802.4,pttm:1104.3},
+    adjEbit:{q3:1030.4,q2:899.7,q3py:669.8,ttm:3766.7,pttm:2413.5}, /* sum of segment adjusted operating income */
+    ni:{q3:545.8,q2:17.1,q3py:242.5,ttm:1076.6,pttm:1166.7},
+    epsG:{q3:2.84,q2:0.09,q3py:1.50,ttm:5.66,pttm:7.40},
+    epsA:{q3:3.91,q2:3.35,q3py:3.39,ttm:13.93,pttm:13.49},
+    ocf:{q3:812.8,q2:628.9,q3py:671.0,ttm:2938.3,pttm:1441.7},
+    capex:{q3:66.6,q2:53.9,q3py:39.0,ttm:190.6,pttm:155.6},
+    da:{q3:454.8,q2:null,q3py:null,ttm:1811.1,pttm:326.2},
+    amort:{ttm:1615.5},
+    sbc:{q3:231.6,q2:null,q3py:267.7,ttm:950.0,pttm:820.8},
+    buyback:{q3:37.5,q2:262.5,q3py:0,ttm:300.0,pttm:null},
+    buybackSh:{q3:0.051,q2:0.640,q3py:0,ttm:0.691,pttm:null},
+    dilShares:{q3:192.3,q2:192.1,q3py:161.7},
+    /* ex-Ansys growth inputs: Ansys revenue in period */
+    ansys:{q3:711,q2:652,q3py:88.8,ttm:2916.7,pttm:88.8},
+    revPY:{q3:1525.7,q2:1455.3,q3py:1525.7} /* comparison base for organic calc: q3=>Q3FY25 base used below */
+  },
+  bs:{ /* period-end balance sheets */
+    "Jul-26":{cash:3607.7,debt:10037.4,lease:804.4,equity:31151.4,gw:26834.8,intang:11458.7},
+    "Apr-26":{cash:2484.4,debt:10036.0,lease:806.0,equity:30478.1,gw:26853.8,intang:11875.4},
+    "Oct-25":{cash:2961.0,debt:13484.5,lease:808.9,equity:28327.0,gw:26899.2,intang:12679.6},
+    "Jul-25":{cash:2593.7,debt:14340.1,lease:800.2,equity:27614.2,gw:26945.7,intang:13079.9},
+    "Oct-24":{cash:4050.4,debt:15.6,lease:668.9,equity:8993.2,gw:3448.9,intang:195.2}
+  },
+  segTTM:[{n:"Design Automation (EDA software + hardware + Ansys simulation)",v:7674.3},{n:"Design IP (interface, memory, logic libraries, security IP)",v:1742.2}],
+  typeQ3:[{n:"Time-based licenses (ratable)",v:1002.8},{n:"Maintenance & service (incl. Ansys)",v:808.8},{n:"Upfront licenses + hardware/IP",v:665.2}],
+  guide:{fy26Rev:9715,fy26EpsA:15.07,fy26Fcf:2600,fy26Margin:41.5,fy27Rev:11150,fy27EpsA:19.08,fy27Margin:44,fy27Fcf:3100,fy25EpsA:12.91},
+  hist:{fwdPe5y:38.4,ttmPeA5y:41.3,evEbitda5y:42.3,evEbitdaFY25:33.6,evEbitdaFY24:41.0},
+  consensus:{target:586.95,low:475,high:700,buy:23,hold:2,sell:0,n:25,date:"3-9 Nov 2026"},
+  peers:[
+    {t:"SNPS",n:"Synopsys",self:true},
+    {t:"CDNS",n:"Cadence Design",px:327.0,mcap:89.7,growth:21,opm:44.7,fwdPe:327.0/8.40,evEbitda:38.8,note:"FY26 guide: rev +21%, non-GAAP EPS $8.40; price 5 Nov 2026"},
+    {t:"PTC",n:"PTC",fwdPe:21.6,note:"forward P/E, Oct 2026 (aggregator)"},
+    {t:"DASTY",n:"Dassault Systemes",fwdPe:16.5,note:"forward P/E, Oct 2026 (aggregator)"},
+    {t:"ADSK",n:"Autodesk",fwdPe:19,note:"forward P/E approx. (aggregator, date not stated)"}
+  ],
+  scenarios:[
+    {k:"bear",name:"Bear",eps:17.50,pe:21,a:["FY27 revenue +11% (EDA slows, IP stalls again, China export rules tighten)","Non-GAAP margin ~42%, below the 44% guide","Multiple de-rates to the PTC/Autodesk range on 'AI disrupts EDA' fears"]},
+    {k:"base",name:"Base",eps:19.08,pe:28,a:["FY27 guide met: revenue $11.15bn (+15%), ~44% margin","Ansys synergies of $400m complete in FY27 as planned","Multiple stays below Cadence and the 5-yr average while GAAP returns stay low"]},
+    {k:"bull",name:"Bull",eps:20.00,pe:33,a:["EDA double-digit plus AI 'agentic' consumption pricing lifts usage","IP royalties (Amazon $1bn+ AOIP deal) and Ansys fusion beat plan","Multiple re-rates toward the 5-yr average forward P/E of ~38x"]}
+  ],
+  sources:[
+    ["Synopsys Q3 FY26 press release (8-K Ex.99.1), 26 Aug 2026","https://www.sec.gov/Archives/edgar/data/0000883241/000119312526368620/d157153dex991.htm"],
+    ["Synopsys Q3 FY26 Form 10-Q","https://www.sec.gov/Archives/edgar/data/0000883241/000088324126000025/snps-20260731.htm"],
+    ["Synopsys Q2 FY26 press release, 27 May 2026","https://www.sec.gov/Archives/edgar/data/0000883241/000119312526241911/d126227dex991.htm"],
+    ["Synopsys Q4/FY25 press release, 10 Dec 2025","https://www.sec.gov/Archives/edgar/data/883241/000119312525314200/d29055dex991.htm"],
+    ["Synopsys Q3 FY25 press release, 9 Sep 2025","https://www.sec.gov/Archives/edgar/data/883241/000119312525199178/d56931dex991.htm"],
+    ["Q3 FY26 call highlights (MarketBeat): Ansys $711m, backlog $10.9bn, EDA +8.5%, IP +11%","https://www.marketbeat.com/instant-alerts/transcript-synopsys-q3-earnings-call-highlights-2026-08-26/"],
+    ["Q2 FY26 call transcript (Motley Fool): FCF $575m, buybacks","https://www.fool.com/earnings/call-transcripts/2026/05/27/synopsys-snps-q2-2026-earnings-transcript/"],
+    ["Q3 FY25 results (Zacks): OCF $671m","https://www.zacks.com/stock/news/2749516/synopsys-q3-earnings-and-revenues-miss-estimates-stock-plunges-22"],
+    ["Q3 FY25 summary (Fintool): FCF ~$632m","https://fintool.com/app/research/companies/SNPS/earnings/Q3 2025"],
+    ["Q1/Q2 FY26 results (Zacks): geography, OCF","https://www.zacks.com/stock/news/2875706/synopsys-q1-earnings-surpass-estimates-revenues-rise-yy"],
+    ["Investor Day 2026 (Futurum)","https://futurumgroup.com/insights/synopsys-investor-day-2026-turns-eda-into-a-royalty-and-ai-model-revenue-share-business/"],
+    ["Investor Day 2026 (Stocktwits/TheFly: BofA, KeyBanc)","https://stocktwits.com/news-articles/markets/equity/synopsys-long-term-earnings-targets-come-in-well-ahead-of-consensus-bof-a-says-firm-lifts-target-by-100/cZD0TzcRBiS"],
+    ["24/7 Wall St, 9 Nov 2026: price $462.88, consensus $586.95","https://247wallst.com/investing/2026/11/09/prediction-synopsys-could-be-a-bigger-ai-winner-than-investors-expect/"],
+    ["Bullstory consensus snapshot, 3 Nov 2026","https://bullstory.io/en/stocks/snps/forecast/analyst-rating"],
+    ["Seeking Alpha valuation metrics (5-yr averages)","https://seekingalpha.com/symbol/SNPS/valuation/metrics"],
+    ["TickerLeague EV/EBITDA history","https://tickerleague.com/companies/SNPS/financials/ev-ebitda"],
+    ["Cadence Q3 2026 results (8-K)","https://www.sec.gov/Archives/edgar/data/0000813672/000081367226000116/cdns10262026ex9901.htm"],
+    ["Cadence price / market cap (Trefis, 5 Nov 2026)","https://www.trefis.com/data/companies/CDNS?from=section_ticker"],
+    ["Cadence EV/EBITDA (De Belegger, 1 Nov 2026)","https://www.debelegger.nl/en/stock/CDNS.US"],
+    ["PTC / Dassault forward P/E (Walnut, Oct 2026)","https://walnutinvest.com/stocks/compare/dasty-vs-ptc"],
+    ["Autodesk forward P/E (Belcourt)","https://belcourt.vercel.app/ADSK/valuation"],
+    ["Elliott settlement (Reuters via The Star, 27 May 2026)","https://www.thestar.com.my/tech/tech-news/2026/05/28/synopsys-reaches-settlement-with-elliott-says-jesse-cohn-to-join-board"],
+    ["Insider holdings (SECForm4)","https://www.secform4.com/insider-holders/883241.html"],
+    ["Insider ownership 0.56% (MarketBeat)","https://www.marketbeat.com/instant-alerts/filing-synopsys-inc-snps-shares-purchased-by-temasek-holdings-private-ltd-2026-07-22/"],
+    ["Nvidia $2bn investment, FY25 backlog (SiliconANGLE)","https://siliconangle.com/2025/12/10/synopsys-records-record-breaking-full-year-revenue-beats-expectations/"],
+    ["Cadence vs Synopsys duopoly (Design & Reuse)","https://www.design-reuse.com/news/202529833--synopsys-records-record-breaking-full-year-revenue-as-it-beats-expectations-again-"],
+    ["Recurring revenue 82% (Zacks)","https://zacks.com/stock/news/3015097/can-synopsys-ai-push-drive-chip-design-efficiency-and-growth"]
+  ]
+};
+
+/* ============ TEXT (judgement fields) ============ */
+const TEXT = {
+  whatItDoes:"Synopsys sells the software, hardware and pre-built circuit blocks that engineers use to design and verify chips, and (since buying Ansys in July 2025) the simulation software used to test physical systems such as engines, antennas and batteries. Almost every advanced chip passes through Synopsys or Cadence tools before it is manufactured. Customers are chip designers (Nvidia, AMD, Apple, Qualcomm, hyperscalers) and foundries; contracts are mostly multi-year licences, so 82% of revenue is recurring.",
+  timeline:[
+    ["1986","Founded by Aart de Geus and colleagues out of GE's microelectronics centre; its logic-synthesis tool (Design Compiler) becomes the industry standard."],
+    ["1992","IPO on Nasdaq."],
+    ["2000s-2010s","Roll-up of the design flow: Avant! (place & route), Magma, Synplicity and many IP firms. Builds the #1 interface-IP business."],
+    ["Jan 2024","Sassine Ghazi becomes CEO; de Geus moves to executive chair."],
+    ["Sep 2024","Sells the Software Integrity (app security) unit to focus on silicon-to-systems."],
+    ["Jul 2025","Closes the ~$35bn Ansys acquisition; debt rises to ~$14bn."],
+    ["Sep 2025","Q3 FY25 miss driven by Design IP; stock falls 22% after hours."],
+    ["Dec 2025","Nvidia invests $2bn in Synopsys; FY25 revenue $7.05bn, backlog $11.4bn."],
+    ["May 2026","Settlement with activist Elliott; Jesse Cohn joins the board."],
+    ["Sep 2026","Investor Day: FY27 guide $11.15bn revenue, ~44% margin, ~50% margin by FY30, ~$1bn buyback intent, $1bn+ Amazon IP deal, OpenAI partnership."]
+  ],
+  readOverview:"<b>Read:</b> a toll-road business that just doubled its toll booths. Core EDA is a near-monopoly-like duopoly; Ansys adds about $2.9bn of simulation revenue a year. The price was a $26.8bn goodwill balance and $10bn of debt, so the next three years are about proving the deal earns its cost.",
+  moat:[
+    ["Switching costs","Design flows, scripts and sign-off methods are built around one vendor's tools; a tool switch mid-project risks a failed tape-out costing $100m+.","Very strong"],
+    ["Foundry co-optimization","Tools are certified with TSMC, Samsung and Intel at each new node (2nm and below). A newcomer must re-earn this every node.","Very strong"],
+    ["Duopoly scale","Synopsys and Cadence together design virtually every chip; Siemens EDA is a distant third. R&D of ~$2.8bn/yr is hard to match.","Strong"],
+    ["IP library ('build once, sell many')","#1 in interface IP (PCIe, DDR/LPDDR, die-to-die). Each block is reused across hundreds of chips at near-zero marginal cost.","Strong, but execution slipped in FY25"],
+    ["Ansys physics solvers","Decades-old, validated multiphysics solvers (fluids, structures, electromagnetics) used for certification in aerospace and autos.","Strong"],
+    ["Data and AI","Proprietary design data and solvers feed AI agents (AgentEngineer, Autopilot). Rivals face the same option, so this is a race, not a moat yet.","Unproven"]
+  ],
+  readMoat:"<b>Read:</b> the moat is real and mostly about switching costs and foundry certification, not brand. What is less secure is pricing power in Design IP (segment margin fell from ~38% in FY24 to 16% in Q1 FY26 before recovering to 26.5% in Q3) and whether AI lets customers or Cadence capture more of the value.",
+  driverFormula:"<b>Revenue = design activity (number and complexity of chip and system projects) x licences and seats per project x price per licence + IP blocks licensed (and, increasingly, royalties per unit shipped) + simulation seats (Ansys).</b> AI raises all three: more custom chips, bigger designs (multi-die, 3D packaging), and AI agents that consume more licence-hours.",
+  kpis:[
+    ["EDA growth (organic)","+8.5% YoY in Q3 FY26","Guided to double digits in Q4 and FY26. The core of valuation."],
+    ["Design IP revenue","$474m, +11% YoY, 2nd straight quarter of growth","Long-term floor now 17% CAGR; watch margins (26.5%)."],
+    ["Ansys / Simulation & Analysis revenue","$711m in Q3; ~$2.98bn FY26 guide","Floor 10% CAGR; $400m revenue synergies by FY29."],
+    ["Backlog","$10.9bn (down from $11.4bn at FY25 end, mainly divested Processor IP)","~1.1x annual revenue: high visibility."],
+    ["Non-GAAP operating margin","41.6% in Q3; 41.5% FY26 guide","Target ~44% FY27, ~50% FY30."],
+    ["China share of revenue","~10% in Q2 FY26 (14% in Q3 FY25)","Export-control sensitivity."]
+  ],
+  readDrivers:"<b>Read:</b> headline growth of 42% is mostly Ansys arriving. Strip that out and the old Synopsys grew roughly 6-9% in Q3 (divestitures muddy the base). The story the market is underwriting is that core EDA re-accelerates to low teens and IP returns to high teens.",
+  readHeadline:"<b>Read:</b> revenue and adjusted EPS hit records and beat guidance. GAAP profits look weak because Ansys brings ~$400m a quarter of intangible amortization and Q2 carried restructuring; cash flow is the cleaner signal, and TTM FCF roughly doubled to ~$2.7bn.",
+  readScore:"<b>Read:</b> on the operating business this is a 40% margin, 29% FCF-margin franchise. On capital employed it is not yet: GAAP ROIC is ~2% and even on adjusted profits it is ~8%, below a ~9-10% cost of capital, because $38bn of the $38.4bn invested capital is goodwill and intangibles. Tangible capital is near zero, so the core business has very high returns; the question is only whether Ansys was worth $35bn. Deleveraging (net debt/EBITDA from 8.2x to 2.5x) and falling SBC are the improving trends.",
+  valSub:"",
+  readVal:"<b>Read:</b> on cash-earnings measures SNPS trades below its own history (forward P/E ~31x vs a 5-yr average of ~38x) and below Cadence (~39x), despite a similar margin target. The discount reflects lower GAAP returns after Ansys, IP execution scars and leverage. On GAAP numbers it looks expensive (~82x), which is mostly amortization noise.",
+  industryText:"EDA is a roughly $20bn+ niche growing faster than software as a whole, driven by AI accelerators, custom silicon at hyperscalers, chiplets and 3D packaging, and more simulation in cars and aerospace. It is a duopoly (Synopsys, Cadence) with Siemens EDA third. Both leaders are pushing into system simulation (Synopsys via Ansys, Cadence via its system design and analysis group) and AI agents, so the two are converging and competing more directly.",
+  peerNote:"Forward P/E uses current-fiscal-year non-GAAP EPS. SNPS on FY26 guide ($15.07). Cadence on its 2026 guide ($8.40). Other peers from aggregators as labelled; they are less directly comparable (design/PLM software rather than EDA). n/a = not available from sources read.",
+  readPeers:"<b>Read:</b> Cadence is the only like-for-like peer and it grows faster this year (21% vs ~15% guide for SNPS FY27) with higher current margins, which is why it holds a premium. Engineering software peers (PTC, Autodesk, Dassault) trade at 16-22x, which sets a sensible floor for the bear case.",
+  mgmt:[
+    ["Sassine Ghazi","President & CEO (CEO since Jan 2024; at Synopsys since 1998)","~76.9k shares (~$36m) direct","Led the Ansys deal and the shift to royalty/consumption pricing."],
+    ["Aart de Geus","Co-founder, Executive Chair (CEO 1997-2023, co-CEO from 2012)","~468k shares (~$217m)","Founder still on board; long-term product culture."],
+    ["Shelagh Glaser","CFO","~14.4k shares direct after 10b5-1 sales","Owns synergy, margin and deleveraging targets."],
+    ["Jesse Cohn (Elliott)","Director since Jun 2026","Elliott: multi-billion stake (reported)","Activist pressure on margins, buybacks and portfolio."]
+  ],
+  plan:["FY27: revenue $11.1-11.2bn (+~15%), non-GAAP operating margin ~44%, EPS $19.04-19.12 (+27%), FCF ~$3.1bn.","FY26-FY30: mid-teens revenue CAGR (EDA 13%+, Design IP 17%+, Simulation 10%+); EPS and FCF growth mid-20s.","Non-GAAP operating margin ~50% by FY30; SBC falling from a ~13% peak toward ~8% of revenue.","$400m Ansys cost synergies completed in FY27, a year early; $400m revenue synergies by FY29.","New models: application-optimized IP with royalties (Amazon $1bn+ deal), agentic-AI consumption pricing, GPT-Synopsys with OpenAI.","Repurchase ~$1bn of shares over the coming months."],
+  cap:["Ansys: ~$35bn (cash + stock) in Jul 2025; diluted share count up ~19% YoY (161.7m to 192.3m).","Debt paid down from $14.3bn (Jul 2025) to $10.0bn (Jul 2026), helped by a $2bn private placement (Nvidia) and $440m of divestiture proceeds.","Pruning: Software Integrity (2024), Optical Solutions and PowerArtist (2025-26), Processor IP (2026).","Buybacks restarted: $300m in 9M FY26 (691k shares); $2bn authorization (Feb 2026).","No dividend."],
+  readMgmt:"<b>Read:</b> experienced, engineering-led management with a founder still on the board, but low skin in the game (insiders ~0.6%) and steady 10b5-1 selling. The Ansys bet was bold and expensive; the activist on the board and the explicit FY30 targets make management accountable on margins and buybacks.",
+  risks:[
+    ["Ansys returns","Paid ~$35bn; estimated Ansys NOPAT gives a ~2-3% return on price today. $26.8bn of goodwill could be impaired if synergies slip.","High","Ansys revenue vs ~$2.98bn guide; synergy run-rate"],
+    ["Design IP execution","FY25 IP miss (Intel foundry, China, roadmap) cut margins sharply. The new 17% growth floor depends on the royalty model working.","High","IP growth and segment margin each quarter"],
+    ["China / export controls","~10% of revenue; 2025 US EDA export restrictions showed how fast this can change. Guidance assumes no new rules.","Medium-High","Commerce/Entity List actions; China % of revenue"],
+    ["AI disruption","AI-native design tools or customer in-house flows could compress pricing; Cadence's Maestro AI models compete head-on.","Medium","Pricing on renewals; agentic licence uptake"],
+    ["Leverage","$10.0bn debt, net debt/EBITDA ~2.5x (GAAP). Fine for this cash flow, but limits flexibility if growth slows.","Medium","Net debt trend; interest ~$480m/yr"],
+    ["Customer concentration and semis cycle","Large chipmakers and hyperscalers drive a big share; a semis downturn or a big customer slowdown (e.g. Intel) hits upfront and IP revenue first.","Medium","Upfront revenue, backlog"],
+    ["Quality of earnings","Wide GAAP vs non-GAAP gap (amortization, SBC ~10% of revenue, restructuring).","Low-Medium","FCF minus SBC; GAAP margin trend"]
+  ],
+  readScen:"<b>Read:</b> consensus ($587) sits between the base and bull cases: the Street is already paying for FY27 guidance plus some re-rating. Upside needs the margin path and IP royalties to show up; the bear case is mostly a multiple story (21x), not a collapse in earnings.",
+  remember:["A duopoly toll road on every advanced chip, now bundled with the #1 simulation franchise.","Operating quality is excellent (41% adj. margin, 29% FCF margin, 82% recurring); capital returns are poor after paying $35bn for Ansys.","Valuation: ~31x FY26 / ~24x FY27 adjusted EPS, below its 5-yr average and Cadence.","Management has put hard numbers on FY27-FY30; the stock is a bet on them delivering."],
+  checkNext:["Q4 FY26 results (early Dec 2026): EDA double-digit growth delivered? FY27 guide reaffirmed?","Design IP growth and margin trend; first royalty revenue from AOIP deals.","Ansys revenue and synergy run-rate; any goodwill impairment test language.","Net debt and buyback pace (~$1bn intent).","Export-control news for China and the Entity List.","Cadence's next guide as the read-across for EDA demand."],
+  glossary:"<b>EDA</b>: electronic design automation, software to design chips. <b>IP (semiconductor)</b>: pre-designed circuit blocks licensed into a chip. <b>Tape-out</b>: sending a final design to the factory. <b>Backlog</b>: contracted revenue not yet recognised. <b>NOPAT</b>: operating profit after tax, before interest. <b>ROIC</b>: NOPAT / capital invested in the business. <b>Non-GAAP</b>: company-adjusted figures excluding amortization, SBC, restructuring. <b>PEG</b>: P/E divided by expected EPS growth (%)."
+};
+
+/* ============ CALCULATIONS ============ */
+const F=DATA.fin, t=DATA.taxRate;
+const ic = k => { const b=DATA.bs[k]; return b.debt+b.lease+b.equity-b.cash; };
+const icx = k => ic(k)-DATA.bs[k].gw-DATA.bs[k].intang;
+const avgIC = (a,b)=> (ic(a)+ic(b))/2;
+const fcf = p => (F.ocf[p]!=null&&F.capex[p]!=null)? F.ocf[p]-F.capex[p]:null;
+const ann = p => (p==="ttm"||p==="pttm")?1:4;
+const per = ["q3","q2","q3py","ttm","pttm"];
+const icFor = {q3:ic("Jul-26"),q2:ic("Apr-26"),q3py:ic("Jul-25"),ttm:avgIC("Jul-25","Jul-26"),pttm:avgIC("Oct-24","Jul-25")};
+const nopat = p => F.ebit[p]*(1-t);
+const anopat = p => F.adjEbit[p]*(1-t);
+const ebitdaTTM = F.ebit.ttm+F.da.ttm, ebitdaPTTM=F.ebit.pttm+F.da.pttm;
+const adjEbitdaTTM = F.adjEbit.ttm + (F.da.ttm-F.amort.ttm);
+const netDebt = k => DATA.bs[k].debt-DATA.bs[k].cash;
+const mcap = DATA.price*DATA.sharesOut;
+const ev = mcap + netDebt("Jul-26") + DATA.bs["Jul-26"].lease;
+
+function M(){
+  const r={};
+  per.forEach(p=>{
+    r[p]={
+      rev:F.rev[p], gp:F.gp[p], ebit:F.ebit[p], epsG:F.epsG[p], epsA:F.epsA[p], ocf:F.ocf[p], fcf:fcf(p),
+      opm:F.ebit[p]/F.rev[p]*100, adjOpm:F.adjEbit[p]/F.rev[p]*100,
+      nopatM:nopat(p)/F.rev[p]*100,
+      roic:nopat(p)*ann(p)/icFor[p]*100, aroic:anopat(p)*ann(p)/icFor[p]*100,
+      sc:F.rev[p]*ann(p)/icFor[p],
+      fcfM:fcf(p)!=null?fcf(p)/F.rev[p]*100:null,
+      conv:fcf(p)!=null?fcf(p)/nopat(p)*100:null, aconv:fcf(p)!=null?fcf(p)/anopat(p)*100:null,
+      sbc:F.sbc[p]!=null?F.sbc[p]/F.rev[p]*100:null,
+      bb:F.buyback[p],
+      org: null
+    };
+  });
+  // ex-Ansys growth: (rev - ansys) vs (base - base ansys)
+  r.q3.org=((F.rev.q3-F.ansys.q3)/(F.rev.q3py-F.ansys.q3py)-1)*100;
+  r.q3py.org=((F.rev.q3py-F.ansys.q3py)/1525.7-1)*100;
+  r.q2.org=((F.rev.q2-F.ansys.q2)/1604.3-1)*100;
+  r.ttm.org=((F.rev.ttm-F.ansys.ttm)/(F.rev.pttm-F.ansys.pttm)-1)*100;
+  r.pttm.org=null;
+  r.q3.nd=netDebt("Jul-26")/ebitdaTTM; r.ttm.nd=r.q3.nd;
+  r.q3py.nd=netDebt("Jul-25")/ebitdaPTTM; r.pttm.nd=r.q3py.nd; r.q2.nd=null;
+  // incremental ROIC (TTM vs prior TTM) and multi-year (FY24 -> TTM)
+  r.incr={ttm:(nopat("ttm")-nopat("pttm"))/(icFor.ttm-icFor.pttm)*100,
+          adjMulti:(anopat("ttm")-2362.1*(1-t))/(ic("Jul-26")-ic("Oct-24"))*100,
+          gaapMulti:(nopat("ttm")-1355.7*(1-t))/(ic("Jul-26")-ic("Oct-24"))*100};
+  return r;
+}
+const R=M();
+
+/* ============ FORMATTERS ============ */
+const n=(v,d=1)=>v==null||!isFinite(v)?'<span class="na">n/a</span>':v.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct=(v,d=1)=>v==null||!isFinite(v)?'<span class="na">n/a</span>':n(v,d)+'%';
+const x=(v,d=1)=>v==null||!isFinite(v)?'<span class="na">n/a</span>':n(v,d)+'x';
+const chg=(a,b)=>{ if(a==null||b==null||!isFinite(a)||!isFinite(b)||b===0) return '<span class="na">n/a</span>'; if(b<0&&a>=0||Math.sign(a)!==Math.sign(b)) return '<span class="na">n/m</span>'; const c=(a/b-1)*100; return `<span class="${c>=0?'pos':'neg'}">${c>=0?'+':''}${n(c,1)}%</span>`;};
+const pp=(a,b)=>{ if(a==null||b==null||!isFinite(a)||!isFinite(b)) return '<span class="na">n/a</span>'; const c=a-b; return `<span class="${c>=0?'pos':'neg'}">${c>=0?'+':''}${n(c,1)} pp</span>`;};
+const xd=(a,b)=>{ if(a==null||b==null||!isFinite(a)||!isFinite(b)) return '<span class="na">n/a</span>'; const c=a-b; return `${c>=0?'+':''}${n(c,2)}x`;};
+const $=id=>document.getElementById(id);
+
+/* ============ RENDER ============ */
+$("title").textContent=`${DATA.company} (${DATA.exchange}: ${DATA.ticker})`;
+$("subtitle").textContent=`Equity research 101 overview · data as of ${DATA.asOf} · price $${DATA.price} (${DATA.priceDate}) · fiscal year ends 31 Oct · ${DATA.currency}`;
+const fwdPe=DATA.price/DATA.guide.fy26EpsA, fwdPe27=DATA.price/DATA.guide.fy27EpsA;
+const kp=[["$"+n(mcap/1000,1)+"bn","Market cap"],["$"+n(ev/1000,1)+"bn","Enterprise value"],["$"+n(F.rev.ttm/1000,2)+"bn","TTM revenue"],[pct(R.ttm.adjOpm),"TTM adj. op. margin"],[x(fwdPe),"P/E FY26 guide (adj.)"],["$"+DATA.consensus.target,"Consensus target ("+chg(DATA.consensus.target,DATA.price).replace(/<[^>]+>/g,'')+")"]];
+$("kpis").innerHTML=kp.map(k=>`<div class="kpi"><b>${k[0]}</b><span>${k[1]}</span></div>`).join("");
+
+$("whatItDoes").innerHTML=TEXT.whatItDoes;
+function bars(el,arr){const tot=arr.reduce((s,a)=>s+a.v,0);$(el).innerHTML=arr.map(a=>`<div style="margin:6px 0"><div style="display:flex;justify-content:space-between;font-size:13px"><span>${a.n}</span><span>$${n(a.v,0)}m · ${n(a.v/tot*100,0)}%</span></div><div class="bar" style="width:${a.v/tot*100}%"></div></div>`).join("");}
+bars("segBars",DATA.segTTM); bars("typeBars",DATA.typeQ3);
+$("timeline").innerHTML=TEXT.timeline.map(t=>`<div><b>${t[0]}</b>${t[1]}</div>`).join("");
+$("readOverview").innerHTML=TEXT.readOverview;
+
+$("moatTbl").innerHTML=`<tr><th class="l">Source</th><th class="l">Why it matters</th><th class="l">Strength</th></tr>`+TEXT.moat.map(m=>`<tr><td><b>${m[0]}</b></td><td class="l">${m[1]}</td><td class="l">${m[2]}</td></tr>`).join("");
+$("readMoat").innerHTML=TEXT.readMoat;
+$("driverFormula").innerHTML=TEXT.driverFormula;
+$("kpiTbl").innerHTML=`<tr><th class="l">KPI</th><th class="l">Latest</th><th class="l">Why it matters</th></tr>`+TEXT.kpis.map(k=>`<tr><td>${k[0]}</td><td class="l">${k[1]}</td><td class="l">${k[2]}</td></tr>`).join("");
+$("readDrivers").innerHTML=TEXT.readDrivers;
+
+$("earnSub").textContent="Latest quarter Q3 FY26 (3 months to 31 Jul 2026, reported 26 Aug 2026). Q4 FY26 results due early December 2026.";
+const hdr=`<tr><th class="l">Metric</th><th>Q3 FY26</th><th>Q2 FY26</th><th>Q3 FY25</th><th>QoQ %</th><th>YoY %</th><th>TTM Jul-26</th><th>Prior TTM</th><th>TTM %</th></tr>`;
+const hrow=(lab,k,d=1,pre="")=>`<tr><td>${lab}</td><td>${pre}${n(R.q3[k],d)}</td><td>${pre}${n(R.q2[k],d)}</td><td>${pre}${n(R.q3py[k],d)}</td><td>${chg(R.q3[k],R.q2[k])}</td><td>${chg(R.q3[k],R.q3py[k])}</td><td>${pre}${n(R.ttm[k],d)}</td><td>${pre}${n(R.pttm[k],d)}</td><td>${chg(R.ttm[k],R.pttm[k])}</td></tr>`;
+$("headTbl").innerHTML=hdr+hrow("Revenue","rev")+hrow("Gross profit","gp")+hrow("Operating income (GAAP)","ebit")+hrow("EPS, diluted (GAAP)","epsG",2,"$")+hrow("EPS, adjusted (non-GAAP)","epsA",2,"$")+hrow("Operating cash flow","ocf")+hrow("Free cash flow","fcf");
+$("readHeadline").innerHTML=TEXT.readHeadline;
+
+const shdr=`<tr><th class="l">Category</th><th class="l">Metric</th><th>Q3 FY26</th><th>Q2 FY26</th><th>Q3 FY25</th><th>QoQ Δ</th><th>YoY Δ</th><th>TTM</th><th>Prior TTM</th><th>Δ</th></tr>`;
+function srow(cat,lab,k,f,dfn,note){const D=dfn||pp;return `<tr><td class="l">${cat}</td><td class="l">${lab}${note?` <span class="tag">${note}</span>`:''}</td><td>${f(R.q3[k])}</td><td>${f(R.q2[k])}</td><td>${f(R.q3py[k])}</td><td>${D(R.q3[k],R.q2[k])}</td><td>${D(R.q3[k],R.q3py[k])}</td><td>${f(R.ttm[k])}</td><td>${f(R.pttm[k])}</td><td>${D(R.ttm[k],R.pttm[k])}</td></tr>`;}
+const money=v=>v==null?'<span class="na">n/a</span>':'$'+n(v,1)+'m';
+const bbChg=(a,b)=>chg(a,b);
+$("scoreTbl").innerHTML=shdr+
+ srow("Growth","Revenue growth ex-Ansys (YoY)","org",pct,pp,"est.")+
+ srow("Profitability","Operating margin (GAAP)","opm",pct)+
+ srow("Profitability","Operating margin (adjusted)","adjOpm",pct)+
+ srow("Profitability","NOPAT margin (GAAP, 18% tax)","nopatM",pct)+
+ srow("Capital efficiency","ROIC (GAAP)","roic",pct)+
+ srow("Capital efficiency","ROIC (adjusted NOPAT)","aroic",pct)+
+ `<tr><td class="l">Capital efficiency</td><td class="l">Incremental ROIC</td><td colspan="8" class="l">TTM vs prior TTM (GAAP): ${pct(R.incr.ttm)} (n/m: NOPAT fell while capital rose ~$16bn). Multi-year FY24 to TTM Jul-26: GAAP ${pct(R.incr.gaapMulti)}, adjusted ${pct(R.incr.adjMulti)} on ~$32.8bn of added capital.</td></tr>`+
+ srow("Reinvestment","Sales / capital (annualized)","sc",v=>x(v,2),xd)+
+ srow("Cash","FCF margin","fcfM",pct)+
+ srow("Quality","FCF conversion (vs GAAP NOPAT)","conv",v=>pct(v,0))+
+ srow("Quality","FCF conversion (vs adjusted NOPAT)","aconv",v=>pct(v,0))+
+ srow("Balance sheet","Net debt / EBITDA (TTM, GAAP)","nd",x,xd)+
+ srow("Capital allocation","Buybacks ($m)","bb",money,bbChg)+
+ `<tr><td class="l">Capital allocation</td><td class="l">Shares</td><td colspan="8" class="l">Q3: 51k shares retired ($37.5m); 9M FY26: 691k ($300m). Diluted shares 192.3m vs 161.7m a year ago (+18.9%, Ansys stock consideration). Basic outstanding 191.6m (24 Aug 2026).</td></tr>`+
+ `<tr><td class="l">Capital allocation</td><td class="l">Acquisition ROIC (Ansys) <span class="tag">est.</span></td><td colspan="8" class="l">Ansys TTM revenue ~$2.92bn. Ansys profit is not disclosed; assuming a ~40% adjusted operating margin and 18% tax gives NOPAT ~$${n(2916.7*0.40*0.82,0)}m, or ~${n(2916.7*0.40*0.82/35000*100,1)}% on a ~$35bn price. Not determinable precisely from filings.</td></tr>`+
+ srow("Dilution","SBC / revenue","sbc",pct);
+$("readScore").innerHTML=TEXT.readScore;
+$("method").innerHTML=`<p><b>Periods.</b> TTM = Q4 FY25 + 9M FY26 (Aug 2025 to Jul 2026). Prior TTM = Q4 FY24 + 9M FY25. Q2 FY26 capex is derived from operating cash flow less disclosed FCF ($575m); Q3 FY25 capex from OCF $671m less FCF ~$632m. Q4 figures are full-year less nine-month.</p>
+<p><b>Organic growth.</b> Not disclosed. Estimated as revenue excluding Ansys revenue in each period (Ansys: Q3 FY26 $711m, Q2 FY26 ~$652m, Q3 FY25 ~$89m implied, TTM ~$2.92bn). Not adjusted for divestitures (Optical Solutions, PowerArtist, Processor IP, ~$150m FY26 impact) or FX, so it understates underlying growth by roughly 2 pp. Company-reported segment growth in Q3: EDA +8.5%, Design IP +11%.</p>
+<p><b>Operating margin</b> = GAAP operating income / revenue; adjusted = sum of segment adjusted operating income / revenue (company's non-GAAP margin: Q3 41.6%). <b>NOPAT</b> = operating income x (1 - 18%), the company's normalized non-GAAP tax rate (GAAP rates swing from -28% to +20%). <b>Invested capital</b> = total debt + operating lease liabilities + equity - cash and short-term investments (financing approach). Quarterly ROIC and sales/capital use annualized quarter / period-end capital; TTM uses the average of Jul-25 and Jul-26; prior TTM uses the average of Oct-24 and Jul-25 (Ansys closed 17 Jul 2025, so prior-period ratios are distorted). Invested capital excluding goodwill and intangibles is about $${n(icx("Jul-26"),0)}m, so ROIC ex-goodwill is not meaningful (effectively unbounded). <b>Incremental ROIC</b> = ΔNOPAT / Δinvested capital; FY24 base NOPAT uses FY24 GAAP operating income $1,355.7m and adjusted $2,362.1m. <b>FCF</b> = operating cash flow - capex. <b>FCF conversion</b> = FCF / NOPAT. <b>EBITDA</b> = GAAP operating income + depreciation and amortization (TTM $${n(ebitdaTTM,0)}m); adjusted EBITDA = adjusted operating income + depreciation only (~$${n(adjEbitdaTTM,0)}m). <b>Net debt</b> = total debt - cash (leases excluded here; included in EV). Q3 FY25 net debt/EBITDA is inflated because Ansys debt is in but only ~2 weeks of Ansys EBITDA. <b>SBC / revenue</b> = stock-based compensation / revenue. <b>Buybacks</b> = treasury stock purchased.</p>`;
+
+/* valuation */
+$("valSub").textContent=`At $${DATA.price} (${DATA.priceDate}). Market cap $${n(mcap/1000,1)}bn; EV $${n(ev/1000,1)}bn incl. $${n(DATA.bs["Jul-26"].lease,0)}m leases.`;
+const g26=(DATA.guide.fy26EpsA/DATA.guide.fy25EpsA-1)*100, g27=(DATA.guide.fy27EpsA/DATA.guide.fy26EpsA-1)*100;
+const fwdEbitda27 = DATA.guide.fy27Rev*DATA.guide.fy27Margin/100 + (F.da.ttm-F.amort.ttm);
+const vrows=[
+ ["P/E, TTM GAAP",x(DATA.price/F.epsG.ttm),"60.0x (5-yr avg GAAP TTM, SA)","GAAP EPS depressed by ~$1.6bn amortization"],
+ ["P/E, TTM adjusted",x(DATA.price/F.epsA.ttm),x(DATA.hist.ttmPeA5y)+" (5-yr avg)","Below own history"],
+ ["P/E, FY26 guide (adj. EPS $"+DATA.guide.fy26EpsA+")",x(fwdPe),x(DATA.hist.fwdPe5y)+" (5-yr avg fwd)","~20% discount to history"],
+ ["P/E, FY27 guide (adj. EPS $"+DATA.guide.fy27EpsA+")",x(fwdPe27),"n/a",""],
+ ["EV / EBITDA, TTM GAAP",x(ev/ebitdaTTM),x(DATA.hist.evEbitda5y)+" (5-yr avg); FY25 "+x(DATA.hist.evEbitdaFY25)+", FY24 "+x(DATA.hist.evEbitdaFY24),"Below 5-yr average"],
+ ["EV / adj. EBITDA, TTM",x(ev/adjEbitdaTTM),"n/a",""],
+ ["EV / adj. EBITDA, FY27 implied <span class='tag'>est.</span>",x(ev/fwdEbitda27),"n/a","FY27 revenue x 44% + depreciation"],
+ ["PEG, FY26 (fwd P/E / FY26 EPS growth "+n(g26,1)+"%)",x(fwdPe/g26,2),"2.38x (5-yr avg, SA)",""],
+ ["PEG, FY27 (P/E / FY27 EPS growth "+n(g27,1)+"%)",x(fwdPe27/g27,2),"n/a","Below 1x if guide is met"],
+ ["FCF yield, FY26 guide ($2.6bn)",pct(DATA.guide.fy26Fcf/mcap*100,1),"","FY27 guide $3.1bn: "+pct(DATA.guide.fy27Fcf/mcap*100,1)]
+];
+$("valTbl").innerHTML=`<tr><th class="l">Multiple</th><th>SNPS now</th><th class="l">SNPS history</th><th class="l">Comment</th></tr>`+vrows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td class="l">${r[2]}</td><td class="l">${r[3]}</td></tr>`).join("");
+$("readVal").innerHTML=TEXT.readVal;
+
+/* peers */
+$("industryText").innerHTML=TEXT.industryText;
+const self={px:DATA.price,mcap:mcap/1000,growth:(DATA.guide.fy26Rev/7054.2-1)*100,opm:DATA.guide.fy26Margin,fwdPe:fwdPe,evEbitda:ev/ebitdaTTM,note:"FY26 guide incl. Ansys (FY27 guide +15%); price "+DATA.priceDate};
+$("peerTbl").innerHTML=`<tr><th class="l">Company</th><th>Price</th><th>Mkt cap ($bn)</th><th>Rev. growth (current FY guide)</th><th>Adj. op. margin</th><th>Fwd P/E</th><th>EV/EBITDA (TTM)</th><th class="l">Note</th></tr>`+
+ DATA.peers.map(p=>{const q=p.self?Object.assign({},p,self):p;return `<tr${p.self?' style="background:#f4f7fb;font-weight:600"':''}><td>${q.n} (${q.t})</td><td>${q.px?'$'+n(q.px,2):'<span class="na">n/a</span>'}</td><td>${n(q.mcap,1)}</td><td>${pct(q.growth,0)}</td><td>${pct(q.opm,1)}</td><td>${x(q.fwdPe)}</td><td>${x(q.evEbitda)}</td><td class="l foot">${q.note||''}</td></tr>`}).join("");
+$("peerNote").innerHTML=TEXT.peerNote;
+$("readPeers").innerHTML=TEXT.readPeers;
+
+/* management */
+$("mgmtTbl").innerHTML=`<tr><th class="l">Name</th><th class="l">Role / tenure</th><th class="l">Ownership</th><th class="l">Relevance</th></tr>`+TEXT.mgmt.map(m=>`<tr>${m.map(c=>`<td class="l">${c}</td>`).join("")}</tr>`).join("")+`<tr><td class="l" colspan="4">Insiders own ~0.56% in total; institutions ~85%. Net insider selling over the past year, mostly under pre-arranged 10b5-1 plans.</td></tr>`;
+$("planList").innerHTML=TEXT.plan.map(p=>`<li>${p}</li>`).join("");
+$("capList").innerHTML=TEXT.cap.map(p=>`<li>${p}</li>`).join("");
+$("readMgmt").innerHTML=TEXT.readMgmt;
+
+/* risks */
+$("riskTbl").innerHTML=`<tr><th class="l">Risk</th><th class="l">What would happen</th><th class="l">Severity</th><th class="l">Signal to watch</th></tr>`+TEXT.risks.map(r=>`<tr>${r.map(c=>`<td class="l">${c}</td>`).join("")}</tr>`).join("");
+
+/* scenarios */
+$("scenSub").textContent=`Value = FY27 non-GAAP EPS x P/E. Our scenario values are estimates. Analyst consensus target $${DATA.consensus.target} (${DATA.consensus.n} analysts: ${DATA.consensus.buy} buy, ${DATA.consensus.hold} hold; range $${DATA.consensus.low}-$${DATA.consensus.high}; ${DATA.consensus.date}).`;
+$("scenCards").innerHTML=DATA.scenarios.map(s=>{const v=s.eps*s.pe;return `<div class="sc ${s.k}"><h4>${s.name}</h4><div class="px">$${n(v,0)}</div><div>${chg(v,DATA.price)} vs price · EPS $${n(s.eps,2)} x ${s.pe}x</div><ul>${s.a.map(a=>`<li>${a}</li>`).join("")}</ul></div>`}).join("")+
+ `<div class="sc" style="grid-column:1/-1;background:#fafaf7"><b>Consensus $${DATA.consensus.target}</b> (${chg(DATA.consensus.target,DATA.price)}) implies ~${n(DATA.consensus.target/DATA.guide.fy27EpsA,1)}x FY27 guided EPS: between our base (${DATA.scenarios[1].pe}x) and bull (${DATA.scenarios[2].pe}x).</div>`;
+$("uEps").value=DATA.guide.fy27EpsA; $("uPe").value=28;
+const upd=()=>{const v=+$("uEps").value*+$("uPe").value;$("uOut").innerHTML=`$${n(v,0)} (${chg(v,DATA.price)})`;};
+$("uEps").oninput=upd;$("uPe").oninput=upd;upd();
+$("readScen").innerHTML=TEXT.readScen;
+
+$("remember").innerHTML=TEXT.remember.map(p=>`<li>${p}</li>`).join("");
+$("checkNext").innerHTML=TEXT.checkNext.map(p=>`<li>${p}</li>`).join("");
+$("glossary").innerHTML=TEXT.glossary;
+$("srcList").innerHTML=DATA.sources.map(s=>`<li><a href="${s[1]}">${s[0]}</a></li>`).join("");
+
+/* expose for checks */
+window.__R={R,mcap,ev,ebitdaTTM,adjEbitdaTTM,fwdPe,fwdPe27};
+</script>
+</body>
+</html>

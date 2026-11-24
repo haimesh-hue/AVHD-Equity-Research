@@ -33,6 +33,7 @@ export function companyText(c, notes = []) {
   const t = c.thesis || {};
   return [c.ticker, c.name, c.sector, c.industry, c.exchange, c.country, (c.tags || []).join(' '), c.description,
     c.thesisText, t.summary, t.bull, t.bear, t.catalysts, t.risks, t.moat, t.valuation, (c.links || []).map(l => l.title).join(' '),
+    (c.reports || []).map(r => [r.title, r.kind, r.verdict, r.summary].join(' ')).join(' '),
     notes.map(n => n.title + ' ' + (n.text || '')).join(' ')].filter(Boolean).join(' \n ').toLowerCase();
 }
 
@@ -60,6 +61,7 @@ function matchFilters(kind, item, filters, extra) {
         const t = kind === 'company' ? item.ticker : extra?.ticker;
         if ((t || '').toLowerCase() !== value) return false; break;
       }
+      case 'verdict': if (kind !== 'company' || !(item.reports || []).some(r => (r.verdict || '').toLowerCase().replace(/\s+/g, '-').startsWith(value))) return false; break;
       case 'rating': if (kind !== 'company' || !cmp(item.rating || 0, value)) return false; break;
       case 'upside': case 'pe': case 'roe': case 'margin': case 'growth': {
         if (kind !== 'company') return false;

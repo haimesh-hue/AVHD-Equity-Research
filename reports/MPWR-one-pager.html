@@ -1,0 +1,447 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>MPWR Research One-Pager</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a component datasheet. Narrow reading column, section "pins" numbered as the 11 questions in order, spec tables in mono. */
+:root{
+  --bg:#f3f5f7; --panel:#ffffff; --fg:#141a22; --muted:#5b6673; --rule:#d8dee5;
+  --accent:#1d5fd1; --accent-soft:#e3ecfb; --good:#1f7a4d; --warn:#b26a00; --bad:#b4312b;
+  --bar2:#9db5e0;
+  --f-display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1318; --panel:#161c23; --fg:#e6ebf0; --muted:#94a1ae; --rule:#2a333d;
+  --accent:#6ea0ff; --accent-soft:#1c2a42; --good:#4fbf86; --warn:#e3a33a; --bad:#ef6b63; --bar2:#3b5584; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1318; --panel:#161c23; --fg:#e6ebf0; --muted:#94a1ae; --rule:#2a333d;
+  --accent:#6ea0ff; --accent-soft:#1c2a42; --good:#4fbf86; --warn:#e3a33a; --bad:#ef6b63; --bar2:#3b5584; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+header.top{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:end;border-bottom:2px solid var(--fg);padding-bottom:14px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--f-display);font-stretch:85%;font-weight:800;font-size:clamp(30px,5vw,46px);line-height:1.02;margin:4px 0 6px;text-wrap:balance}
+.lede{max-width:68ch;margin:0;color:var(--fg)}
+.quote{font-family:var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+.quote .px{font-family:var(--f-display);font-size:34px;font-weight:700;font-stretch:90%}
+.quote small{display:block;color:var(--muted);font-size:12px}
+.verdict{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.verdict div{background:var(--panel);padding:12px 14px;min-width:0}
+.verdict b{display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.verdict span{font-family:var(--f-display);font-weight:700;font-size:19px;font-stretch:90%}
+.verdict p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+section{background:var(--panel);border:1px solid var(--rule);padding:18px 20px 20px;display:flex;flex-direction:column;gap:12px;min-width:0}
+section h2{display:flex;gap:12px;align-items:baseline;margin:0;font-family:var(--f-display);font-stretch:90%;font-size:22px;font-weight:700;text-wrap:balance}
+section h2 .pin{font-family:var(--f-mono);font-size:12px;font-weight:500;color:var(--accent);border:1px solid var(--accent);padding:1px 6px;letter-spacing:.04em}
+section h2 .q{font-family:var(--f-body);font-weight:400;font-size:14px;color:var(--muted);font-stretch:100%}
+.read{background:var(--accent-soft);border-left:3px solid var(--accent);padding:9px 12px;margin:0;max-width:none}
+.read::before{content:"Read: ";font-weight:600}
+p{margin:0;max-width:72ch}
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.cols > *{min-width:0}
+ul.tight{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px}
+.tbl{overflow-x:auto;border:1px solid var(--rule)}
+table{border-collapse:collapse;width:100%;font-family:var(--f-mono);font-size:13px;font-variant-numeric:tabular-nums}
+th,td{padding:6px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--rule)}
+th:first-child,td:first-child{text-align:left;font-family:var(--f-body)}
+thead th{font-weight:500;color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--bg)}
+tr.sub td{color:var(--muted)}
+tr.hl td{font-weight:500;background:var(--accent-soft)}
+td.na{color:var(--muted)}
+.timeline{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0}
+.timeline dt{font-family:var(--f-mono);font-size:13px;color:var(--accent);font-variant-numeric:tabular-nums}
+.timeline dd{margin:0}
+.chart svg{width:100%;height:auto;display:block}
+.chart figcaption{font-size:12px;color:var(--muted);margin-top:4px}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:11px;padding:1px 6px;border:1px solid currentColor;margin-right:6px}
+.tag.bad{color:var(--bad)} .tag.warn{color:var(--warn)} .tag.good{color:var(--good)}
+.scen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.scen > div{border:1px solid var(--rule);padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.scen h3{margin:0;font-family:var(--f-display);font-stretch:90%;font-size:18px}
+.scen .val{font-family:var(--f-mono);font-size:22px;font-variant-numeric:tabular-nums}
+.scen .bear{color:var(--bad)} .scen .base{color:var(--accent)} .scen .bull{color:var(--good)}
+.scen ul{margin:0;padding-left:18px;font-size:14px}
+details{border-top:1px solid var(--rule);padding-top:8px}
+summary{cursor:pointer;font-weight:600}
+summary:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--accent)}
+.src{font-size:13px;columns:2;column-gap:24px;padding-left:18px;margin:8px 0 0}
+.src li{break-inside:avoid;margin-bottom:4px}
+.gloss{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 18px;font-size:13px;margin:8px 0 0}
+.gloss dt{font-weight:600} .gloss dd{margin:0 0 6px;color:var(--muted)}
+.disc{font-size:12px;color:var(--muted)}
+@media (max-width:720px){
+  header.top{grid-template-columns:1fr}.quote{text-align:left}
+  .verdict{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cols,.scen,.gloss{grid-template-columns:1fr}.src{columns:1}
+}
+@media print{body{background:#fff}section{break-inside:avoid}}
+</style>
+
+<div class="wrap" id="app">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Equity research 101 · NASDAQ: MPWR · USD · data as of 20 Oct 2026</div>
+      <h1>Monolithic Power Systems</h1>
+      <p class="lede" id="lede"></p>
+    </div>
+    <div class="quote" id="quote"></div>
+  </header>
+  <div class="verdict" id="verdict"></div>
+  <div id="sections" style="display:flex;flex-direction:column;gap:22px"></div>
+  <p class="disc">Education and analysis only, not investment advice. Figures come from the sources listed; estimates and scenario values are marked as such. FY = calendar year (December year end). TTM = twelve months to 30 Jun 2026.</p>
+</div>
+
+<script>
+/* ================= DATA (raw inputs; the page derives every ratio) ================= */
+const DATA = {
+  company:"Monolithic Power Systems", ticker:"MPWR", currency:"USD m",
+  price:1248.74, priceDate:"20 Oct 2026 close", sharesNow:49.14, dps:8.00,
+  taxRateForROIC:0.15,
+  lede:"A fabless designer of power-management chips and modules that turn a board's raw supply into the exact voltages a processor, sensor or motor needs. Founded in 1997, it now sells 4,000+ parts across 13 product lines, and AI servers have become its largest end market.",
+  years:["FY21","FY22","FY23","FY24","FY25","TTM Jun26"],
+  revenue:[1208,1794,1821,2207,2790,3273],
+  grossProfit:[685.46,1049,1021,1221,1540,1807],
+  ebit:[262.42,526.79,481.74,539.36,728.64,940.17],
+  da:[28.70,37.11,40.17,36.43,52.51,60.12],
+  netIncome:[242.02,437.67,427.37,1592.1,621.48,801.95],
+  sbc:[123.48,160.99,149.71,205.64,227.49,208.87],
+  ocf:[320.01,246.67,638.21,788.41,838.20,822.34],
+  capex:[94.42,58.84,57.58,146.12,172.01,236.80],
+  dividends:[109.36,137.97,185.84,240.62,284.80,329.22],
+  buybacks:[0,0,3.74,636.24,7.69,8.05],
+  acquisitions:[0,0,0,33.28,0,0],
+  cash:[725.08,737.87,1108,862.95,1257,1414],
+  receivables:[110.25,182.71,229.86,172.52,255.63,343.62],
+  inventory:[259.42,447.29,383.7,419.61,564.65,675.85],
+  payables:[83.03,61.46,62.96,102.53,138.27,182.22],
+  ppe:[369.26,361.45,377.31,511.86,652.58,798.42],
+  totalAssets:[1586,2059,2434,3516,4194,4686],
+  equity:[1244,1669,2050,2951,3531,3895],
+  debt:[5.81,3.8,7.87,15.79,24.1,18.93],
+  shares:[46.26,47.11,48.03,47.82,48.71,49.14],
+  consensus:{eps26:27.52, eps27:35.16, eps25:17.77, rev26:4160, rev27:5290, ptLow:1575, ptAvg:1840, ptHigh:2100, analysts:17, rating:"Strong Buy (13 SB, 3 Buy, 1 Hold)"},
+  history:{ // year-end multiples, StockAnalysis ratios page
+    years:["FY21","FY22","FY23","FY24","FY25"],
+    pe:[93.95,37.93,70.72,18.13,69.87], fwdPe:[60.78,28.10,53.24,37.05,45.68], evEbitda:[75.58,28.14,55.93,47.62,53.99],
+    fwdPeNow:38.64
+  },
+  peers:[ // 20 Oct 2026, StockAnalysis statistics pages. netDebt negative = net cash
+    {n:"Monolithic Power",t:"MPWR",mcap:61.4,pe:76.2,fpe:38.6,peg:1.21,eve:60.0,opm:28.7,roic:31.7,nd:-1.40,g3:31.7,self:true},
+    {n:"Texas Instruments",t:"TXN",mcap:253.7,pe:42.2,fpe:28.7,peg:1.24,eve:27.4,opm:38.0,roic:25.5,nd:7.05,g3:16.1},
+    {n:"Analog Devices",t:"ADI",mcap:192.4,pe:47.2,fpe:24.8,peg:0.90,eve:28.8,opm:35.7,roic:11.0,nd:6.84,g3:23.0},
+    {n:"onsemi",t:"ON",mcap:29.4,pe:48.5,fpe:19.4,peg:0.54,eve:14.6,opm:23.2,roic:15.6,nd:0.84,g3:12.0},
+    {n:"Vicor",t:"VICR",mcap:9.4,pe:53.5,fpe:34.8,peg:1.08,eve:72.5,opm:19.6,roic:25.7,nd:-0.51,g3:42.9}
+  ],
+  segments:{ q:["Q2 25","Q2 26"],
+    rows:[["Enterprise Data",144.0,380.6],["Storage & Computing",195.3,199.8],["Automotive",145.1,157.1],["Communications",73.8,131.5],["Industrial",46.7,54.8],["Consumer",59.7,56.8]]},
+  scenarios:{
+    bear:{eps:26,pe:30,pts:["AI accelerator socket losses or a customer inventory correction stall Enterprise Data","FY27 EPS flat at ~$26 vs FY26 consensus $27.52","Multiple de-rates to 30x, near onsemi/TI territory on growth-adjusted terms"]},
+    base:{eps:35.16,pe:40,pts:["FY27 consensus holds: revenue ~$5.3bn (+27%), EPS $35.16","Gross margin stays ~55-56% as guided","Multiple settles at 40x, below the 5-year average forward P/E of ~45x"]},
+    bull:{eps:42,pe:45,pts:["800V data-center and DDR5 products add a new leg; capacity beyond $6bn gets filled","FY27 EPS ~$42, about 20% above consensus","Market pays its 5-year average forward multiple (~45x)"]}
+  },
+  sources:[
+    ["MPS Q2 2026 results, Form 8-K Ex. 99.1 (SEC)","https://www.sec.gov/Archives/edgar/data/0001280452/000162828026051029/mpwr-20260630xexx991.htm"],
+    ["MPS Q2 2026 earnings commentary (IR)","https://www.monolithicpower.com/media/investor-relations/press-releases/Q2_2026_MPS_Earnings_Commentary_1.pdf"],
+    ["MPWR income statement, StockAnalysis","https://stockanalysis.com/stocks/mpwr/financials/"],
+    ["MPWR balance sheet, StockAnalysis","https://stockanalysis.com/stocks/mpwr/financials/balance-sheet/"],
+    ["MPWR cash flow, StockAnalysis","https://stockanalysis.com/stocks/mpwr/financials/cash-flow-statement/"],
+    ["MPWR ratios history, StockAnalysis","https://stockanalysis.com/stocks/mpwr/financials/ratios/"],
+    ["MPWR statistics, StockAnalysis","https://stockanalysis.com/stocks/mpwr/statistics/"],
+    ["MPWR analyst forecast, StockAnalysis","https://stockanalysis.com/stocks/mpwr/forecast/"],
+    ["Peer statistics: TXN, ADI, ON, VICR (StockAnalysis)","https://stockanalysis.com/stocks/txn/statistics/"],
+    ["Item 4.02 non-reliance 8-K, Feb 2026 (StockTitan)","https://www.stocktitan.net/sec-filings/MPWR/8-k-monolithic-power-systems-inc-reports-material-event-ae7b80820d15.html"],
+    ["USITC: Section 337 investigation, vertical power delivery (Oct 2026)","https://www.usitc.gov/press_room/news_release/2026/er1009_69342.htm"],
+    ["Proxy statement DEF 14A 2026 (SEC)","https://www.sec.gov/Archives/edgar/data/0001280452/000143774926014084/mpwr20260403_def14a.htm"],
+    ["Michael Hsing insider holdings, GuruFocus","https://gurufocus.com/insider/58393/michael-hsing"],
+    ["Wall Street thinks MPWR is worth 50% more, Yahoo Finance (Sep 2026)","https://finance.yahoo.com/markets/stocks/articles/wall-street-thinks-monolithic-power-104937385.html"],
+    ["Monolithic Power Systems, Wikipedia","https://en.wikipedia.org/wiki/Monolithic_Power_Systems"],
+    ["Oppenheimer on AI accelerator share, Nasdaq/The Fly (Nov 2024)","https://www.nasdaq.com/articles/oppenheimer-sees-monolithic-retaining-dominant-ai-accelerator-power-share"]
+  ]
+};
+
+/* ================= helpers ================= */
+const D=DATA, N=D.years.length;
+const f0=v=>v==null||!isFinite(v)?"n/a":(Math.round(v)+0).toLocaleString("en-US");
+const f1=v=>v==null||!isFinite(v)?"n/a":v.toLocaleString("en-US",{minimumFractionDigits:1,maximumFractionDigits:1});
+const pct=v=>v==null||!isFinite(v)?"n/a":(v*100).toFixed(1)+"%";
+const x=v=>v==null||!isFinite(v)?"n/a":v.toFixed(1)+"x";
+const usd=v=>"$"+Math.round(v).toLocaleString("en-US");
+const arr=fn=>D.years.map((_,i)=>fn(i));
+const avg=a=>a.reduce((s,v)=>s+v,0)/a.length;
+
+/* ================= derived ================= */
+const C={};
+C.growth=arr(i=>i?D.revenue[i]/D.revenue[i-1]-1:null);
+C.growth[N-1]=null; // TTM vs FY not comparable
+C.gm=arr(i=>D.grossProfit[i]/D.revenue[i]);
+C.ebitda=arr(i=>D.ebit[i]+D.da[i]);
+C.ebitdaM=arr(i=>C.ebitda[i]/D.revenue[i]);
+C.ebitM=arr(i=>D.ebit[i]/D.revenue[i]);
+C.nm=arr(i=>D.netIncome[i]/D.revenue[i]);
+C.fcf=arr(i=>D.ocf[i]-D.capex[i]);
+C.fcfM=arr(i=>C.fcf[i]/D.revenue[i]);
+C.conv=arr(i=>C.fcf[i]/D.netIncome[i]);
+C.capexPct=arr(i=>D.capex[i]/D.revenue[i]);
+C.sbcPct=arr(i=>D.sbc[i]/D.revenue[i]);
+C.cogs=arr(i=>D.revenue[i]-D.grossProfit[i]);
+C.nwc=arr(i=>D.receivables[i]+D.inventory[i]-D.payables[i]);
+C.nwcPct=arr(i=>C.nwc[i]/D.revenue[i]);
+C.dso=arr(i=>D.receivables[i]/D.revenue[i]*365);
+C.dio=arr(i=>D.inventory[i]/C.cogs[i]*365);
+C.dpo=arr(i=>D.payables[i]/C.cogs[i]*365);
+C.ccc=arr(i=>C.dso[i]+C.dio[i]-C.dpo[i]);
+C.netDebt=arr(i=>D.debt[i]-D.cash[i]);
+C.ndE=arr(i=>C.netDebt[i]/C.ebitda[i]);
+C.at=arr(i=>D.revenue[i]/D.totalAssets[i]);
+C.em=arr(i=>D.totalAssets[i]/D.equity[i]);
+C.roe=arr(i=>C.nm[i]*C.at[i]*C.em[i]);
+C.ic=arr(i=>D.equity[i]+D.debt[i]-D.cash[i]);
+C.roic=arr(i=>D.ebit[i]*(1-D.taxRateForROIC)/C.ic[i]);
+C.payout=arr(i=>(D.dividends[i]+D.buybacks[i])/C.fcf[i]);
+const L=N-1;
+C.mcap=D.price*D.sharesNow;
+C.ev=C.mcap+C.netDebt[L];
+C.pe=C.mcap/D.netIncome[L];
+C.eve=C.ev/C.ebitda[L];
+C.pe26=D.price/D.consensus.eps26;
+C.pe27=D.price/D.consensus.eps27;
+C.g27=D.consensus.eps27/D.consensus.eps26-1;
+C.peg=C.pe27/(C.g27*100);
+C.fcfYield=C.fcf[L]/C.mcap;
+C.histFwd=avg(D.history.fwdPe); C.histEve=avg(D.history.evEbitda);
+C.histPeEx24=avg(D.history.pe.filter((_,i)=>i!==3));
+C.segMixAI=D.segments.rows[0][2]/D.segments.rows.reduce((s,r)=>s+r[2],0);
+C.segTot=[0,1].map(k=>D.segments.rows.reduce((s,r)=>s+r[k+1],0));
+for(const k of["bear","base","bull"]){const s=D.scenarios[k];s.px=s.eps*s.pe;s.up=s.px/D.price-1;}
+
+/* ================= render ================= */
+const $=id=>document.getElementById(id);
+$("lede").textContent=D.lede;
+$("quote").innerHTML=`<div class="px">${"$"+D.price.toLocaleString("en-US",{minimumFractionDigits:2})}</div>
+<small>${D.priceDate}</small><small>Mkt cap $${f1(C.mcap/1000)}bn · EV $${f1(C.ev/1000)}bn</small>`;
+$("verdict").innerHTML=[
+ ["Business quality","High",`ROIC ${pct(C.roic[L])}, gross margin ${pct(C.gm[L])}, no debt`],
+ ["Growth","Accelerating",`Q2 26 revenue +47.6% y/y; Q3 guide $1.14-1.16bn`],
+ ["Valuation",`${x(C.pe26)} FY26 P/E`,`Below own 5-yr avg fwd ${x(C.histFwd)}, above every large peer`],
+ ["Main risk","AI concentration",`Enterprise Data ${pct(C.segMixAI)} of Q2 sales; Vicor ITC case`]
+].map(([b,s,p])=>`<div><b>${b}</b><span>${s}</span><p>${p}</p></div>`).join("");
+
+function table(head,rows,cls){
+  return `<div class="tbl"><table><thead><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${
+    rows.map(r=>`<tr class="${r.cls||""}">${r.cells.map((c,j)=>`<td class="${c==="n/a"&&j?"na":""}">${c}</td>`).join("")}</tr>`).join("")
+  }</tbody></table></div>`;
+}
+const row=(label,vals,fmt,cls)=>({cls,cells:[label,...vals.map(fmt)]});
+const H=["USD m",...D.years];
+
+function sec(n,title,q,body,read){
+  return `<section id="s${n}"><h2><span class="pin">${String(n).padStart(2,"0")}</span>${title}<span class="q">${q}</span></h2>${body}${read?`<p class="read">${read}</p>`:""}</section>`;
+}
+
+/* --- chart: revenue bars + EBIT margin line --- */
+function revChart(){
+  const W=560,Hh=230,pl=44,pr=44,pt=16,pb=30,max=3500;
+  const bw=(W-pl-pr)/N*0.6, step=(W-pl-pr)/N;
+  const y=v=>pt+(Hh-pt-pb)*(1-v/max), ym=m=>pt+(Hh-pt-pb)*(1-m/0.5);
+  let s=`<svg viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Revenue and EBIT margin, FY21 to TTM">`;
+  [0,1000,2000,3000].forEach(t=>{s+=`<line x1="${pl}" x2="${W-pr}" y1="${y(t)}" y2="${y(t)}" stroke="var(--rule)"/><text x="${pl-6}" y="${y(t)+4}" font-size="10" text-anchor="end" fill="var(--muted)" font-family="IBM Plex Mono,monospace">${t?t/1000+"bn":"0"}</text>`});
+  [0,0.1,0.2,0.3,0.4,0.5].forEach(t=>{s+=`<text x="${W-pr+6}" y="${ym(t)+4}" font-size="10" fill="var(--muted)" font-family="IBM Plex Mono,monospace">${t*100}%</text>`});
+  D.revenue.forEach((v,i)=>{const cx=pl+step*i+step/2;
+    s+=`<rect x="${cx-bw/2}" y="${y(v)}" width="${bw}" height="${y(0)-y(v)}" fill="${i===L?"var(--bar2)":"var(--accent)"}"/>`;
+    s+=`<text x="${cx}" y="${y(v)-4}" font-size="10" text-anchor="middle" fill="var(--fg)" font-family="IBM Plex Mono,monospace">${f0(v)}</text>`;
+    s+=`<text x="${cx}" y="${Hh-10}" font-size="10" text-anchor="middle" fill="var(--muted)" font-family="IBM Plex Mono,monospace">${D.years[i].replace(" Jun26","")}</text>`;});
+  const pts=C.ebitM.map((m,i)=>`${pl+step*i+step/2},${ym(m)}`).join(" ");
+  s+=`<polyline points="${pts}" fill="none" stroke="var(--warn)" stroke-width="2"/>`;
+  C.ebitM.forEach((m,i)=>{s+=`<circle cx="${pl+step*i+step/2}" cy="${ym(m)}" r="3" fill="var(--warn)"/>`});
+  return s+`</svg>`;
+}
+/* --- chart: segment bars --- */
+function segChart(){
+  const rows=D.segments.rows,W=560,rh=28,pl=140,pr=50,Hh=rows.length*rh+30,max=400;
+  const sx=v=>pl+(W-pl-pr)*v/max;
+  let s=`<svg viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Revenue by end market Q2 2025 vs Q2 2026">`;
+  rows.forEach((r,i)=>{const y0=10+i*rh;
+    s+=`<text x="0" y="${y0+15}" font-size="11" fill="var(--fg)" font-family="IBM Plex Sans,sans-serif">${r[0]}</text>`;
+    s+=`<rect x="${pl}" y="${y0+2}" width="${sx(r[1])-pl}" height="9" fill="var(--bar2)"/>`;
+    s+=`<rect x="${pl}" y="${y0+12}" width="${sx(r[2])-pl}" height="9" fill="var(--accent)"/>`;
+    s+=`<text x="${sx(r[2])+5}" y="${y0+20}" font-size="10" fill="var(--fg)" font-family="IBM Plex Mono,monospace">${f0(r[2])} (${(r[2]/r[1]-1>=0?"+":"")+((r[2]/r[1]-1)*100).toFixed(0)}%)</text>`;});
+  const ly=Hh-8;
+  s+=`<rect x="${pl}" y="${ly-8}" width="10" height="8" fill="var(--bar2)"/><text x="${pl+14}" y="${ly}" font-size="10" fill="var(--muted)" font-family="IBM Plex Mono,monospace">Q2 25</text>`;
+  s+=`<rect x="${pl+70}" y="${ly-8}" width="10" height="8" fill="var(--accent)"/><text x="${pl+84}" y="${ly}" font-size="10" fill="var(--muted)" font-family="IBM Plex Mono,monospace">Q2 26 (USD m, y/y)</text>`;
+  return s+`</svg>`;
+}
+
+let html="";
+/* 1 Business */
+html+=sec(1,"Business overview","What does it do and how does it make money?",`
+<div class="cols"><div style="display:flex;flex-direction:column;gap:10px">
+<p>Every chip in a server, car or phone needs clean, stable power at a precise voltage. MPS designs the integrated circuits and modules that do that conversion (DC/DC converters, power modules, motor drivers, battery and lighting controllers). It is <b>fabless</b>: it designs the silicon and outsources wafer production and assembly, much of it in Asia.</p>
+<p><b>Model:</b> sells thousands of low-ticket parts, mostly through distributors, into six end markets. Pricing power comes from design wins: once a part is designed into a board, it usually ships for that product's life. In Q2 2026 Enterprise Data (AI and server power) was ${pct(C.segMixAI)} of revenue, up from about 22% a year earlier.</p>
+<p>Management describes the shift as moving from "chip-only" supplier to a full-service solutions provider (modules, reference designs, software).</p>
+</div>
+<dl class="timeline">
+<dt>1997</dt><dd>Founded by Michael Hsing, an analog process engineer, who still runs it.</dd>
+<dt>2004</dt><dd>IPO in November.</dd>
+<dt>2021</dt><dd>Added to the S&P 500 (February); revenue passes $1bn.</dd>
+<dt>2024</dt><dd>AI accelerator power ramps; $636m buyback; one-off foreign tax incentive.</dd>
+<dt>2025</dt><dd>Revenue $2.79bn; joins the Nasdaq-100 in December.</dd>
+<dt>Feb 2026</dt><dd>Restates 2024 net income down $195m (deferred tax error); material weakness disclosed.</dd>
+<dt>Jul 2026</dt><dd>Record Q2 revenue $981m; capacity goal "significantly beyond $6bn"; buyback authorisation raised to $1bn.</dd>
+<dt>Oct 2026</dt><dd>Named in Vicor's ITC patent complaint on vertical power delivery.</dd>
+</dl></div>`,
+`A mature analog franchise that has turned into an AI-infrastructure growth story in under three years. That changes both its growth rate and its risk profile.`);
+
+/* 2 Moat */
+html+=sec(2,"Moat","Why does it earn its returns, and can rivals copy it?",`
+<ul class="tight">
+<li><b>Process and packaging know-how.</b> MPS develops its own power process technology and runs it at partner foundries. This is why it can sell analog parts at ~55% gross margin without owning fabs, and why ROIC (${pct(C.roic[L])} TTM) beats fab-owning TI and ADI.</li>
+<li><b>Design-in stickiness.</b> Power stages are qualified with each board; switching costs a redesign. Over 1,500 new automotive sockets shipped in H1 2026 alone.</li>
+<li><b>Speed in high-current AI power.</b> Early leadership in accelerator power for top AI platforms, which competitors (Infineon, Renesas, Vicor, TI) are contesting.</li>
+<li><b>Where it is weaker:</b> no captive fabs (supply depends on partners), heavy China manufacturing exposure, and in AI a few very large customers can shift share fast (a Nov 2024 report of a lost Nvidia socket hit the stock before being disputed).</li>
+</ul>`,
+`Returns are durable in the broad catalogue (auto, industrial, storage). In AI, the moat is speed and execution rather than lock-in, so share must be re-won each platform generation.`);
+
+/* 3 Drivers */
+html+=sec(3,"Drivers","What is revenue made of, and which KPIs move it?",`
+<div class="cols"><figure class="chart" style="margin:0">${segChart()}<figcaption>Revenue by end market, Q2 2025 vs Q2 2026. Source: Q2 2026 8-K.</figcaption></figure>
+<div style="display:flex;flex-direction:column;gap:8px">
+<p><b>Revenue = units x content per board x mix.</b> AI servers raise content per board sharply because accelerators draw hundreds of amps.</p>
+<ul class="tight">
+<li><b>Enterprise Data revenue</b>: $381m in Q2, +164% y/y. The swing factor.</li>
+<li><b>Gross margin</b>: 55.2% GAAP in Q2; Q3 guide 55.2-55.8%. Holding it while mix shifts to modules tests pricing power.</li>
+<li><b>Inventory days</b>: 140 (121 on next-quarter sales). Watch for build-up.</li>
+<li><b>Capacity</b>: target lifted beyond $6bn of revenue capacity; capex follows.</li>
+<li><b>Next-quarter guide</b>: Q3 $1.14-1.16bn, roughly +17% q/q at the midpoint.</li>
+</ul></div></div>`,
+`Total Q2 revenue rose ${pct(C.segTot[1]/C.segTot[0]-1)} y/y, and Enterprise Data supplied about ${pct((D.segments.rows[0][2]-D.segments.rows[0][1])/(C.segTot[1]-C.segTot[0]))} of the increase. Storage & Computing and Consumer were flat, so the core ex-AI business is growing modestly.`);
+
+/* 4 Financials */
+html+=sec(4,"Financials","Is growth turning into profit and cash?",`
+<figure class="chart" style="margin:0;max-width:640px">${revChart()}<figcaption>Revenue (bars, USD m) and EBIT margin (line). TTM to Jun 2026 in light blue.</figcaption></figure>
+<h3 style="margin:4px 0 0;font-size:15px">Income statement</h3>
+${table(H,[
+ row("Revenue",D.revenue,f0,"hl"),row("  growth",C.growth,pct,"sub"),
+ row("Gross margin",C.gm,pct,"sub"),
+ row("EBITDA",C.ebitda,f0),row("  margin",C.ebitdaM,pct,"sub"),
+ row("EBIT",D.ebit,f0),row("  margin",C.ebitM,pct,"sub"),
+ row("Net profit",D.netIncome,f0),row("  margin",C.nm,pct,"sub"),
+ row("Stock comp (% rev)",C.sbcPct,pct,"sub")])}
+<h3 style="margin:4px 0 0;font-size:15px">Balance sheet</h3>
+${table(H,[
+ row("Cash & ST investments",D.cash,f0),row("Debt incl. leases",D.debt,f0),row("Net debt (cash)",C.netDebt,f0,"hl"),
+ row("Net PP&E",D.ppe,f0),row("Working capital (AR+Inv-AP)",C.nwc,f0),row("  % revenue",C.nwcPct,pct,"sub"),
+ row("Inventory",D.inventory,f0,"sub"),row("Equity",D.equity,f0)])}
+<h3 style="margin:4px 0 0;font-size:15px">Cash flow and capital allocation</h3>
+${table(H,[
+ row("Operating cash flow",D.ocf,f0),row("Capex",D.capex.map(v=>-v),f0),row("  % revenue",C.capexPct,pct,"sub"),
+ row("Free cash flow",C.fcf,f0,"hl"),row("  FCF margin",C.fcfM,pct,"sub"),row("  FCF / net profit",C.conv,pct,"sub"),
+ row("Dividends",D.dividends.map(v=>-v),f0),row("Buybacks",D.buybacks.map(v=>-v),f0),row("Acquisitions",D.acquisitions.map(v=>-v),f0),
+ row("Returned / FCF",C.payout,pct,"sub")])}`,
+`Revenue has grown ${x(D.revenue[4]/D.revenue[0])} in four years with EBIT margin rising to ${pct(C.ebitM[L])}. FY24 net profit is inflated by a one-off non-cash tax benefit, so its 40% FCF conversion is not a warning; FY23 and FY25 conversion of 136% and 107% show profits are cash. The new concern is TTM: FCF margin fell to ${pct(C.fcfM[L])} as capex hit ${pct(C.capexPct[L])} of sales and inventory grew, so cash is lagging the revenue surge.`);
+
+/* 5 Ratios */
+html+=sec(5,"Ratios","How efficiently does it use capital?",
+table(["Ratio",...D.years],[
+ row("Net debt / EBITDA",C.ndE,x),
+ row("Asset turnover",C.at,v=>v.toFixed(2)+"x"),
+ row("DSO (days)",C.dso,f0,"sub"),row("DIO (days)",C.dio,f0,"sub"),row("DPO (days)",C.dpo,f0,"sub"),row("Cash conversion cycle",C.ccc,f0),
+ row("Net margin",C.nm,pct,"sub"),row("x Asset turnover",C.at,v=>v.toFixed(2),"sub"),row("x Equity multiplier",C.em,v=>v.toFixed(2),"sub"),
+ row("= ROE (DuPont)",C.roe,pct,"hl"),
+ row(`ROIC (EBIT x (1-${D.taxRateForROIC*100}%) / (equity+debt-cash))`,C.roic,pct,"hl")]),
+`ROE of ~${pct(C.roe[L])} comes almost entirely from margin; leverage is nil (equity multiplier ${C.em[L].toFixed(2)}x) and the balance sheet carries $1.4bn of cash. ROIC excluding that cash is above 30%. The weak spot is working capital: inventory sits near ${f0(C.dio[L])} days of cost of sales, typical for a chip company stocking for growth, but a cycle turn would show up here first.`);
+
+/* 6 Valuation */
+const peersSorted=D.peers;
+html+=sec(6,"Valuation","What is the market paying, versus history and peers?",`
+<div class="cols">
+${table(["Multiple","Now","5-yr avg"],[
+ {cells:["P/E trailing (GAAP)",x(C.pe),x(C.histPeEx24)+"*"]},
+ {cells:["P/E FY26e (consensus EPS $"+D.consensus.eps26+")",x(C.pe26),"n/a"]},
+ {cells:["P/E FY27e (consensus EPS $"+D.consensus.eps27+")",x(C.pe27),"n/a"]},
+ {cells:["Forward P/E (NTM)",x(D.history.fwdPeNow),x(C.histFwd)],cls:"hl"},
+ {cells:["EV / EBITDA trailing",x(C.eve),x(C.histEve)]},
+ {cells:["PEG (FY27 P/E / FY27 EPS growth)",C.peg.toFixed(2),"n/a"]},
+ {cells:["FCF yield (TTM)",pct(C.fcfYield),"n/a"]},
+ {cells:["Dividend yield",pct(D.dps/D.price),"n/a"]}])}
+<div style="display:flex;flex-direction:column;gap:8px">
+<p>Year-end multiples FY21-FY25: forward P/E ${D.history.fwdPe.map(v=>v.toFixed(0)).join(", ")}; EV/EBITDA ${D.history.evEbitda.map(v=>v.toFixed(0)).join(", ")}.</p>
+<p class="disc">*Trailing P/E average excludes FY24 (18x, distorted by the one-off tax benefit). Consensus EPS is non-GAAP; trailing P/E uses GAAP net profit, which is lower by stock comp, so the two are not like-for-like.</p>
+</div></div>`,
+`The forward multiple has compressed from ~76x earlier in 2026 to ${x(D.history.fwdPeNow)}, now below its own 5-year average of ${x(C.histFwd)}. On trailing EV/EBITDA (${x(C.eve)}) it still looks expensive, because trailing numbers lag 50% growth. Against peers it is the priciest large analog name on every measure except PEG, where growth roughly justifies it.`);
+
+/* 7 Industry & peers */
+html+=sec(7,"Industry and competitors","Is the market growing, and how does MPWR compare?",`
+<p>Power management is a large, fragmented analog market. The fastest-growing pocket is AI data-center power, driven by accelerators drawing more current each generation and the move to 48V and 800V rack architectures. Competitors range from broad-line analog leaders (TI, ADI, Infineon, Renesas) to specialists (Vicor). Infineon is omitted from the table because current data could not be verified.</p>
+${table(["Company","Cap $bn","P/E","Fwd P/E","PEG","EV/EBITDA","Op mgn","ROIC","Net debt $bn","Rev g 3y fcst"],
+ peersSorted.map(p=>({cls:p.self?"hl":"",cells:[`${p.n} (${p.t})`,f1(p.mcap),f1(p.pe),f1(p.fpe),p.peg.toFixed(2),f1(p.eve),p.opm.toFixed(1)+"%",p.roic.toFixed(1)+"%",p.nd.toFixed(2),p.g3.toFixed(1)+"%"]})))}
+<p class="disc">Peer figures from StockAnalysis, 20 Oct 2026, trailing multiples except Fwd P/E and growth forecasts. Negative net debt = net cash. MPWR operating margin is TTM GAAP.</p>`,
+`MPWR has the best mix of growth and returns in the group: second-fastest forecast growth (behind much smaller Vicor), top ROIC, and net cash. It pays roughly 1.3-1.6x the forward P/E of TI and ADI for about 1.4-2x their forecast revenue growth.`);
+
+/* 8 Management */
+html+=sec(8,"Management","Who runs it, and how do they allocate capital?",`
+<ul class="tight">
+<li><b>Michael Hsing</b>, founder, Chairman and CEO since 1997 (29 years). Holds about 964k shares (~2.0% of the company, ~$1.2bn at today's price). Insider transactions over 5 years are all sales, including 30,000 shares on 28 Sep 2026.</li>
+<li><b>Bernie Blegen</b>, EVP and CFO. Signed the Feb 2026 restatement filing; no CFO change reported.</li>
+<li><b>Plan:</b> become a solutions provider, add end markets (800V data-center AC-DC, DDR5 memory power), and diversify the supply chain with capacity well beyond $6bn.</li>
+<li><b>Capital allocation:</b> dividend $${D.dps.toFixed(2)}/share a year (~${pct(D.dividends[4]/D.netIncome[4])} of FY25 GAAP profit); opportunistic buybacks ($636m in 2024, little since; authorisation now $1bn); minimal M&A. Capex is rising to fund capacity.</li>
+<li><b>Incentives:</b> part of executive equity vests on relative TSR vs the PHLX Semiconductor index (75th percentile for maximum); 2026 awards are also tied to securing capacity.</li>
+</ul>`,
+`A founder-led company with a long record of compounding and conservative balance sheet. The 2026 restatement and unremediated material weakness are a governance blemish to watch, and steady insider selling means insiders are not adding at these prices.`);
+
+/* 9 Risks */
+html+=sec(9,"Risks","What would break the story?",`
+<ul class="tight">
+<li><span class="tag bad">High</span><b>AI concentration.</b> ${pct(C.segMixAI)} of revenue in Enterprise Data. A socket loss on a major accelerator platform, or a pause in AI capex, would hit growth and the multiple at once.</li>
+<li><span class="tag bad">High</span><b>Valuation.</b> At ~${x(C.pe26)} FY26 earnings, a growth miss would be punished; the stock already fell ~20% from its May 2026 level (~$1,553) without a fundamental miss.</li>
+<li><span class="tag warn">Medium</span><b>Vicor ITC complaint (filed Oct 2026).</b> Seeks an exclusion order on vertical power delivery systems; respondents include MPS, Infineon, Delta and major server makers.</li>
+<li><span class="tag warn">Medium</span><b>China and trade policy.</b> Heavy reliance on China-based manufacturing; tariffs and export controls are named risks.</li>
+<li><span class="tag warn">Medium</span><b>Cash conversion and inventory.</b> FCF margin down to ${pct(C.fcfM[L])} TTM; inventory $676m. Distribution channel inventory can hide a slowdown.</li>
+<li><span class="tag warn">Medium</span><b>Controls and litigation.</b> Feb 2026 restatement, material weakness not yet remediated, securities class action pending.</li>
+<li><span class="tag good">Low</span><b>Dilution.</b> Stock comp ~${pct(C.sbcPct[L])} of revenue; share count up ~6% since FY21 despite buybacks.</li>
+</ul>`,null);
+
+/* 10 Scenarios */
+const S=D.scenarios;
+const scen=(k,label)=>`<div><h3 class="${k}">${label}</h3><div class="val ${k}">${usd(S[k].px)}</div><div class="disc">${S[k].pe}x FY27e EPS $${S[k].eps.toFixed(2)} · ${(S[k].up>=0?"+":"")+(S[k].up*100).toFixed(0)}% vs today</div><ul>${S[k].pts.map(p=>`<li>${p}</li>`).join("")}</ul></div>`;
+html+=sec(10,"Scenarios","Bear, base, bull on 2027 earnings (estimates)",`
+<div class="scen">${scen("bear","Bear")}${scen("base","Base")}${scen("bull","Bull")}</div>
+<p><b>Consensus baseline:</b> ${D.consensus.analysts} analysts, ${D.consensus.rating}. Revenue FY26e $${f1(D.consensus.rev26/1000)}bn (+49%), FY27e $${f1(D.consensus.rev27/1000)}bn (+27%). Price targets $${f0(D.consensus.ptLow)} / $${f0(D.consensus.ptAvg)} / $${f0(D.consensus.ptHigh)} (low / average / high).</p>`,
+`The average analyst target ($1,840) sits near this page's bull case: it needs both earnings above consensus and a return to the historical multiple. The base case, which only assumes consensus is right and a below-average multiple, gives modest upside. Scenario values are illustrative estimates, not forecasts.`);
+
+/* 11 Takeaways */
+html+=sec(11,"Takeaways","What to remember and what to check next",`
+<div class="cols"><div><b>Remember</b><ul class="tight">
+<li>High-quality, debt-free analog franchise: ~55% gross margin, ROIC above 30%.</li>
+<li>Growth now rides on AI data-center power; ex-AI growth is modest.</li>
+<li>Valuation has reset to below its own history but remains the richest among large peers.</li>
+<li>Cash conversion has slipped during a capacity build; the market has noticed.</li>
+</ul></div>
+<div><b>Check next</b><ul class="tight">
+<li>Q3 2026 results on <b>29 Oct 2026</b>: revenue vs the $1.14-1.16bn guide and Q4 guide.</li>
+<li>FCF margin recovery and inventory days in the Q3 10-Q.</li>
+<li>Material weakness remediation status.</li>
+<li>Progress of the Vicor ITC investigation.</li>
+<li>Next AI accelerator platform socket wins (and any share-loss reports).</li>
+</ul></div></div>
+<details open><summary>Glossary</summary><dl class="gloss">
+<dt>Fabless</dt><dd>Designs chips but pays foundries to manufacture them.</dd>
+<dt>Design win / socket</dt><dd>A customer choosing a specific part for a product; revenue follows once the product ships.</dd>
+<dt>EBITDA</dt><dd>EBIT plus depreciation and amortisation; a rough proxy for operating cash profit.</dd>
+<dt>FCF conversion</dt><dd>Free cash flow divided by net profit; above ~90% means profits turn into cash.</dd>
+<dt>ROIC</dt><dd>After-tax operating profit divided by capital invested in the business (here excluding surplus cash).</dd>
+<dt>PEG</dt><dd>P/E divided by expected EPS growth in percent; near 1 means growth roughly justifies the multiple.</dd>
+<dt>Cash conversion cycle</dt><dd>Days to collect from customers plus days of inventory, minus days taken to pay suppliers.</dd>
+<dt>ITC Section 337</dt><dd>US trade-court action that can bar imports of products found to infringe patents.</dd>
+</dl></details>
+<details open><summary>Sources</summary><ol class="src">${D.sources.map(([t,u])=>`<li><a href="${u}" target="_blank" rel="noopener">${t}</a></li>`).join("")}</ol></details>`,null);
+
+$("sections").innerHTML=html;
+</script>
+
+</body></html>

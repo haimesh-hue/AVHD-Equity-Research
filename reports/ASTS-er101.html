@@ -1,0 +1,634 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>AST SpaceMobile ER101</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column (research note), wide tables scroll in place; hero = constellation progress track, the one KPI that gates everything. */
+:root{
+  --bg:#f2f4f6; --surface:#ffffff; --ink:#15212c; --muted:#5a6773; --rule:#d5dbe1;
+  --accent:#b8640f; --accent-soft:#f6e7d6; --track:#e3e8ed;
+  --good:#2f7a4f; --bad:#b23a3a; --warn:#9a6a00;
+  --f-display:"Archivo", "Arial Narrow", Arial, sans-serif;
+  --f-body:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-data:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --s-1:.8125rem; --s0:1rem; --s1:1.1875rem; --s2:1.5rem; --s3:2.125rem;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f151b; --surface:#161e26; --ink:#e4e9ee; --muted:#9aa7b3; --rule:#2a3540;
+  --accent:#e59a4c; --accent-soft:#3a2a1a; --track:#24303b;
+  --good:#6cc08f; --bad:#ef7d7d; --warn:#e2b54f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f151b; --surface:#161e26; --ink:#e4e9ee; --muted:#9aa7b3; --rule:#2a3540;
+  --accent:#e59a4c; --accent-soft:#3a2a1a; --track:#24303b;
+  --good:#6cc08f; --bad:#ef7d7d; --warn:#e2b54f; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:var(--s0);line-height:1.6}
+.wrap{max-width:60rem;margin:0 auto;padding-block:2rem 4rem;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:2.75rem}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:var(--s3);font-weight:750;font-stretch:88%;letter-spacing:-.01em}
+h2{font-size:var(--s2);font-weight:700;font-stretch:92%}
+h3{font-size:var(--s1);font-weight:650;font-stretch:95%}
+p{margin:0;max-width:68ch}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.label{font-family:var(--f-display);font-size:var(--s-1);text-transform:uppercase;letter-spacing:.08em;font-weight:600;color:var(--muted)}
+.mono,td.n,.kv b{font-family:var(--f-data);font-variant-numeric:tabular-nums}
+section{display:flex;flex-direction:column;gap:1rem;min-width:0}
+.sec-head{display:flex;align-items:baseline;gap:.75rem;border-bottom:1px solid var(--rule);padding-bottom:.5rem;flex-wrap:wrap}
+.sec-head .q{font-family:var(--f-body);font-style:italic;color:var(--muted);font-size:var(--s0)}
+.read{background:var(--accent-soft);border-radius:4px;padding:.75rem 1rem;max-width:none}
+.read::before{content:"Read: ";font-family:var(--f-display);font-weight:700;letter-spacing:.02em}
+
+/* header */
+header{display:flex;flex-direction:column;gap:1rem}
+.ticker{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;align-items:baseline}
+.ticker .sym{font-family:var(--f-data);font-size:var(--s1);color:var(--accent);font-weight:500}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(9.5rem,1fr));gap:.75rem 1.25rem;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:1rem}
+.kv div{display:flex;flex-direction:column;gap:.1rem;min-width:0}
+.kv b{font-size:var(--s1);font-weight:500}
+.verdict{font-size:var(--s1);max-width:62ch}
+
+/* constellation track */
+.track-box{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:1.25rem 1rem 1rem;display:flex;flex-direction:column;gap:.75rem}
+.track{position:relative;height:3.6rem;margin:2.2rem .5rem 0}
+.track .bar{position:absolute;left:0;right:0;top:1.4rem;height:.75rem;background:var(--track);border-radius:2px}
+.track .fill{position:absolute;left:0;top:1.4rem;height:.75rem;background:var(--accent);border-radius:2px}
+.track .cape{position:absolute;top:1.4rem;height:.75rem;background:repeating-linear-gradient(45deg,var(--accent) 0 3px,transparent 3px 6px);opacity:.7}
+.tick{position:absolute;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;font-family:var(--f-data);font-size:.75rem;color:var(--muted);white-space:nowrap}
+.tick i{display:block;width:1px;height:2.6rem;background:var(--ink);opacity:.45;margin-top:.15rem}
+.tick.now{color:var(--accent);font-weight:500}
+.tick .tl{position:absolute;top:-1.3rem;font-family:var(--f-display);font-size:.7rem;letter-spacing:.04em}
+.track-legend{display:flex;flex-wrap:wrap;gap:.4rem 1.25rem;font-size:var(--s-1);color:var(--muted)}
+.sw{display:inline-block;width:.9rem;height:.6rem;vertical-align:middle;margin-right:.35rem;border-radius:1px}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:var(--s-1)}
+th,td{padding:.45rem .7rem;text-align:right;white-space:nowrap;border-bottom:1px solid var(--rule)}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--surface)}
+thead th{font-family:var(--f-display);font-weight:650;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-size:.72rem}
+tr.sub td{color:var(--muted)}
+tr.hl td{font-weight:600}
+tr:last-child td{border-bottom:0}
+td.neg{color:var(--bad)} td.pos{color:var(--good)}
+td.txt,th.txt{text-align:left;white-space:normal;min-width:12rem}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));gap:1rem}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:1rem;display:flex;flex-direction:column;gap:.5rem;min-width:0}
+ul.clean{margin:0;padding-left:1.1rem;display:flex;flex-direction:column;gap:.4rem}
+ul.clean li{max-width:66ch}
+
+/* timeline (a real sequence) */
+ol.tl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;border-left:2px solid var(--rule);margin-left:.4rem}
+ol.tl li{display:grid;grid-template-columns:6.5rem 1fr;gap:.75rem;padding:.35rem 0 .35rem 1rem;position:relative}
+ol.tl li::before{content:"";position:absolute;left:-.38rem;top:.85rem;width:.6rem;height:.6rem;border-radius:50%;background:var(--surface);border:2px solid var(--muted)}
+ol.tl li.key::before{background:var(--accent);border-color:var(--accent)}
+ol.tl li.bad::before{background:var(--bad);border-color:var(--bad)}
+ol.tl .d{font-family:var(--f-data);font-size:var(--s-1);color:var(--muted);padding-top:.15rem}
+@media (max-width:30rem){ol.tl li{grid-template-columns:1fr;gap:0}}
+
+/* charts */
+.chart{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:1rem;display:flex;flex-direction:column;gap:.5rem;min-width:0}
+.chart svg{width:100%;height:auto;display:block}
+.chart text{font-family:var(--f-data);font-size:11px;fill:var(--muted)}
+.chart .vl{fill:var(--ink)}
+
+/* scenarios */
+.scen{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1rem}
+.scen .card{border-top:4px solid var(--muted)}
+.scen .bear{border-top-color:var(--bad)} .scen .base{border-top-color:var(--accent)} .scen .bull{border-top-color:var(--good)}
+.px{font-family:var(--f-data);font-size:var(--s2);font-weight:500}
+.chip{display:inline-block;font-family:var(--f-display);font-size:.72rem;font-weight:650;letter-spacing:.05em;text-transform:uppercase;padding:.1rem .45rem;border-radius:3px;border:1px solid currentColor}
+.chip.est{color:var(--warn)} .chip.cons{color:var(--accent)}
+
+dl.gloss{display:grid;grid-template-columns:minmax(8rem,max-content) 1fr;gap:.35rem 1rem;margin:0}
+dl.gloss dt{font-family:var(--f-display);font-weight:650}
+dl.gloss dd{margin:0}
+@media (max-width:30rem){dl.gloss{grid-template-columns:1fr}dl.gloss dd{margin-bottom:.4rem}}
+.sources{font-size:var(--s-1);color:var(--muted)}
+.sources ol{padding-left:1.2rem;margin:0;display:flex;flex-direction:column;gap:.2rem}
+.disc{font-size:var(--s-1);color:var(--muted);border-top:1px solid var(--rule);padding-top:1rem}
+@media (prefers-reduced-motion:no-preference){.track .fill{animation:grow 1.2s ease-out both}@keyframes grow{from{width:0}}}
+</style>
+
+<div class="wrap" id="app">
+
+<header>
+  <div class="ticker"><span class="label">Equity Research 101</span><span class="sym">NASDAQ: ASTS</span><span class="label" id="asof"></span></div>
+  <h1>AST SpaceMobile: a cell tower in orbit, priced as if it already works</h1>
+  <div class="kv" id="kv"></div>
+  <p class="verdict" id="verdict"></p>
+</header>
+
+<section id="s-track">
+  <div class="sec-head"><h2>The one number that gates the story</h2><span class="q">How many BlueBirds are in orbit?</span></div>
+  <div class="track-box">
+    <div class="track" id="track" aria-label="Satellites in orbit versus coverage thresholds"></div>
+    <div class="track-legend">
+      <span><span class="sw" style="background:var(--accent)"></span>In orbit (13)</span>
+      <span><span class="sw" style="background:repeating-linear-gradient(45deg,var(--accent) 0 3px,transparent 3px 6px)"></span>At Cape Canaveral awaiting Falcon 9 (BB14 to BB16)</span>
+      <span><span class="sw" style="background:var(--track)"></span>Still to build and launch (BB17 to BB46 in production)</span>
+    </div>
+    <p class="read" id="r-track"></p>
+  </div>
+</section>
+
+<section id="s1">
+  <div class="sec-head"><h2>1. Business overview</h2><span class="q">What does it do, how does it make money, how did it get here?</span></div>
+  <div class="grid2">
+    <div class="card"><h3>What it does</h3><p id="what"></p></div>
+    <div class="card"><h3>How it makes money</h3><p id="model"></p></div>
+  </div>
+  <h3>Timeline</h3>
+  <ol class="tl" id="timeline"></ol>
+  <p class="read" id="r-overview"></p>
+</section>
+
+<section id="s2">
+  <div class="sec-head"><h2>2. Moat</h2><span class="q">Why would it earn returns, and can others copy it?</span></div>
+  <div class="grid2">
+    <div class="card"><h3>What protects it</h3><ul class="clean" id="moat-for"></ul></div>
+    <div class="card"><h3>What erodes it</h3><ul class="clean" id="moat-against"></ul></div>
+  </div>
+  <p class="read" id="r-moat"></p>
+</section>
+
+<section id="s3">
+  <div class="sec-head"><h2>3. Drivers</h2><span class="q">What is revenue made of, and which KPIs move it?</span></div>
+  <p id="formula"></p>
+  <div class="tbl"><table><thead><tr><th>KPI</th><th>Latest</th><th class="txt">Why it matters</th></tr></thead><tbody id="kpis"></tbody></table></div>
+  <p class="read" id="r-drivers"></p>
+</section>
+
+<section id="s4">
+  <div class="sec-head"><h2>4. Financials</h2><span class="q">USD millions, fiscal years to December; TTM to 30 Jun 2026</span></div>
+  <div class="grid2">
+    <div class="chart"><span class="label">Revenue</span><div id="ch-rev"></div></div>
+    <div class="chart"><span class="label">Capex vs operating cash flow</span><div id="ch-cash"></div></div>
+  </div>
+  <h3>P&amp;L</h3>
+  <div class="tbl"><table id="t-pl"></table></div>
+  <p class="read" id="r-pl"></p>
+  <h3>Balance sheet</h3>
+  <div class="tbl"><table id="t-bs"></table></div>
+  <p class="read" id="r-bs"></p>
+  <h3>Cash flow and capital allocation</h3>
+  <div class="tbl"><table id="t-cf"></table></div>
+  <p class="read" id="r-cf"></p>
+</section>
+
+<section id="s5">
+  <div class="sec-head"><h2>5. Ratios</h2><span class="q">Leverage, efficiency, returns</span></div>
+  <div class="tbl"><table id="t-ratio"></table></div>
+  <p class="read" id="r-ratios"></p>
+</section>
+
+<section id="s6">
+  <div class="sec-head"><h2>6. Valuation</h2><span class="q">What is the market paying, versus history and peers?</span></div>
+  <div class="tbl"><table id="t-val"></table></div>
+  <div class="card"><h3>What today's price implies</h3><p id="implied"></p></div>
+  <p class="read" id="r-val"></p>
+</section>
+
+<section id="s7">
+  <div class="sec-head"><h2>7. Industry and competitors</h2><span class="q">How big can the market get, and who else wants it?</span></div>
+  <p id="industry"></p>
+  <div class="tbl"><table id="t-peers"></table></div>
+  <p class="read" id="r-peers"></p>
+</section>
+
+<section id="s8">
+  <div class="sec-head"><h2>8. Management</h2><span class="q">Who runs it, what do they own, how do they allocate capital?</span></div>
+  <div class="tbl"><table><thead><tr><th>Name</th><th class="txt">Role</th><th class="txt">Tenure</th></tr></thead><tbody id="mgmt"></tbody></table></div>
+  <ul class="clean" id="mgmt-notes"></ul>
+  <p class="read" id="r-mgmt"></p>
+</section>
+
+<section id="s9">
+  <div class="sec-head"><h2>9. Risks</h2><span class="q">What would break the story?</span></div>
+  <ul class="clean" id="risks"></ul>
+</section>
+
+<section id="s10">
+  <div class="sec-head"><h2>10. Scenarios</h2><span class="q">Bear, base, bull against the analyst range</span></div>
+  <div class="scen" id="scen"></div>
+  <p class="read" id="r-scen"></p>
+</section>
+
+<section id="s11">
+  <div class="sec-head"><h2>11. Takeaways</h2><span class="q">What to remember, what to check next</span></div>
+  <div class="grid2">
+    <div class="card"><h3>Remember</h3><ul class="clean" id="remember"></ul></div>
+    <div class="card"><h3>Check next</h3><ul class="clean" id="checknext"></ul></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>Glossary</h2></div>
+  <dl class="gloss" id="gloss"></dl>
+</section>
+
+<section class="sources">
+  <div class="sec-head"><h2>Sources</h2></div>
+  <ol id="sources"></ol>
+</section>
+
+<p class="disc">Education and analysis only, not investment advice. Figures come from the sources listed and may contain errors or be revised; verify against filings before acting. Prices are as of the date shown. Values marked as estimates are the author's, not the company's.</p>
+</div>
+
+<script>
+/* ===== DATA: every raw figure, sourced. Ratios are computed below. USD millions unless noted. ===== */
+const DATA = {
+  company:"AST SpaceMobile, Inc.", ticker:"ASTS", exchange:"Nasdaq", currency:"USD",
+  asOf:"20 Oct 2026 (intraday)", price:41.63,
+  sharesTotal:389.17,      // m; Class A 299.79 + Class B 11.22 + Class C 78.16 (10-Q, 6 Aug 2026)
+  classA:299.79, classB:11.22, classC:78.16,
+  years:["2021","2022","2023","2024","2025","TTM Jun-26"],
+  revenue:[12.41,13.83,0,4.42,70.92,115.3],
+  grossProfit:[4.84,7.11,null,4.42,35.7,44.87],
+  ebit:[-86.75,-145.76,-222.37,-242.76,-287.71,-473.03],
+  da:[2.91,4.71,54.47,63.34,51.11,66.71],
+  netIncome:[-18.97,-31.64,-87.56,-300.08,-341.94,-618.76], // attributable to common
+  ocf:[-80.10,-156.46,-148.94,-126.14,-71.52,-144.71],
+  capex:[54.79,57.28,118.81,174.13,1065,1493],
+  cash:[321.79,238.59,85.62,564.99,2336,2288],
+  debt:[13.16,12.77,72.87,173,2240,2994],
+  ppe:[103.93,153.66,251.7,351.68,1418,2091],
+  totalAssets:[443.94,438.37,360.89,954.56,5014,5855],
+  receivables:[3.75,1.67,0,1.4,37.73,79.3],
+  inventory:[1.41,0,0,1.06,12.01,28.42],
+  payables:[6.64,13.93,20.58,17,46.76,60.62],
+  equityTotal:[351.97,359.83,213.56,669.15,2392,2398],     // incl. noncontrolling interest
+  nci:[251.69,226.29,114.57,190.03,550.85,503.56],
+  sbc:[3.74,9.39,13.29,32.04,47.49,147.96],
+  stockIssued:[0.01,104.86,64.86,710.51,2319,2553],
+  debtIssued:[0.05,0.23,63.5,145,2612,3199],
+  debtRepaid:[0,0,0.24,48.75,1009,1639],
+  repurchases:[0,0,0.87,5.2,23.02,79.02],
+  dividends:[0,0,0,0,0,0],
+  pbHistory:{"2021":1.17,"2022":0.95,"2023":2.54,"2024":6.32,"2025":8.53},
+  evSalesHistory:{"2021":25.69,"2022":26.22,"2023":null,"2024":932.15,"2025":286.26},
+  consensus:{analysts:13, rating:"Hold", ptAvg:74.28, ptMedian:78, ptLow:42.5, ptHigh:108,
+             rev2026:167.5, rev2026Low:151, rev2026High:189, rev2027:581.65, eps2026:-2.03, eps2027:-1.29},
+  guidance2026:[150,200],
+  backlog:1300, liquidityProForma:3700, julyConvert:1150,
+  sats:{inOrbit:13, atCape:3, intermittent:25, target:45, continuousLow:45, continuousHigh:60, global:90},
+  peers:[
+    {name:"AST SpaceMobile", t:"ASTS", mcap:null, ev:null, rev:null, ebitda:null, ni:null, fpe:null, roic:null, self:true},
+    {name:"Iridium", t:"IRDM", mcap:4680, ev:6720, rev:902.97, ebitda:394.01, ni:163.03, fpe:35.49, roic:6.44},
+    {name:"Viasat", t:"VSAT", mcap:8310, ev:13500, rev:4630, ebitda:1390, ni:-29.39, fpe:537.34, roic:0.07},
+    {name:"EchoStar", t:"ECHO", mcap:25140, ev:42220, rev:14650, ebitda:1990, ni:-5670, fpe:32.76, roic:3.24},
+    {name:"Globalstar*", t:"GSAT", mcap:10750, ev:10760, rev:280.64, ebitda:90.75, ni:-62.49, fpe:null, roic:3.26}
+  ],
+  peerAsOf:"19-20 Oct 2026",
+  sources:[
+    ["AST SpaceMobile Q2 2026 results (8-K Ex. 99.1)","https://www.sec.gov/Archives/edgar/data/0001780312/000119312526342540/asts-ex99_1.htm"],
+    ["AST SpaceMobile 10-Q for quarter ended 30 Jun 2026","https://www.sec.gov/Archives/edgar/data/0001780312/000119312526342550/asts-20260630.htm"],
+    ["AST SpaceMobile 2026 proxy statement (DEF 14A)","https://www.sec.gov/Archives/edgar/data/0001780312/000149315226019384/formdef14a.htm"],
+    ["Stock Analysis: ASTS income statement, balance sheet, cash flow, ratios","https://stockanalysis.com/stocks/asts/financials/"],
+    ["Stock Analysis: ASTS statistics (price, market cap, EV, short interest)","https://stockanalysis.com/stocks/asts/statistics/"],
+    ["Stock Analysis: ASTS analyst forecast","https://stockanalysis.com/stocks/asts/forecast/"],
+    ["Stock Analysis: Iridium, Globalstar, Viasat, EchoStar statistics","https://stockanalysis.com/stocks/irdm/statistics/"],
+    ["Nasdaq/Zacks: ASTS down 7.7% since last earnings report (9 Sep 2026)","https://www.nasdaq.com/articles/why-ast-spacemobile-asts-down-77-last-earnings-report"],
+    ["Nasdaq/Zacks: ASTS falls 47.5% in 3 months (26 Aug 2026)","https://www.nasdaq.com/articles/asts-falls-475-3-months-execution-risks-stay-elevated"],
+    ["Telecoms.com: AST revenues surge but losses mount (Aug 2026)","https://www.telecoms.com/satellite/ast-revenues-surge-but-losses-mount-due-to-rocket-mishap"],
+    ["Stocktwits: Piper downgrade, Clear Street view (13 Oct 2026)","https://stocktwits.com/news-articles/markets/equity/asts-stock-hits-fresh-52-week-low-but-clear-street-sees-six-month-lead-over-space-x/cZxBunhRBYY"],
+    ["Timothy Sykes news digest: Deutsche Bank upgrade, TELUS test (19 Oct 2026)","https://www.timothysykes.com/news/ast-spacemobile-inc-asts-news-2026_10_19/"],
+    ["SatNews: SpaceX acquires Grain 800 MHz spectrum (11 Oct 2026)","https://satnews.com/2026/10/11/spacex-acquires-grain-managements-800-mhz-spectrum-portfolio-to-launch-standalone-starlink-mobile-carrier/"],
+    ["Fierce Network: AT&T CEO touts carrier satellite JV (May 2026)","https://www.fierce-network.com/wireless/att-ceo-touts-satellite-jv-keeps-ast-play"],
+    ["Omdia: Amazon to acquire Globalstar (Apr 2026)","https://omdia.tech.informa.com/om145174/acquiring-globalstar-provides-amazon-leo-a-fast-lane-to-enter-the-d2d-market"],
+    ["DCD: AST pays ~$550m for North American L-band spectrum (Ligado, Jun 2025)","https://www.datacenterdynamics.com/en/news/ast-spacemobile-pays-550m-to-access-premium-spectrum-in-north-america-for-satellite-d2d/"],
+    ["NewSpace Economy: D2D market and AST coverage thresholds (Mar 2026)","https://newspaceeconomy.ca/2026/03/31/direct-to-device-ast-spacemobile-and-the-market-for-satellite-cellular-connectivity/"],
+    ["CSI Magazine: Kaleido forecast, direct-to-satellite >$9bn by 2030 (Feb 2023)","https://www.csimagazine.com/csi/Direct-to-satellite-will-be-a-usd9BN-market.php"],
+    ["Wikipedia: AST SpaceMobile (history and launch timeline)","https://en.wikipedia.org/wiki/AST_SpaceMobile"]
+  ]
+};
+
+/* ===== Text fields (judgement lives here) ===== */
+const TEXT = {
+  verdict:"A pre-commercial infrastructure bet. AST has the partner list (60+ carriers, ~3 billion subscribers), $1.3bn of contracted revenue and >$3.7bn of pro forma liquidity, but only 13 of the ~45-60 satellites it needs for continuous service. At ~$17bn EV the market is paying for a working network in 2027, while a launch failure in April, Falcon 9 dependence and SpaceX's spectrum land-grab have halved the stock in a year. Consensus sits at Hold with targets of $42.50 to $108.",
+  rTrack:"Commercial US service was tied to roughly 45 satellites in orbit; management now targets that by early 2027, after the April 2026 loss of BlueBird 7. About 25 satellites give intermittent US coverage, 45-60 give continuous coverage in core markets, and about 90 give full global coverage. Every revenue line on this page scales with this bar.",
+  what:"AST builds and operates very large low-Earth-orbit satellites (BlueBirds) that act as cell towers in space. They connect directly to ordinary, unmodified smartphones using spectrum lent by mobile carriers plus spectrum AST controls, so a phone keeps 4G/5G voice and data where no ground tower reaches. Headquarters: Midland, Texas.",
+  model:"Wholesale to carriers. AST does not sell to consumers; it partners with mobile network operators (MNOs), who bill their own customers and share the revenue. Terms are not public. Today revenue comes from two other sources: ground gateway equipment sold to MNO partners (Q2 2026 product revenue $24.4m) and US government contracts and milestones (services $7.1m). Government awards total over $125m.",
+  rOverview:"Nine years in, AST has proved the physics (first call between unmodified phones via satellite in 2023) but not yet the business. 2025 was the year it raised serious money and started mass production; 2026 was meant to be the launch ramp and instead brought a lost satellite and a slipped commercial date.",
+  moatFor:[
+    "Carrier network: 60+ MNO agreements covering ~3 billion subscribers; AT&T, Verizon, Vodafone, Rakuten, Google and American Tower are investors or strategic partners.",
+    "Spectrum: up to 45 MHz of L-band and 1670-1675 MHz in North America via Ligado, with rights running to 2107, targeting ~100 MHz in the US and 60+ MHz globally when combined with partner spectrum.",
+    "Technology lead in big phased arrays: the BlueBird antenna is the largest commercial LEO array deployed; Block 1 has shown nearly 100 Mbps and Block 2 targets ~200 Mbps peak to standard phones.",
+    "Neutral-host position: AST partners with carriers rather than competing with them, which matters more now that SpaceX is building its own carrier."
+  ],
+  moatAgainst:[
+    "SpaceX is vertically integrated: its own launch, ~660 direct-to-cell satellites in orbit by early 2026, ~$17bn plus $2.6bn of EchoStar spectrum and an ~$8bn 800 MHz deal with Grain (Oct 2026), plus a 15,000-satellite direct-to-device authorization.",
+    "AST depends on SpaceX's Falcon 9 for launch capacity; three BlueBirds fit per Falcon 9 versus up to eight on Blue Origin's New Glenn, which lost BlueBird 7 in April 2026.",
+    "The AT&T / Verizon / T-Mobile joint venture explicitly wants several wholesale constellations to buy from. That favors a neutral host but also caps pricing power.",
+    "Amazon agreed to buy Globalstar for $11.57bn (Apr 2026), adding a well-funded third D2D entrant."
+  ],
+  rMoat:"The moat is real but unfinished: partners and spectrum are hard to copy, the network is not built yet. If AST reaches continuous coverage first and the carrier JV wants a neutral supplier, the position is strong. If launches slip while SpaceX scales, the partner list is only an option.",
+  formula:"Future revenue ≈ (partner subscribers who use satellite service × wholesale price or revenue share) + government contracts + gateway equipment sales. Until ~45 satellites are up, only the last two exist, which is why 2026 revenue (guided at $150-200m) is mostly hardware and government work.",
+  kpis:[
+    ["Satellites in orbit","13 (3 more at the Cape)","Gates coverage, hence every service dollar. Target ~45 by early 2027."],
+    ["Launch cadence","6 launched in 50 days (BB8-13)","Shows production works; next launch (BB14-16) has no firm date."],
+    ["Contracted revenue","~$1.3bn","Backlog from commercial partners and US government; converts as coverage arrives."],
+    ["2026 revenue guide","$150-200m","H1 delivered $46.3m, so H2 needs $104-154m."],
+    ["Adjusted opex / quarter","$119.1m (Q2), up from $91.2m (Q1)","The fixed cost base the network must cover."],
+    ["Liquidity","> $3.7bn pro forma (after $1.15bn July convert)","Management says enough to build and launch 100+ BlueBirds."]
+  ],
+  rDrivers:"Watch satellites in orbit and launch dates first, then definitive commercial agreements. Revenue in 2026 is a lagging, lumpy signal (Q4 2025 was $54.3m on equipment deliveries, Q1 2026 fell to $14.7m).",
+  rPL:"Revenue has gone from nothing in 2023 to $115m TTM, but operating losses widened to $473m TTM. That figure includes a one-off $125.9m write-off of BlueBird 7 (net of expected insurance) and $148m of stock compensation. Margins are not meaningful yet; the page shows n/m where revenue is too small for a ratio to mean anything.",
+  rBS:"The balance sheet was rebuilt in 2025: cash went from $565m to $2.3bn and debt from $173m to $3.0bn, mostly convertible notes, while PP&E (satellites) grew six-fold to $2.1bn. A further $1.15bn convertible in July 2026 lifts pro forma debt to roughly $4.1bn (estimate). Net cash today is negative.",
+  rCF:"Free cash flow is deeply negative because this is a build phase: capex of $1.49bn TTM against $145m of operating cash burn. It has been funded with $2.55bn of new shares and $3.2bn of new debt in the last twelve months. No dividends. Reported share repurchases are small next to issuance. Shareholders are being diluted to pay for the network.",
+  rRatios:"Leverage and return ratios are negative or not meaningful for a company with negative EBITDA; they are shown to make the point, not to compare. The useful ratio today is runway: H1 2026 burn (operating cash use plus capex) was about $1.0bn, so >$3.7bn pro forma liquidity covers roughly 1.8 years at that pace (estimate, before new revenue or financing).",
+  rVal:"P/E, EV/EBITDA and PEG are all negative, so the market is pricing revenue years out. EV/Sales has fallen from 286x at end-2025 to ~147x TTM as revenue arrived and the price fell, and drops to ~29x on 2027 consensus revenue. P/B has come down from 8.5x to ~6.8x. Still far above any operating satellite peer.",
+  industry:"Satellite direct-to-device is early. Kaleido Intelligence (2023) forecast more than $9bn of annual connectivity revenue by 2030; forecasts vary widely. The field has split into vertically integrated players (SpaceX's Starlink, now building a standalone mobile carrier) and carrier-aligned wholesalers (AST, Lynk/Omnispace, Skylo for messaging and IoT), with Amazon entering via Globalstar. The listed peers below are operating satellite businesses, not true D2D comparables; there is no pure-play listed comparable.",
+  rPeers:"Mature satellite operators trade at ~3-7x sales and ~10-21x EBITDA. Globalstar's 38x sales reflects Amazon's pending $11.57bn takeover price, which is the closest public read on what a D2D-capable spectrum-plus-satellite asset is worth. AST's ~147x TTM sales means the market treats it as a growth option rather than an operator.",
+  mgmt:[
+    ["Abel Avellan","Founder, Chairman and CEO","Founded AST in 2017; CEO of the listed company since Apr 2021"],
+    ["Scott Wisniewski","President and Chief Strategy Officer","CSO since 2021; President since Jun 2024"],
+    ["Andrew Johnson","EVP, CFO, Chief Legal Officer, Director","CLO since May 2024; CFO since Jun 2024"],
+    ["Shanti Gupta","EVP and Chief Operating Officer","Joined Sep 2021 as CAO; COO since Jun 2024"],
+    ["Dr. Huiwen Yao","Chief Technology Officer","CTO since 2018"]
+  ],
+  mgmtNotes:[
+    "Avellan holds all Class C shares: ~78.2m of 389.2m total shares (~20% economic, calculated) but ~71.6% of voting power. Outside shareholders cannot outvote him.",
+    "Avellan has taken no base salary beyond minimum-wage requirements since 2021 and no 2025 cash bonus; pay is in RSUs and performance share units (73.75% of 2025 PSUs earned).",
+    "Capital allocation is all-in on the network: no dividends, heavy equity and convertible issuance, ~$100m of capital advances to Ligado and $42m of spectrum purchases in H1 2026.",
+    "Management targets: ~45 satellites by early 2027, beta service with select MNOs in 2026, commercial launch in 2027, 2026 revenue $150-200m."
+  ],
+  rMgmt:"A founder-led company with strong alignment through equity and weak outside control through the share structure. The team has hit technical milestones but repeatedly missed timelines (commercial service moved from 2026 to 2027).",
+  risks:[
+    "Launch risk and launch access: one satellite already lost (BB7, Apr 2026). AST relies on Falcon 9, built by its main competitor; Piper Sandler flagged that SpaceX could theoretically limit availability.",
+    "Schedule slip: commercial launch needs ~45 satellites. BB14-16 have no firm launch date as of mid-October 2026; each quarter of delay is ~$400-500m of burn (estimate from H1 run rate).",
+    "Competition: SpaceX now owns spectrum outright and is building its own carrier; Amazon is buying Globalstar. Price competition for wholesale capacity could be fierce.",
+    "Dilution and debt: ~$4.1bn of pro forma debt (estimate) and continuing equity issuance; Q2 2026 non-GAAP loss of $0.44/share missed consensus of $0.28.",
+    "Regulation: FCC approvals for spectrum and constellation size (Viasat has urged the FCC to reject AST's overseas spectrum bid); the US carrier JV faces DoJ review.",
+    "Governance: ~71.6% of votes with the founder; 16.7% of shares sold short, so volatility is high (5-year beta 2.71)."
+  ],
+  rScen:"Consensus is a Hold with a $74.28 average target, about 78% above the price, and estimates have been cut since Q2 (Zacks: -54.5% revision to the current-quarter EPS consensus). The stock trades just below the lowest Street target of $42.50, so the market is closer to the bear case than analysts are.",
+  remember:[
+    "Satellites in orbit (13 of ~45-60) is the KPI. Everything else follows.",
+    "~$17bn EV for $115m of TTM revenue; you are paying for 2027 and beyond.",
+    "Funded for now (>$3.7bn pro forma liquidity) but burning ~$2bn a year at H1 2026 pace.",
+    "The competitive map changed in 2026: SpaceX owns spectrum, Amazon buys Globalstar, US carriers form a JV that wants multiple suppliers."
+  ],
+  checkNext:[
+    "Launch date and outcome for BlueBirds 14-16 on Falcon 9, and any New Glenn return to flight.",
+    "Q3 2026 results: revenue versus the $150-200m full-year guide, adjusted opex, and capex run rate.",
+    "FCC agenda item dated 29 Oct 2026 on carrier-partner satellite models, and progress on AST's L-band and overseas spectrum filings.",
+    "Whether the AT&T / Verizon / T-Mobile JV signs AST as a wholesale supplier, and any definitive (not MoU) agreements converting the 60+ partners.",
+    "Diluted share count trend and any further equity or convertible raises."
+  ],
+  timeline:[
+    ["May 2017","Abel Avellan founds AST & Science LLC.","key"],
+    ["Apr 2019","BlueWalker 1 test satellite launches on India's PSLV.",""],
+    ["Mar 2020","$110m Series B led by Vodafone and Rakuten, with American Tower and Samsung Next.",""],
+    ["Apr 2021","Lists on Nasdaq via merger with New Providence Acquisition Corp.","key"],
+    ["Sep 2022","BlueWalker 3 prototype launches on Falcon 9; NanoAvionics stake sold to Kongsberg.",""],
+    ["Apr 2023","First two-way call between unmodified smartphones via satellite; first space-based 5G call later that year.","key"],
+    ["Jan-May 2024","AT&T and Google investment; Verizon $100m partnership.",""],
+    ["Sep 2024","BlueBirds 1-5 (Block 1) launch together on Falcon 9.","key"],
+    ["Jun 2025","Ligado deal: up to 45 MHz of North American L-band spectrum to 2107.",""],
+    ["Dec 2025","BlueBird 6, first Block 2 satellite, launches on India's LVM3.",""],
+    ["Apr 2026","BlueBird 7 on New Glenn reaches too low an orbit and is de-orbited; $125.9m write-off.","bad"],
+    ["Jun-Aug 2026","BlueBirds 8-13 launch on Falcon 9, six in 50 days; 13 in orbit. $1.15bn convertible raised.","key"],
+    ["Oct 2026","Piper downgrade to Neutral, Deutsche Bank upgrade to Buy; SpaceX buys Grain spectrum; BB14-16 at the Cape.",""]
+  ],
+  scenarios:[
+    {k:"bear", name:"Bear", price:20, tag:"est", tagText:"Author estimate",
+     a:["Launch cadence slips (Falcon 9 access, no New Glenn), 45 satellites not reached until late 2027 or 2028.","SpaceX wins the US carrier JV's anchor volume; AST's wholesale pricing compresses.","Another large equity raise below today's price; valued near 3x book equity (it traded at 2.5x in 2023)."]},
+    {k:"base", name:"Base", price:74.28, tag:"cons", tagText:"Consensus average",
+     a:["~45 satellites by early 2027 and commercial US service during 2027, as management targets.","Revenue tracks consensus: $167.5m in 2026, ~$582m in 2027.","No further satellite losses; funding holds without heavy new dilution."]},
+    {k:"bull", name:"Bull", price:108, tag:"cons", tagText:"Street high (S&P panel)",
+     a:["60+ satellites through 2027, with New Glenn returning to add capacity.","Carrier JV and major MNOs sign AST as the neutral wholesale network; L-band approved.","Government revenue scales alongside commercial service. (Clear Street's $115 target sits above this panel high.)"]}
+  ],
+  gloss:[
+    ["D2D","Direct-to-device: satellites talking straight to an ordinary phone, no special handset or dish."],
+    ["MNO","Mobile network operator, e.g. AT&T, Verizon, Vodafone."],
+    ["BlueBird / Block 2","AST's production satellites. Block 2 units are larger, targeting ~200 Mbps peak."],
+    ["EV/Sales","Enterprise value (market cap + debt - cash) divided by revenue. Used when earnings are negative."],
+    ["Involuntary conversion","Accounting loss when an asset is destroyed or lost, here BlueBird 7, net of expected insurance."],
+    ["Noncontrolling interest","Book equity belonging to holders of the operating LLC's units (Class B and C holders) rather than Class A shareholders."],
+    ["DuPont ROE","Return on equity split into net margin × asset turnover × equity multiplier."],
+    ["n/m","Not meaningful: the ratio exists arithmetically but says nothing (e.g. margins on near-zero revenue)."]
+  ]
+};
+
+/* ===== helpers ===== */
+const $ = id => document.getElementById(id);
+const isNum = v => typeof v === "number" && isFinite(v);
+const fm = (v,d=0) => isNum(v) ? v.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d}) : "n/a";
+const fb = v => isNum(v) ? "$"+(v/1000).toLocaleString("en-US",{maximumFractionDigits:1})+"bn" : "n/a";
+const pct = (v,d=1) => isNum(v) ? (v*100).toFixed(d)+"%" : "n/m";
+const x = (v,d=1) => isNum(v) ? v.toFixed(d)+"x" : "n/m";
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+const D = DATA, Y = D.years, n = Y.length, L = n-1;
+const MINREV = 20; // revenue below this (USDm) makes margin ratios n/m
+
+/* ===== derived ===== */
+const ebitda = D.ebit.map((e,i)=>e + D.da[i]);
+const fcf = D.ocf.map((o,i)=>o - D.capex[i]);
+const parentEq = D.equityTotal.map((e,i)=>e - D.nci[i]);
+const wc = D.receivables.map((r,i)=>r + D.inventory[i] - D.payables[i]);
+const netDebt = D.debt.map((d,i)=>d - D.cash[i]);
+const growth = D.revenue.map((r,i)=> i===0 || !(D.revenue[i-1]>0) || i===L ? null : r/D.revenue[i-1]-1);
+const margin = (arr,i)=> D.revenue[i] >= MINREV ? arr[i]/D.revenue[i] : null;
+const mcap = D.price * D.sharesTotal;
+const ev = mcap + D.debt[L] - D.cash[L];
+const C = D.consensus;
+
+/* ===== header ===== */
+$("asof").textContent = "Price as of " + D.asOf;
+const kv = [
+  ["Price", "$"+fm(D.price,2)],
+  ["Market cap", fb(mcap)],
+  ["Enterprise value", fb(ev)],
+  ["Revenue TTM", "$"+fm(D.revenue[L],0)+"m"],
+  ["EV / Sales TTM", x(ev/D.revenue[L],0)],
+  ["Pro forma liquidity", ">"+fb(D.liquidityProForma)],
+  ["Consensus", C.rating+", $"+fm(C.ptAvg,2)],
+  ["Satellites in orbit", D.sats.inOrbit+" of ~45-60"]
+];
+$("kv").innerHTML = kv.map(([k,v])=>`<div><span class="label">${k}</span><b>${v}</b></div>`).join("");
+$("verdict").textContent = TEXT.verdict;
+
+/* ===== constellation track ===== */
+(function(){
+  const max = D.sats.global, p = v => (v/max*100).toFixed(2)+"%";
+  const s = D.sats;
+  const ticks = [
+    [s.inOrbit,"now","13"],
+    [s.intermittent,"intermittent US","25"],
+    [s.target,"commercial target","45"],
+    [s.continuousHigh,"continuous core","60"],
+    [s.global,"global","90"]
+  ];
+  let h = `<div class="bar"></div><div class="fill" style="width:${p(s.inOrbit)}"></div><div class="cape" style="left:${p(s.inOrbit)};width:${p(s.atCape)}"></div>`;
+  h += ticks.map(([v,lab,num],i)=>`<div class="tick${i===0?" now":""}" style="left:${p(v)}"><span class="tl">${lab}</span>${num}<i></i></div>`).join("");
+  $("track").innerHTML = h;
+  // keep labels from colliding on narrow screens: stagger alternates
+  [...$("track").querySelectorAll(".tick")].forEach((t,i)=>{ if(i%2===1) t.querySelector(".tl").style.top="-2.5rem"; });
+  $("track").style.marginTop="3.2rem";
+})();
+$("r-track").textContent = TEXT.rTrack;
+
+/* ===== section text ===== */
+$("what").textContent = TEXT.what;
+$("model").textContent = TEXT.model;
+$("r-overview").textContent = TEXT.rOverview;
+$("timeline").innerHTML = TEXT.timeline.map(([d,t,c])=>`<li class="${c}"><span class="d">${d}</span><span>${esc(t)}</span></li>`).join("");
+$("moat-for").innerHTML = TEXT.moatFor.map(t=>`<li>${esc(t)}</li>`).join("");
+$("moat-against").innerHTML = TEXT.moatAgainst.map(t=>`<li>${esc(t)}</li>`).join("");
+$("r-moat").textContent = TEXT.rMoat;
+$("formula").textContent = TEXT.formula;
+$("kpis").innerHTML = TEXT.kpis.map(([k,v,w])=>`<tr><td>${k}</td><td class="n">${esc(v)}</td><td class="txt">${esc(w)}</td></tr>`).join("");
+$("r-drivers").textContent = TEXT.rDrivers;
+
+/* ===== tables ===== */
+function cell(v, f, signColor){
+  const s = f(v);
+  const cls = ["n"]; if(signColor && isNum(v)) cls.push(v<0?"neg":"");
+  return `<td class="${cls.join(" ")}">${s}</td>`;
+}
+function table(id, rows){
+  const head = `<thead><tr><th>${D.currency}m</th>${Y.map(y=>`<th>${y}</th>`).join("")}</tr></thead>`;
+  const body = rows.map(r=>`<tr class="${r.cls||""}"><td>${r.l}</td>${r.v.map(v=>cell(v,r.f||(z=>fm(z,0)),r.sign)).join("")}</tr>`).join("");
+  $(id).innerHTML = head + "<tbody>"+body+"</tbody>";
+}
+const m1 = v => isNum(v)? fm(v,1) : "n/a";
+table("t-pl",[
+  {l:"Revenue", v:D.revenue, f:m1, cls:"hl"},
+  {l:"Growth", v:growth, f:v=>isNum(v)?pct(v,0):"n/m", cls:"sub"},
+  {l:"Gross profit", v:D.grossProfit, f:m1},
+  {l:"EBITDA (EBIT + D&A)", v:ebitda, f:m1, sign:true},
+  {l:"EBITDA margin", v:ebitda.map((_,i)=>margin(ebitda,i)), f:v=>pct(v,0), cls:"sub"},
+  {l:"Operating income (EBIT)", v:D.ebit, f:m1, sign:true},
+  {l:"Net income to common", v:D.netIncome, f:m1, sign:true, cls:"hl"},
+  {l:"Net margin", v:D.netIncome.map((_,i)=>margin(D.netIncome,i)), f:v=>pct(v,0), cls:"sub"},
+  {l:"Stock-based comp", v:D.sbc, f:m1, cls:"sub"}
+]);
+table("t-bs",[
+  {l:"Cash & equivalents", v:D.cash},
+  {l:"PP&E (satellites, ground)", v:D.ppe},
+  {l:"Total assets", v:D.totalAssets},
+  {l:"Total debt", v:D.debt},
+  {l:"Net debt (debt - cash)", v:netDebt, sign:true, cls:"hl"},
+  {l:"Working capital (AR + inv - AP)", v:wc, f:m1, sign:true},
+  {l:"Working capital % revenue", v:wc.map((w,i)=>D.revenue[i]>=MINREV? w/D.revenue[i]:null), f:v=>pct(v,0), cls:"sub"},
+  {l:"Equity (total, incl. NCI)", v:D.equityTotal},
+  {l:"of which noncontrolling", v:D.nci, cls:"sub"}
+]);
+table("t-cf",[
+  {l:"Operating cash flow", v:D.ocf, f:m1, sign:true},
+  {l:"Capex", v:D.capex.map(c=>-c), f:m1, sign:true},
+  {l:"Free cash flow", v:fcf, f:m1, sign:true, cls:"hl"},
+  {l:"FCF margin", v:fcf.map((_,i)=>margin(fcf,i)), f:v=>pct(v,0), cls:"sub"},
+  {l:"FCF conversion (FCF / NI)", v:fcf.map((f,i)=> D.netIncome[i]>0 ? f/D.netIncome[i] : null), f:v=>pct(v,0), cls:"sub"},
+  {l:"New shares issued", v:D.stockIssued, f:m1},
+  {l:"Debt issued, net of repaid", v:D.debtIssued.map((d,i)=>d-D.debtRepaid[i]), f:m1},
+  {l:"Share repurchases", v:D.repurchases.map(r=>-r), f:m1},
+  {l:"Dividends", v:D.dividends, f:m1}
+]);
+$("r-pl").textContent = TEXT.rPL; $("r-bs").textContent = TEXT.rBS; $("r-cf").textContent = TEXT.rCF;
+
+/* ratios: DuPont on parent equity, ROIC on invested capital = total equity + debt - cash */
+const avg = (a,i)=> i>0 && i<L ? (a[i]+a[i-1])/2 : a[i];
+table("t-ratio",[
+  {l:"Net debt / EBITDA", v:netDebt.map((d,i)=> ebitda[i]>0 ? d/ebitda[i] : null), f:v=>x(v)},
+  {l:"Asset turnover (rev / assets)", v:D.revenue.map((r,i)=> r/D.totalAssets[i]), f:v=>x(v,2)},
+  {l:"Receivable days", v:D.receivables.map((r,i)=> D.revenue[i]>=MINREV ? r/D.revenue[i]*365 : null), f:v=>isNum(v)?fm(v,0):"n/m"},
+  {l:"Net margin", v:D.netIncome.map((_,i)=>margin(D.netIncome,i)), f:v=>pct(v,0)},
+  {l:"Equity multiplier (assets / parent equity)", v:D.totalAssets.map((a,i)=>a/parentEq[i]), f:v=>x(v,1)},
+  {l:"ROE (NI / parent equity)", v:D.netIncome.map((ni,i)=>ni/parentEq[i]), f:v=>pct(v,0), sign:true, cls:"hl"},
+  {l:"ROIC (EBIT, no tax / invested capital)", v:D.ebit.map((e,i)=>{const ic=D.equityTotal[i]+D.debt[i]-D.cash[i]; return ic>0? e/ic : null;}), f:v=>pct(v,0), sign:true, cls:"hl"}
+]);
+$("r-ratios").textContent = TEXT.rRatios;
+
+/* valuation */
+(function(){
+  const pb = mcap/D.equityTotal[L];
+  const rows = [
+    ["P/E (trailing / 2026E / 2027E)","n/m (losses)",`EPS 2026E $${C.eps2026}, 2027E $${C.eps2027}`,"n/m","Iridium 35.5x fwd, EchoStar 32.8x fwd"],
+    ["EV/EBITDA","n/m (negative EBITDA)","","n/m","Iridium 17.1x, Viasat 9.7x, EchoStar 21.2x"],
+    ["PEG","n/m","","n/m","No positive earnings growth base"],
+    ["EV / Sales TTM",x(ev/D.revenue[L],0),"",`End-2025 ${x(D.evSalesHistory["2025"],0)}, end-2024 ${x(D.evSalesHistory["2024"],0)}, 2021-22 ~26x`,"Iridium 7.5x, Viasat 2.9x, EchoStar 2.9x, Globalstar 38.1x (takeover)"],
+    ["EV / Sales 2026E",x(ev/C.rev2026,0),`Consensus revenue $${fm(C.rev2026,1)}m`,"",""],
+    ["EV / Sales 2027E",x(ev/C.rev2027,0),`Consensus revenue $${fm(C.rev2027,0)}m`,"",""],
+    ["P / Book (total equity)",x(pb,1),"",`End-2025 ${x(D.pbHistory["2025"],1)}, 2024 ${x(D.pbHistory["2024"],1)}, 2023 ${x(D.pbHistory["2023"],1)}`,"n/a"]
+  ];
+  $("t-val").innerHTML = `<thead><tr><th>Multiple</th><th>ASTS now</th><th class="txt">Basis</th><th class="txt">ASTS history</th><th class="txt">Peers (${D.peerAsOf})</th></tr></thead><tbody>`+
+    rows.map(r=>`<tr><td>${r[0]}</td><td class="n">${r[1]}</td><td class="txt">${r[2]}</td><td class="txt">${r[3]}</td><td class="txt">${r[4]}</td></tr>`).join("")+"</tbody>";
+  // reverse look: what operating business justifies today's EV
+  const irdm = D.peers.find(p=>p.t==="IRDM");
+  const peerMult = irdm.ev/irdm.ebitda, peerMargin = irdm.ebitda/irdm.rev;
+  const needEbitda = ev/peerMult, needRev = needEbitda/peerMargin;
+  $("implied").textContent = `At $${fm(D.price,2)} the enterprise value is ${fb(ev)}. If AST eventually traded like Iridium, the most profitable listed satellite operator (${x(peerMult,1)} EV/EBITDA, ${pct(peerMargin,0)} EBITDA margin), today's EV would need about ${fb(needEbitda)} of EBITDA, or roughly ${fb(needRev)} of revenue, earned at some future date and discounted back. That is about ${x(needRev/D.revenue[L],0)} TTM revenue and ${x(needRev/C.rev2027,1)} the 2027 consensus. The ~$1.3bn backlog covers about ${pct(D.backlog/needRev,0)} of one such year. (Calculation, not a forecast.)`;
+})();
+$("r-val").textContent = TEXT.rVal;
+
+/* peers */
+(function(){
+  const self = D.peers[0];
+  self.mcap = mcap; self.ev = ev; self.rev = D.revenue[L]; self.ebitda = ebitda[L]; self.ni = D.netIncome[L];
+  self.roic = (()=>{const ic=D.equityTotal[L]+D.debt[L]-D.cash[L]; return D.ebit[L]/ic*100;})();
+  const rows = D.peers.map(p=>{
+    const em = p.rev >= MINREV && p.ebitda>0 ? p.ebitda/p.rev : null;
+    const evs = p.ev/p.rev, eve = p.ebitda>0 ? p.ev/p.ebitda : null;
+    return `<tr class="${p.self?"hl":""}"><td>${p.name} <span class="mono" style="color:var(--muted)">${p.t}</span></td>
+      <td class="n">${fb(p.mcap)}</td><td class="n">${fb(p.ev)}</td><td class="n">${fm(p.rev,0)}</td>
+      <td class="n">${em===null?"n/m":pct(em,0)}</td><td class="n">${x(evs,1)}</td><td class="n">${x(eve,1)}</td>
+      <td class="n">${isNum(p.fpe)?x(p.fpe,1):"n/m"}</td><td class="n ${p.roic<0?"neg":""}">${isNum(p.roic)?p.roic.toFixed(1)+"%":"n/a"}</td></tr>`;
+  }).join("");
+  $("t-peers").innerHTML = `<thead><tr><th>Company</th><th>Mkt cap</th><th>EV</th><th>Rev TTM $m</th><th>EBITDA margin</th><th>EV/Sales</th><th>EV/EBITDA</th><th>Fwd P/E</th><th>ROIC</th></tr></thead><tbody>${rows}</tbody>`+
+   `<tfoot><tr><td colspan="9" class="txt" style="text-align:left;color:var(--muted)">*Globalstar agreed to be acquired by Amazon for $11.57bn (Apr 2026); its multiples reflect the deal. Peer data trailing, ${D.peerAsOf}. ASTS ROIC uses EBIT before tax over total equity + debt - cash.</td></tr></tfoot>`;
+})();
+$("industry").textContent = TEXT.industry;
+$("r-peers").textContent = TEXT.rPeers;
+
+/* management, risks, scenarios, takeaways */
+$("mgmt").innerHTML = TEXT.mgmt.map(([a,b,c])=>`<tr><td>${a}</td><td class="txt">${b}</td><td class="txt">${c}</td></tr>`).join("");
+$("mgmt-notes").innerHTML = TEXT.mgmtNotes.map(t=>`<li>${esc(t)}</li>`).join("");
+$("r-mgmt").textContent = TEXT.rMgmt;
+$("risks").innerHTML = TEXT.risks.map(t=>`<li>${esc(t)}</li>`).join("");
+$("scen").innerHTML = TEXT.scenarios.map(s=>{
+  const up = s.price/D.price-1;
+  return `<div class="card ${s.k}"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:.5rem;flex-wrap:wrap"><h3>${s.name}</h3><span class="chip ${s.tag}">${s.tagText}</span></div>
+    <div class="px">$${fm(s.price,2)} <span class="label" style="font-size:.8rem">${up>=0?"+":""}${pct(up,0)} vs price</span></div>
+    <ul class="clean">${s.a.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>`;
+}).join("");
+$("r-scen").textContent = TEXT.rScen + ` Street range: low $${fm(C.ptLow,2)}, median $${fm(C.ptMedian,0)}, high $${fm(C.ptHigh,0)} (${C.analysts} analysts).`;
+$("remember").innerHTML = TEXT.remember.map(t=>`<li>${esc(t)}</li>`).join("");
+$("checknext").innerHTML = TEXT.checkNext.map(t=>`<li>${esc(t)}</li>`).join("");
+$("gloss").innerHTML = TEXT.gloss.map(([a,b])=>`<dt>${a}</dt><dd>${esc(b)}</dd>`).join("");
+$("sources").innerHTML = D.sources.map(([t,u])=>`<li><a href="${u}" target="_blank" rel="noopener">${esc(t)}</a></li>`).join("");
+
+/* ===== charts (one linear scale each, zero baseline) ===== */
+function bars(id, series, opts){
+  const W=460, H=210, padL=8, padR=8, padT=22, padB=30;
+  const all = series.flatMap(s=>s.v);
+  const hi = Math.max(0,...all), lo = Math.min(0,...all);
+  const span = hi-lo || 1, ih = H-padT-padB;
+  const yOf = v => padT + (hi - v)/span*ih;
+  const groupW = (W-padL-padR)/n, bw = Math.min(28,(groupW-10)/series.length);
+  let g = `<line x1="${padL}" x2="${W-padR}" y1="${yOf(0)}" y2="${yOf(0)}" stroke="var(--rule)" stroke-width="1"/>`;
+  Y.forEach((y,i)=>{
+    const cx = padL + groupW*i + groupW/2;
+    series.forEach((s,j)=>{
+      const v = s.v[i], xx = cx - (bw*series.length)/2 + j*bw;
+      const y0 = yOf(Math.max(v,0)), hgt = Math.abs(yOf(v)-yOf(0));
+      g += `<rect x="${xx.toFixed(1)}" y="${y0.toFixed(1)}" width="${(bw-2).toFixed(1)}" height="${Math.max(hgt,0.5).toFixed(1)}" fill="${s.c}"><title>${s.name} ${y}: ${fm(v,1)}</title></rect>`;
+      if(opts.labels && (Math.abs(v) >= span*0.06 || series.length===1)){
+        const ly = v>=0 ? y0-4 : yOf(v)+12;
+        g += `<text class="vl" x="${(xx+(bw-2)/2).toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle">${fm(v,0)}</text>`;
+      }
+    });
+    g += `<text x="${cx.toFixed(1)}" y="${H-10}" text-anchor="middle">${y.replace("TTM ","TTM ").replace("Jun-26","")}</text>`;
+  });
+  const legend = series.length>1 ? `<div class="track-legend">${series.map(s=>`<span><span class="sw" style="background:${s.c}"></span>${s.name}</span>`).join("")}</div>` : "";
+  $(id).innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${opts.aria}">${g}</svg>${legend}`;
+}
+bars("ch-rev",[{name:"Revenue",v:D.revenue,c:"var(--accent)"}],{labels:true,aria:"Revenue by year, USD millions"});
+bars("ch-cash",[{name:"Capex",v:D.capex.map(c=>-c),c:"var(--accent)"},{name:"Operating cash flow",v:D.ocf,c:"var(--muted)"}],{labels:true,aria:"Capex and operating cash flow by year, USD millions"});
+</script>
+
+</body></html>

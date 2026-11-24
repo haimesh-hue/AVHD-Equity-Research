@@ -426,3 +426,9 @@ mark.flash { animation: flash 1.2s; }
   .sidebar, .topbar, .rt-toolbar, .ink-toolbar, .tabs, .ann-side, .back { display: none !important; }
   .shell { display: block; } main { overflow: visible; }
 }
+
+/* research reports */
+.report-list { display: flex; flex-direction: column; gap: 12px; }
+.report .report-sum, .report-banner .report-sum { margin: 10px 0; color: var(--text-2); line-height: 1.6; }
+.report-banner { border-left: 3px solid var(--accent); }
+.pill.verdict { text-transform: capitalize; font-weight: 600; }

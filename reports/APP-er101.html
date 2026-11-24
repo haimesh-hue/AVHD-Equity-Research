@@ -1,0 +1,484 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>AppLovin ER101</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,650&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single research-note column, ~920px, section = question heading + data + "read" box. Ink-blue on cool paper. */
+:root{
+  --bg:#f5f7f9; --panel:#ffffff; --fg:#17202a; --muted:#5b6876; --rule:#d9e0e7;
+  --accent:#1d5b8f; --accent-soft:#e3edf6; --pos:#2f7d4f; --neg:#b4452f; --warn:#a8770c;
+  --bar2:#9fb9d1;
+  --display:"Source Serif 4", Georgia, serif;
+  --body:"Public Sans", system-ui, -apple-system, Segoe UI, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f151b; --panel:#161e26; --fg:#e4eaf0; --muted:#97a5b3; --rule:#2a3540;
+  --accent:#7fb3e0; --accent-soft:#1b2c3c; --pos:#6cc08d; --neg:#ec8a74; --warn:#e2b34f; --bar2:#3f5d78; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f151b; --panel:#161e26; --fg:#e4eaf0; --muted:#97a5b3; --rule:#2a3540;
+  --accent:#7fb3e0; --accent-soft:#1b2c3c; --pos:#6cc08d; --neg:#ec8a74; --warn:#e2b34f; --bar2:#3f5d78; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55}
+.wrap{max-width:920px;margin:0 auto;padding-block:28px 60px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+header{display:grid;gap:10px;padding-bottom:20px;border-bottom:2px solid var(--fg)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:650;font-size:clamp(28px,5vw,40px);line-height:1.1;margin:0;text-wrap:balance}
+h1 small{font-family:var(--mono);font-size:.42em;font-weight:500;color:var(--accent);vertical-align:middle;margin-left:8px}
+.lede{max-width:68ch;margin:0;color:var(--fg)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:6px}
+.kpi{background:var(--panel);padding:10px 12px}
+.kpi b{display:block;font-family:var(--mono);font-size:18px;font-weight:500;font-variant-numeric:tabular-nums}
+.kpi span{font-size:12px;color:var(--muted)}
+nav{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0 4px}
+nav a{font-size:12.5px;color:var(--accent);text-decoration:none;border:1px solid var(--rule);padding:3px 9px;border-radius:999px;background:var(--panel)}
+nav a:hover,nav a:focus-visible{border-color:var(--accent);outline:none}
+section{padding-top:30px;display:grid;gap:12px}
+h2{font-family:var(--display);font-weight:650;font-size:22px;margin:0;display:flex;gap:10px;align-items:baseline;text-wrap:balance}
+h2 .n{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:500}
+h2 .q{font-family:var(--body);font-size:14px;font-weight:400;color:var(--muted)}
+p{margin:0;max-width:72ch}
+.read{background:var(--accent-soft);border-left:3px solid var(--accent);padding:10px 14px;max-width:none}
+.read::before{content:"Read: ";font-weight:600;color:var(--accent)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.grid2>*{min-width:0}
+.box{background:var(--panel);border:1px solid var(--rule);padding:14px 16px;display:grid;gap:8px;align-content:start}
+.box h3{margin:0;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.tbl{overflow-x:auto;border:1px solid var(--rule);background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:6px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--rule)}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--panel)}
+thead th{font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+tr.sub td{color:var(--muted);font-size:12.5px}
+tr.sub td:first-child{padding-left:22px}
+tr.hl td{font-weight:600}
+tr.sec td{background:var(--bg);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);font-weight:600;text-align:left}
+td.me{color:var(--accent);font-weight:600}
+.neg{color:var(--neg)} .pos{color:var(--pos)}
+.mono{font-family:var(--mono)}
+.timeline{display:grid;gap:0;border-left:2px solid var(--rule);margin-left:6px}
+.ev{display:grid;grid-template-columns:86px 1fr;gap:12px;padding:5px 0 5px 14px;position:relative}
+.ev::before{content:"";position:absolute;left:-6px;top:12px;width:10px;height:10px;border-radius:50%;background:var(--panel);border:2px solid var(--accent)}
+.ev .d{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.chart svg{display:block;width:100%;height:auto}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;margin-right:5px;vertical-align:-1px}
+.scen{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.sc{background:var(--panel);border:1px solid var(--rule);border-top:4px solid var(--c);padding:12px 14px;display:grid;gap:6px;align-content:start}
+.sc .px{font-family:var(--mono);font-size:24px;font-variant-numeric:tabular-nums}
+.sc .px small{font-size:13px;color:var(--muted)}
+.sc h3{margin:0;font-size:14px}
+.calc{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:end;background:var(--panel);border:1px solid var(--rule);padding:12px 14px}
+.calc label{display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.calc input{font-family:var(--mono);font-size:14px;width:110px;padding:5px 7px;border:1px solid var(--rule);background:var(--bg);color:var(--fg);border-radius:4px}
+.calc input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.calc output{font-family:var(--mono);font-size:20px}
+dl.gl{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;margin:0;font-size:13.5px}
+dl.gl dt{font-weight:600}
+dl.gl dd{margin:0;color:var(--muted)}
+.src{font-size:12.5px;color:var(--muted)}
+.src a{color:var(--accent)}
+table.wrapcells td,table.wrapcells th{white-space:normal;min-width:120px}
+@media print{.tbl{overflow:visible}nav{display:none}}
+footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-size:12px;color:var(--muted)}
+@media (max-width:520px){.ev{grid-template-columns:1fr;gap:0}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Equity Research 101 · Nasdaq · USD · price as of 20 Oct 2026 close</div>
+  <h1>AppLovin Corporation <small>APP</small></h1>
+  <p class="lede">An AI ad-targeting engine that buys and sells ads inside mobile games, now trying to do the same for web shops. Exceptional economics, a share price down about 60% in 2026, and a story that rests on the next two quarters of growth.</p>
+  <div class="kpis" id="kpis"></div>
+</header>
+
+<nav aria-label="Sections">
+  <a href="#biz">Business</a><a href="#moat">Moat</a><a href="#drivers">Drivers</a><a href="#fin">Financials</a><a href="#ratios">Ratios</a><a href="#val">Valuation</a><a href="#peers">Peers</a><a href="#mgmt">Management</a><a href="#risks">Risks</a><a href="#scen">Scenarios</a><a href="#take">Takeaways</a>
+</nav>
+
+<section id="biz">
+  <h2><span class="n">1</span>Business overview <span class="q">What does it do and how did it get here?</span></h2>
+  <div class="grid2">
+    <div class="box">
+      <h3>How it makes money</h3>
+      <p>Advertisers (mostly mobile game studios, increasingly e-commerce brands) set a return-on-ad-spend target in <b>Axon Ads Manager</b>. AppLovin's AI engine, Axon, bids for ad slots across thousands of apps that use its <b>MAX</b> mediation auction, and keeps a cut of every winning ad. Revenue is booked as the platform's take, so gross margin is about 88%.</p>
+      <p>Since the Apps (own games) business was sold to Tripledot on 30 Jun 2025, AppLovin is a pure advertising company with fewer than 900 employees.</p>
+    </div>
+    <div class="box">
+      <h3>Timeline</h3>
+      <div class="timeline" id="timeline"></div>
+    </div>
+  </div>
+  <p class="read">A software marketplace with one product that matters: the Axon model. Revenue per employee is above $7M, which tells you how little labour the machine needs.</p>
+</section>
+
+<section id="moat">
+  <h2><span class="n">2</span>Moat <span class="q">Why does it earn its returns, and can rivals copy it?</span></h2>
+  <div class="grid2">
+    <div class="box"><h3>Real advantages</h3><ul>
+      <li><b>Data loop.</b> MAX runs the ad auction inside a large share of mobile games, so Axon sees bids, installs and in-app purchases at a scale few rivals can match. Better predictions win more auctions, which brings more data.</li>
+      <li><b>Two-sided network.</b> Publishers use MAX because it pays most; advertisers come because the supply is there.</li>
+      <li><b>Measured on outcomes.</b> Advertisers buy a ROAS target, so switching is easy only if a rival proves better returns.</li>
+    </ul></div>
+    <div class="box"><h3>Where it is weaker</h3><ul>
+      <li>Model gains come in steps; Q2 2026 growth slowed when an update (the gen-AI video tool) slipped.</li>
+      <li>E-commerce is a new arena where Meta and Google own the incumbent data and creative tools.</li>
+      <li>Dependence on Apple and Google app-store and privacy rules; a policy change can blunt targeting.</li>
+    </ul></div>
+  </div>
+  <p class="read">The moat is real in mobile gaming, visible in 80%+ EBITDA margins that competitors with similar products (Unity) cannot get near. It is unproven outside games, and that is where the valuation debate sits.</p>
+</section>
+
+<section id="drivers">
+  <h2><span class="n">3</span>Drivers <span class="q">What is revenue made of?</span></h2>
+  <p><b>Revenue ≈ advertiser spend through Axon × AppLovin's take rate.</b> Spend grows with more advertisers (volume), better ROAS that lets each advertiser spend more (price), and a shift into e-commerce and web advertisers (mix).</p>
+  <div class="tbl"><table class="wrapcells">
+    <thead><tr><th>KPI to watch</th><th style="text-align:left">Why it moves revenue</th><th style="text-align:left">Latest data point</th></tr></thead>
+    <tbody>
+      <tr><td>Quarterly revenue growth</td><td style="text-align:left">Headline proof the model keeps improving</td><td style="text-align:left">+53% y/y in Q2 2026; Q3 guide +46% to +48%</td></tr>
+      <tr><td>Adj. EBITDA margin</td><td style="text-align:left">Shows incremental revenue costs almost nothing</td><td style="text-align:left">84% in Q2 2026; guide 83%</td></tr>
+      <tr><td>Consumer / e-commerce spend</td><td style="text-align:left">The new growth leg the bull case needs</td><td style="text-align:left">Ended Q2 28% above Q4 2025 level (per UBS note)</td></tr>
+      <tr><td>Axon model releases</td><td style="text-align:left">Step changes in ROAS drive spend</td><td style="text-align:left">Gen-AI video tool delay blamed for Q2 miss</td></tr>
+      <tr><td>Share count</td><td style="text-align:left">Buybacks turn growth into per-share growth</td><td style="text-align:left">335.3M at Jun 2026 vs 338.3M at Dec 2025</td></tr>
+    </tbody></table></div>
+  <p class="read">Watch Q3 revenue against the $2,055 to $2,085M guide and any figure on e-commerce advertisers. Two misses in a row would signal the step-change model gains have stalled.</p>
+</section>
+
+<section id="fin">
+  <h2><span class="n">4</span>Financials <span class="q">Is the business making real cash?</span></h2>
+  <div class="chart box">
+    <h3>Advertising revenue and adjusted EBITDA, $M</h3>
+    <div id="chart1"></div>
+    <div class="legend"><span><i style="background:var(--accent)"></i>Advertising revenue</span><span><i style="background:var(--bar2)"></i>Adj. EBITDA</span></div>
+  </div>
+  <div class="tbl"><table id="fintbl"></table></div>
+  <p class="src">Basis: "Advertising" rows are the continuing business (FY22 to FY23 = Software Platform segment; FY24 adj. EBITDA restated for continuing ops). Group rows are as reported and include the sold Apps business until 30 Jun 2025. FCF uses the company's definition. TTM = four quarters to 30 Jun 2026.</p>
+  <p class="read">Revenue grew 6.5x in three and a half years while EBITDA margin rose from 69% (FY23) to 84%. FCF conversion above 100% for three years means profits are real cash, and almost all of it has gone to buybacks ($2.6B in the last 12 months). The one item to watch is receivables, which grow with ad spend and absorbed $353M of cash in H1 2026.</p>
+</section>
+
+<section id="ratios">
+  <h2><span class="n">5</span>Ratios <span class="q">How efficient and how leveraged?</span></h2>
+  <div class="tbl"><table id="ratiotbl"></table></div>
+  <p class="src">DuPont uses year-end assets and equity, so it differs from averaged figures on data sites (stockanalysis shows TTM ROE 204%, ROIC 133%). ROIC = EBIT × (1 − 21%) ÷ (equity + debt − cash). Receivable days look long likely because receivables are billed on gross ad spend while revenue is recorded as AppLovin's net take.</p>
+  <p class="read">Net debt is close to zero (0.1x EBITDA), so leverage is not the issue. ROE above 100% is driven by margins, not borrowing, but book equity is small because buybacks shrink it, which flatters the ratio. ROIC near 100% says each dollar of capital earns roughly a dollar a year.</p>
+</section>
+
+<section id="val">
+  <h2><span class="n">6</span>Valuation <span class="q">What is the market paying versus history?</span></h2>
+  <div class="grid2">
+    <div class="box chart"><h3>Trailing EV/EBITDA at year end vs today</h3><div id="chart2"></div>
+      <p class="src">Data-site GAAP EBITDA basis, year-end. Today = 20 Oct 2026.</p></div>
+    <div class="box"><h3>Multiples today</h3><div class="tbl" style="border:0"><table id="valtbl"></table></div></div>
+  </div>
+  <p class="read">The stock has de-rated from about 54x EBITDA and 68x earnings at the end of 2025 to about 16x to 17x and 21x today, while earnings kept growing. A PEG near 0.5 says the market now prices growth well below what consensus forecasts, which means investors doubt the forecasts rather than the business.</p>
+</section>
+
+<section id="peers">
+  <h2><span class="n">7</span>Industry and competitors <span class="q">How does it stack up?</span></h2>
+  <p>Digital advertising grows with the online economy, roughly in the high single digits to low teens a year; the AI ad engines (Meta, Google, AppLovin) have taken share from intermediaries like The Trade Desk. AppLovin's 10-K names Meta, Google, Amazon and Unity as main competitors.</p>
+  <div class="tbl"><table id="peertbl"></table></div>
+  <p class="src">stockanalysis.com, prices 20 to 21 Oct 2026. Growth = analysts' 3-year revenue CAGR forecast. Alphabet's trailing P/E is lowered by large investment gains in net income.</p>
+  <p class="read">AppLovin has the highest margins, returns and forecast growth in the group, yet trades at about Meta's EV/EBITDA and a lower forward P/E. The market prices it as if its margins will fade toward peers or its growth is about to slow sharply.</p>
+</section>
+
+<section id="mgmt">
+  <h2><span class="n">8</span>Management <span class="q">Who runs it and how do they allocate capital?</span></h2>
+  <div class="grid2">
+    <div class="box"><h3>People</h3><ul>
+      <li><b>Adam Foroughi</b>, co-founder, CEO since Dec 2011 (age 45). Product-driven; led the Apps exit and the e-commerce push.</li>
+      <li><b>Matthew Stumpf</b>, CFO since Jan 2024, promoted from FP&amp;A.</li>
+      <li>CTO Vasily Shikin moved to a non-executive engineering role (Jul 2026); legal chief Victoria Valenzuela retired as executive (Aug 2026).</li>
+    </ul></div>
+    <div class="box"><h3>Ownership and allocation</h3><ul>
+      <li>Insiders own about 13% to 20% of shares depending on source; 30.2M high-vote Class B shares give insiders outsized control.</li>
+      <li>Foroughi sold about $51M of stock at ~$480 to $500 in June 2026.</li>
+      <li>Capital priority is buybacks: about $8.1B spent on repurchases from 2022 through H1 2026, no acquisitions since 2022, debt held flat at ~$3.5B.</li>
+    </ul></div>
+  </div>
+  <p class="read">A founder who has been right on the big calls (Axon, selling the games) and a disciplined buyback machine. The weaknesses are a thin bench after two senior exits in 2026 and a governance structure outside shareholders cannot change.</p>
+</section>
+
+<section id="risks">
+  <h2><span class="n">9</span>Risks <span class="q">What would break the story?</span></h2>
+  <ul>
+    <li><b>Growth deceleration.</b> Two ~20% earnings-day drops in 2026 (Feb, Aug); analysts have cut 2027 EPS (from ~$21.2 to ~$20.0 in 60 days per 24/7 Wall St.).</li>
+    <li><b>E-commerce fails to scale.</b> Management calls creative tools the biggest hurdle; without this leg, growth reverts to the gaming ad market.</li>
+    <li><b>Legal and regulatory.</b> Securities class action (Talbot v. AppLovin, N.D. Cal.) alleges overstated AI capabilities; San Diego County suit alleges targeting of children and data collection without consent. The company disputes both. A reported SEC inquiry closed with no action.</li>
+    <li><b>Platform rule changes</b> by Apple or Google on tracking or in-app ads.</li>
+    <li><b>Short-seller allegations</b> (Fuzzy Panda 2025, CapitalWatch 2026, partly retracted) keep sentiment fragile; beta about 2.5.</li>
+    <li><b>Concentration</b> in one model and one end market (mobile games).</li>
+  </ul>
+  <p class="read">The legal cases are headline risk unless they lead to restrictions on data use. The real risk is the first one: if growth falls to 20% quickly, even 16x EBITDA is not obviously cheap.</p>
+</section>
+
+<section id="scen">
+  <h2><span class="n">10</span>Scenarios <span class="q">Bear, base, bull on 2027 earnings</span></h2>
+  <div class="scen" id="scencards"></div>
+  <div class="calc">
+    <label for="ceps">2027 EPS ($)<input id="ceps" type="number" step="0.5" value="20.53"></label>
+    <label for="cpe">P/E (x)<input id="cpe" type="number" step="1" value="17"></label>
+    <div><div class="src">Implied price · vs $272.46</div><output id="cout"></output></div>
+  </div>
+  <p class="read">Consensus 2027 EPS is $20.53 (+24%). The average target of $480 (33 analysts, range $325 to $790) sits between our base and bull cases: the Street is assuming a re-rating toward 23x, not just the earnings. These are illustrative estimates, not forecasts.</p>
+</section>
+
+<section id="take">
+  <h2><span class="n">11</span>Takeaways <span class="q">What to remember, what to check next</span></h2>
+  <div class="grid2">
+    <div class="box"><h3>Remember</h3><ul>
+      <li>One of the most profitable businesses listed anywhere: 84% EBITDA margin, ~66% FCF margin, ~100% ROIC.</li>
+      <li>Price has fallen from ~$738 high to ~$272; valuation is now near Meta's on EV/EBITDA with faster growth.</li>
+      <li>The debate is durability of growth, not quality of the business.</li>
+    </ul></div>
+    <div class="box"><h3>Check next</h3><ul>
+      <li>Q3 2026 results (early November): revenue vs $2,055 to $2,085M guide, Q4 guide.</li>
+      <li>Any disclosed e-commerce advertiser count or spend.</li>
+      <li>Progress in the class action and San Diego suit.</li>
+      <li>Whether buybacks accelerate at these lower prices.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="gloss">
+  <h2><span class="n">·</span>Glossary</h2>
+  <dl class="gl">
+    <dt>Adj. EBITDA</dt><dd>Operating profit before depreciation, amortization and stock pay; AppLovin's headline profit metric.</dd>
+    <dt>FCF conversion</dt><dd>Free cash flow ÷ net income. Above 100% means profit turns fully into cash.</dd>
+    <dt>ROAS</dt><dd>Return on ad spend: revenue an advertiser earns per dollar of ads.</dd>
+    <dt>Mediation (MAX)</dt><dd>The auction inside an app that decides which ad network fills each slot.</dd>
+    <dt>PEG</dt><dd>P/E ÷ expected EPS growth (%). Below 1 is usually read as cheap for the growth.</dd>
+    <dt>DuPont ROE</dt><dd>Net margin × asset turnover × equity multiplier (assets ÷ equity).</dd>
+  </dl>
+</section>
+
+<section id="sources">
+  <h2><span class="n">·</span>Sources</h2>
+  <ul class="src" id="srclist"></ul>
+</section>
+
+<footer>Education and analysis only, not investment advice. Figures from the sources listed; estimates and scenario values are marked as such. Prepared 21 Oct 2026.</footer>
+</div>
+
+<script>
+const DATA = {
+  price: 272.46, shares: 334.65, // M shares, 20 Oct 2026
+  years: ["FY22","FY23","FY24","FY25","TTM Q2'26"],
+  adRev:   [1049.2,1841.8,3224.1,5480.7,6829.1],
+  adEBITDA:[808.4,1275.7,2411.8,4512.5,5727.1],
+  grpRev:  [2817.1,3283.1,4709.2,5480.7,6829.1],
+  grpEBITDA:[1063.2,1502.7,2719.6,4512.5,5727.1],
+  ebit:    [null,null,1911.0,4151.9,null],
+  ni:      [-192.9,356.7,1579.8,3333.8,4410.0],
+  ocf:     [412.8,1061.5,2099.0,3971.1,4527.6],
+  capex:   [0.7,4.2,4.8,0.5,null],
+  fcf:     [388.0,1037.1,2073.4,3952.0,4528.0],
+  buyback: [366.4,1400,2125,2584,2635],
+  acq:     [1346,0,0,0,0],
+  cash:    [1080,502.2,697.0,2487.1,3053.3],
+  ar:      [702.8,953.8,1283.0,1819.4,2171.0],
+  ap:      [273.2,371.7,504.3,747.0,778.9],
+  ppe:     [138.9,221.5,196.4,147.9,111.9],
+  gwi:     [3502,3136,1931,1937,1874],
+  assets:  [5848,5359,5869,7259.6,8269.1],
+  debt:    [3356,3177,3555,3667,3515],
+  equity:  [1903,1256,1090,2134.7,3163.0],
+  hist: {yrs:["2021","2022","2023","2024","2025","Today"], evebitda:[60.3,11.9,18.2,54.9,53.8,16.9], pe:[null,null,37.8,68.9,68.3,21.0]},
+  eps26: 16.59, eps27: 20.53, g27: 23.75,
+  peers: [
+    {n:"AppLovin", pe:21.0, fpe:15.1, ev:16.9, peg:0.46, om:75.8, fcfm:66.3, roic:132.7, g:31.4, me:1},
+    {n:"Meta", pe:26.7, fpe:22.2, ev:16.3, peg:1.12, om:38.1, fcfm:18.0, roic:25.4, g:22.0},
+    {n:"Alphabet", pe:16.6, fpe:24.9, ev:23.3, peg:1.86, om:33.1, fcfm:12.0, roic:24.9, g:22.8},
+    {n:"Unity", pe:null, fpe:27.0, ev:120.7, peg:0.65, om:-16.5, fcfm:26.5, roic:-3.7, g:19.9},
+    {n:"The Trade Desk", pe:14.9, fpe:13.7, ev:7.1, peg:2.57, om:19.6, fcfm:28.9, roic:24.8, g:-2.0}
+  ],
+  timeline: [
+    ["2012","Founded in Palo Alto by Adam Foroughi, John Krystynak and Andrew Karam."],
+    ["Aug 2018","KKR buys a minority stake for $400M."],
+    ["2020–21","Buys game studios (Machine Zone) and measurement firm Adjust."],
+    ["Apr 2021","IPO on Nasdaq, valued near $24B."],
+    ["Jan 2022","Closes $1.05B purchase of Twitter's MoPub; Aug 2022 bid for Unity rejected."],
+    ["2023–24","Axon upgrade drives an inflection: ad revenue +75% in 2024."],
+    ["Jun 2025","Apps business sold to Tripledot ($400M cash + 20% stake)."],
+    ["Sep 2025","Joins the S&P 500."],
+    ["2026","Revenue +53% in Q2 but two ~20% earnings-day drops; shares near 52-week low in Oct."]
+  ],
+  scen: [
+    {k:"Bear", c:"var(--neg)", eps:16.0, pe:12, a:["E-commerce stalls; growth falls to ~15% in 2027","Margins slip as compute and legal costs rise","Market treats it like an ad-tech cyclical"]},
+    {k:"Base", c:"var(--accent)", eps:20.53, pe:17, a:["Consensus 2027 EPS of $20.53 (+24%)","Gaming steady, e-commerce adds modestly","Multiple stays near today's level"]},
+    {k:"Bull", c:"var(--pos)", eps:24.0, pe:24, a:["E-commerce scales; 2027 growth 35%+","Margins hold at 80%+, buybacks shrink shares 2% a year","Legal overhang clears, re-rating toward 2025 levels"]}
+  ],
+  sources: [
+    ["AppLovin Q2 2026 results (Business Wire, 5 Aug 2026)","https://www.businesswire.com/news/home/20260805303503/en/AppLovin-Announces-Second-Quarter-2026-Financial-Results/"],
+    ["AppLovin Q4/FY2025 results (SEC 8-K Ex. 99.1)","https://www.sec.gov/Archives/edgar/data/1751008/000175100826000005/exhibit991-4q25earningspre.htm"],
+    ["AppLovin Q4/FY2024 results (Business Wire)","https://www.businesswire.com/news/home/20250212003292/en/AppLovin-Announces-Fourth-Quarter-and-Full-Year-2024-Financial-Results"],
+    ["AppLovin Q4/FY2023 shareholder letter (SEC 8-K)","https://www.sec.gov/Archives/edgar/data/1751008/000175100824000004/exhibit992-applovinx4q23.htm"],
+    ["AppLovin 10-K FY2025","https://www.sec.gov/Archives/edgar/data/1751008/000175100826000010/app-20251231.htm"],
+    ["AppLovin 2026 proxy (DEF 14A)","https://www.sec.gov/Archives/edgar/data/0001751008/000175100826000028/app-20260420.htm"],
+    ["stockanalysis.com: APP statistics, forecast, financials, ratios","https://stockanalysis.com/stocks/app/statistics/"],
+    ["stockanalysis.com peer statistics: META, GOOGL, U, TTD","https://stockanalysis.com/stocks/meta/statistics/"],
+    ["Benzinga: AppLovin sinks to 52-week low (Oct 2026)","https://www.benzinga.com/trading-ideas/movers/26/10/62376144/applovin-stock-sinks-to-52-week-low-heres-why-2"],
+    ["24/7 Wall St.: AppLovin has fallen nearly 60% in 2026","https://247wallst.com/investing/2026/10/02/applovin-has-fallen-nearly-60-in-2026-180-returns-are-in-store-for-investors-according-to-this-wall-street-pro/"],
+    ["Wikipedia: AppLovin (history)","https://en.wikipedia.org/wiki/AppLovin"],
+    ["InsiderTrades: Adam Foroughi holdings and sales","https://www.insidertrades.com/applovin-co-stock/arash-adam-foroughi/"]
+  ]
+};
+
+const D = DATA, N = D.years.length, $ = id => document.getElementById(id);
+const nz = v => v === null || v === undefined || !isFinite(v);
+const f0 = v => nz(v) ? "n/a" : Math.round(v).toLocaleString("en-US");
+const f1 = v => nz(v) ? "n/a" : v.toFixed(1);
+const pct = v => nz(v) ? "n/a" : (v*100).toFixed(0) + "%";
+const xx = v => nz(v) ? "n/a" : v.toFixed(1) + "x";
+const map = fn => D.years.map((_, i) => fn(i));
+const cls = v => nz(v) ? "" : (v < 0 ? "neg" : "");
+
+// derived
+const growth = arr => map(i => i === 0 || nz(arr[i-1]) ? null : (i === N-1 ? null : arr[i]/arr[i-1]-1));
+const adGrowth = growth(D.adRev);
+adGrowth[N-1] = 3766.1/2417.7 - 1; // H1'26 vs H1'25
+const ebitdaM = map(i => D.adEBITDA[i]/D.adRev[i]);
+const niM = map(i => D.ni[i]/D.grpRev[i]);
+const fcfM = map(i => D.fcf[i]/D.grpRev[i]);
+const conv = map(i => D.ni[i] > 0 ? D.fcf[i]/D.ni[i] : null);
+const wc = map(i => D.ar[i] - D.ap[i]);
+const netDebt = map(i => D.debt[i] - D.cash[i]);
+const ndE = map(i => netDebt[i]/D.grpEBITDA[i]);
+const at = map(i => D.grpRev[i]/D.assets[i]);
+const dso = map(i => D.ar[i]/D.grpRev[i]*365);
+const dpo = map(i => D.ap[i]/D.grpRev[i]*365);
+const em = map(i => D.assets[i]/D.equity[i]);
+const roe = map(i => niM[i]*at[i]*em[i]);
+const roic = map(i => nz(D.ebit[i]) ? null : D.ebit[i]*0.79/(D.equity[i]+D.debt[i]-D.cash[i]));
+roic[N-1] = 1.327; // stockanalysis TTM
+const mcap = D.price*D.shares, ev = mcap + D.debt[N-1] - D.cash[N-1];
+const pe = mcap/D.ni[N-1], evE = ev/D.adEBITDA[N-1];
+const fpe26 = D.price/D.eps26, fpe27 = D.price/D.eps27, peg = fpe27/D.g27;
+
+// KPIs
+$("kpis").innerHTML = [
+  ["$"+D.price.toFixed(2),"Share price"],
+  ["$"+(mcap/1000).toFixed(1)+"B","Market cap"],
+  ["$"+(D.adRev[N-1]/1000).toFixed(2)+"B","TTM revenue"],
+  [pct(ebitdaM[N-1]),"Adj. EBITDA margin"],
+  [xx(evE),"EV / adj. EBITDA"],
+  [xx(fpe27),"P/E on 2027E"],
+  ["$480","Avg. analyst target"]
+].map(k => `<div class="kpi"><b>${k[0]}</b><span>${k[1]}</span></div>`).join("");
+
+$("timeline").innerHTML = D.timeline.map(e => `<div class="ev"><span class="d">${e[0]}</span><span>${e[1]}</span></div>`).join("");
+
+function table(el, head, rows){
+  let h = `<thead><tr><th></th>${head.map(x=>`<th>${x}</th>`).join("")}</tr></thead><tbody>`;
+  rows.forEach(r => {
+    if (r.sec) { h += `<tr class="sec"><td colspan="${head.length+1}">${r.sec}</td></tr>`; return; }
+    h += `<tr class="${r.c||""}"><td>${r.l}</td>${r.v.map(v=>`<td class="${typeof v==='number'?cls(v):''}">${r.f(v)}</td>`).join("")}</tr>`;
+  });
+  el.innerHTML = h + "</tbody>";
+}
+table($("fintbl"), D.years, [
+  {sec:"Profit & loss, $M"},
+  {l:"Advertising revenue", v:D.adRev, f:f0, c:"hl"},
+  {l:"growth", v:adGrowth, f:pct, c:"sub"},
+  {l:"Adj. EBITDA (advertising)", v:D.adEBITDA, f:f0},
+  {l:"margin", v:ebitdaM, f:pct, c:"sub"},
+  {l:"Operating income (GAAP, cont.)", v:D.ebit, f:f0},
+  {l:"Group revenue (as reported)", v:D.grpRev, f:f0},
+  {l:"Net income (group)", v:D.ni, f:f0, c:"hl"},
+  {l:"net margin", v:niM, f:pct, c:"sub"},
+  {sec:"Balance sheet, $M (period end)"},
+  {l:"Cash", v:D.cash, f:f0},
+  {l:"Total debt", v:D.debt, f:f0},
+  {l:"Net debt", v:netDebt, f:f0, c:"hl"},
+  {l:"Fixed assets (PP&E)", v:D.ppe, f:f0},
+  {l:"Goodwill + intangibles", v:D.gwi, f:f0},
+  {l:"Working capital (AR − AP)", v:wc, f:f0},
+  {l:"% of revenue", v:map(i=>wc[i]/D.grpRev[i]), f:pct, c:"sub"},
+  {l:"Shareholders' equity", v:D.equity, f:f0},
+  {sec:"Cash flow, $M"},
+  {l:"Operating cash flow", v:D.ocf, f:f0},
+  {l:"Capex", v:D.capex, f:f1},
+  {l:"Free cash flow", v:D.fcf, f:f0, c:"hl"},
+  {l:"FCF margin", v:fcfM, f:pct, c:"sub"},
+  {l:"FCF conversion (FCF / NI)", v:conv, f:pct, c:"sub"},
+  {l:"Buybacks (incl. tax withholding)", v:D.buyback, f:f0},
+  {l:"Acquisitions", v:D.acq, f:f0},
+  {l:"Dividends", v:[0,0,0,0,0], f:f0}
+]);
+table($("ratiotbl"), D.years, [
+  {l:"Net debt / EBITDA", v:ndE, f:xx},
+  {l:"Asset turnover", v:at, f:v=>nz(v)?"n/a":v.toFixed(2)+"x"},
+  {l:"Receivable days", v:dso, f:f0},
+  {l:"Payable days (on revenue)", v:dpo, f:f0},
+  {sec:"DuPont ROE (year-end equity)"},
+  {l:"Net margin", v:niM, f:pct, c:"sub"},
+  {l:"× Asset turnover", v:at, f:v=>nz(v)?"n/a":v.toFixed(2), c:"sub"},
+  {l:"× Equity multiplier", v:em, f:v=>nz(v)?"n/a":v.toFixed(2), c:"sub"},
+  {l:"= ROE", v:roe, f:pct, c:"hl"},
+  {l:"ROIC", v:roic, f:pct, c:"hl"}
+]);
+$("valtbl").innerHTML = `<tbody>
+<tr><td>P/E, trailing</td><td>${xx(pe)}</td></tr>
+<tr><td>P/E, 2026E ($${D.eps26})</td><td>${xx(fpe26)}</td></tr>
+<tr><td>P/E, 2027E ($${D.eps27})</td><td>${xx(fpe27)}</td></tr>
+<tr><td>EV / adj. EBITDA, TTM</td><td>${xx(evE)}</td></tr>
+<tr><td>PEG (2027E P/E ÷ ${D.g27}% EPS growth)</td><td>${f1(peg)}</td></tr>
+<tr><td>FCF yield (TTM FCF ÷ mkt cap)</td><td>${(D.fcf[N-1]/mcap*100).toFixed(1)}%</td></tr>
+<tr><td>Enterprise value</td><td>$${(ev/1000).toFixed(1)}B</td></tr>
+<tr><td>P/E at end-2025 · end-2024</td><td>68.3x · 68.9x</td></tr></tbody>`;
+
+let ph = `<thead><tr><th>Company</th><th>P/E</th><th>Fwd P/E</th><th>EV/EBITDA</th><th>PEG</th><th>Op. margin</th><th>FCF margin</th><th>ROIC</th><th>Growth fcst</th></tr></thead><tbody>`;
+D.peers.forEach(p => {
+  const c = p.me ? ' class="me"' : "";
+  ph += `<tr><td${c}>${p.n}</td>${[xx(p.pe),xx(p.fpe),xx(p.ev),f1(p.peg)].map(v=>`<td${c}>${v}</td>`).join("")}${[p.om,p.fcfm,p.roic,p.g].map(v=>`<td${c}><span class="${v<0?'neg':''}">${f1(v)}%</span></td>`).join("")}</tr>`;
+});
+$("peertbl").innerHTML = ph + "</tbody>";
+
+// Chart 1: grouped bars
+(function(){
+  const W=860,H=260,L=56,R=10,T=14,B=30, max=7000, ticks=[0,1750,3500,5250,7000];
+  const iw=W-L-R, ih=H-T-B, gw=iw/N, bw=gw*0.3, y=v=>T+ih-v/max*ih;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Advertising revenue and adjusted EBITDA by year">`;
+  ticks.forEach(t=>{s+=`<line x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}" stroke="var(--rule)"/><text x="${L-8}" y="${y(t)+4}" text-anchor="end" font-size="11" fill="var(--muted)" font-family="JetBrains Mono, monospace">${t.toLocaleString()}</text>`;});
+  D.years.forEach((yr,i)=>{
+    const x0=L+gw*i+gw/2-bw-2;
+    s+=`<rect x="${x0}" y="${y(D.adRev[i])}" width="${bw}" height="${ih-(y(D.adRev[i])-T)}" fill="var(--accent)"/>`;
+    s+=`<rect x="${x0+bw+4}" y="${y(D.adEBITDA[i])}" width="${bw}" height="${ih-(y(D.adEBITDA[i])-T)}" fill="var(--bar2)"/>`;
+    s+=`<text x="${x0+bw/2}" y="${y(D.adRev[i])-5}" text-anchor="middle" font-size="11" fill="var(--fg)" font-family="JetBrains Mono, monospace">${f0(D.adRev[i])}</text>`;
+    s+=`<text x="${L+gw*i+gw/2}" y="${H-10}" text-anchor="middle" font-size="12" fill="var(--muted)">${yr}</text>`;
+  });
+  $("chart1").innerHTML=s+"</svg>";
+})();
+// Chart 2: EV/EBITDA bars
+(function(){
+  const h=D.hist, W=420,H=220,L=36,R=8,T=18,B=28,max=70,n=h.yrs.length;
+  const iw=W-L-R, ih=H-T-B, gw=iw/n, bw=gw*0.55, y=v=>T+ih-v/max*ih;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="EV to EBITDA history">`;
+  [0,35,70].forEach(t=>{s+=`<line x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}" stroke="var(--rule)"/><text x="${L-6}" y="${y(t)+4}" text-anchor="end" font-size="10.5" fill="var(--muted)" font-family="JetBrains Mono, monospace">${t}x</text>`;});
+  h.yrs.forEach((yr,i)=>{
+    const x=L+gw*i+(gw-bw)/2, v=h.evebitda[i], last=i===n-1;
+    s+=`<rect x="${x}" y="${y(v)}" width="${bw}" height="${ih-(y(v)-T)}" fill="${last?'var(--accent)':'var(--bar2)'}"/>`;
+    s+=`<text x="${x+bw/2}" y="${y(v)-5}" text-anchor="middle" font-size="11" fill="var(--fg)" font-family="JetBrains Mono, monospace">${v.toFixed(1)}</text>`;
+    s+=`<text x="${x+bw/2}" y="${H-9}" text-anchor="middle" font-size="11" fill="var(--muted)">${yr}</text>`;
+  });
+  $("chart2").innerHTML=s+"</svg>";
+})();
+
+// Scenarios
+$("scencards").innerHTML = D.scen.map(s=>{
+  const px=s.eps*s.pe, up=px/D.price-1;
+  return `<div class="sc" style="--c:${s.c}"><h3>${s.k}</h3><div class="px">$${Math.round(px)} <small>${up>=0?"+":""}${(up*100).toFixed(0)}%</small></div>
+  <div class="src mono">2027E EPS $${s.eps.toFixed(2)} × ${s.pe}x</div><ul>${s.a.map(a=>`<li>${a}</li>`).join("")}</ul></div>`;
+}).join("");
+function calc(){
+  const e=parseFloat($("ceps").value), p=parseFloat($("cpe").value);
+  if(!isFinite(e)||!isFinite(p)){ $("cout").textContent="Enter EPS and P/E"; return; }
+  const px=e*p, up=px/D.price-1;
+  $("cout").textContent=`$${px.toFixed(0)} (${up>=0?"+":""}${(up*100).toFixed(0)}%)`;
+}
+$("ceps").addEventListener("input",calc); $("cpe").addEventListener("input",calc); calc();
+
+$("srclist").innerHTML = D.sources.map(s=>`<li><a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a></li>`).join("");
+</script>
+
+</body></html>

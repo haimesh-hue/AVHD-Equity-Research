@@ -1,0 +1,499 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Arm Holdings ER101</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one long research sheet, a fact rail on top, eleven numbered questions answered in order, data set in mono like a die-shot spec sheet */
+:root{
+  --bg:#f3f6f5; --surface:#ffffff; --ink:#0f1f1c; --muted:#566763; --line:#d4dedb;
+  --accent:#0d6a58; --accent-soft:#dcefe9; --gold:#a8700f; --bad:#b03838; --good:#2b7748;
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0c1413; --surface:#13201e; --ink:#e2ecea; --muted:#95a8a4; --line:#27403b;
+  --accent:#4cc2a4; --accent-soft:#183a33; --gold:#e1a64a; --bad:#e57b7b; --good:#6ec48f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1413; --surface:#13201e; --ink:#e2ecea; --muted:#95a8a4; --line:#27403b;
+  --accent:#4cc2a4; --accent-soft:#183a33; --gold:#e1a64a; --bad:#e57b7b; --good:#6ec48f; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:1060px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:22px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:800;font-stretch:78%;letter-spacing:-.01em;line-height:1}
+h2{font-size:1.35rem;font-weight:700;font-stretch:85%;display:flex;gap:.6em;align-items:baseline}
+h2 .q{font-family:var(--f-mono);font-size:.8rem;color:var(--accent);font-weight:500}
+h3{font-size:1rem;font-weight:700;font-stretch:90%}
+p{margin:0;max-width:70ch}
+.eyebrow{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.mono,.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+header{display:flex;flex-direction:column;gap:10px;border-bottom:2px solid var(--ink);padding-bottom:16px}
+.tick{display:flex;flex-wrap:wrap;gap:6px 18px;font-family:var(--f-mono);font-size:.82rem;color:var(--muted)}
+.tick b{color:var(--ink);font-weight:500}
+.lede{font-size:1.05rem;max-width:72ch}
+.verdict{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.verdict div{background:var(--surface);padding:12px 14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.verdict .v{font-family:var(--f-display);font-weight:700;font-stretch:85%;font-size:1.05rem}
+.verdict small{color:var(--muted);font-size:.82rem;line-height:1.4}
+section{background:var(--surface);border:1px solid var(--line);padding:18px 18px 20px;display:flex;flex-direction:column;gap:12px}
+.read{border-left:3px solid var(--accent);padding:6px 0 6px 12px;background:var(--accent-soft);padding-right:12px;font-size:.93rem;max-width:none}
+.read b{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-right:6px}
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.cols>*{min-width:0}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.86rem}
+th,td{padding:5px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+thead th{font-family:var(--f-mono);font-weight:500;font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:1.5px solid var(--ink)}
+td.num{font-size:.84rem}
+tr.sub td{color:var(--muted);font-size:.8rem}
+tr.hl td{background:var(--accent-soft);font-weight:600}
+.neg{color:var(--bad)} .pos{color:var(--good)}
+ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:5px}
+li{max-width:72ch}
+.timeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.timeline div{border-top:2px solid var(--accent);padding-top:6px;font-size:.86rem;min-width:0}
+.timeline .y{font-family:var(--f-mono);color:var(--accent);font-weight:500}
+.chart svg{width:100%;height:auto;display:block}
+.chart .cap{font-size:.8rem;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.kpi{border:1px solid var(--line);padding:10px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.kpi .n{font-family:var(--f-mono);font-size:1.25rem;font-weight:500}
+.kpi small{color:var(--muted);font-size:.8rem}
+.risk{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:start}
+.sev{font-family:var(--f-mono);font-size:.7rem;padding:2px 7px;border:1px solid currentColor;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.sev.h{color:var(--bad)} .sev.m{color:var(--gold)}
+.scen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.sc{border:1px solid var(--line);padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.sc.base{border-color:var(--accent);border-width:2px}
+.sc .px{font-family:var(--f-mono);font-size:1.6rem;font-weight:500}
+.sc label{font-size:.78rem;color:var(--muted);display:flex;justify-content:space-between;gap:8px;align-items:center}
+.sc input{width:5.5em;font-family:var(--f-mono);font-size:.85rem;padding:3px 5px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.sc input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.sc ul{font-size:.84rem}
+.foot{font-size:.8rem;color:var(--muted);display:flex;flex-direction:column;gap:8px}
+.foot ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:2px}
+.foot a{color:var(--accent);word-break:break-word}
+dl.gl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0;font-size:.85rem}
+dl.gl dt{font-family:var(--f-mono);font-weight:500}
+dl.gl dd{margin:0;color:var(--muted)}
+@media (max-width:760px){.verdict{grid-template-columns:repeat(2,minmax(0,1fr))}.cols,.scen{grid-template-columns:1fr}}
+@media (max-width:420px){.verdict{grid-template-columns:1fr}}
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff;font-size:11px}
+  .wrap{padding:0;gap:12px;max-width:none}
+  section{break-inside:avoid;padding:10px 12px}
+  .tbl{overflow:visible}
+  .sc input{border:none;background:none;padding:0}
+}
+</style>
+
+<div class="wrap">
+<header>
+  <span class="eyebrow">Equity research 101 · first-principles overview</span>
+  <h1 id="h-name"></h1>
+  <div class="tick" id="tick"></div>
+  <p class="lede" id="lede"></p>
+</header>
+
+<div class="verdict" id="verdict"></div>
+
+<section>
+  <h2><span class="q">01</span>What does Arm do, and how did it get here?</h2>
+  <div class="cols">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <p id="biz"></p>
+      <h3>How it makes money</h3>
+      <ul id="model"></ul>
+    </div>
+    <div class="chart" id="ch-mix"></div>
+  </div>
+  <h3>Timeline</h3>
+  <div class="timeline" id="timeline"></div>
+</section>
+
+<section>
+  <h2><span class="q">02</span>Why does it earn its returns, and can anyone copy it?</h2>
+  <ul id="moat"></ul>
+  <p class="read" id="r-moat"></p>
+</section>
+
+<section>
+  <h2><span class="q">03</span>What is revenue made of, and which KPIs move it?</h2>
+  <p id="drivers"></p>
+  <div class="kpis" id="kpis"></div>
+  <p class="read" id="r-drivers"></p>
+</section>
+
+<section>
+  <h2><span class="q">04</span>Financials: profit, balance sheet, cash</h2>
+  <div class="cols">
+    <div class="chart" id="ch-rev"></div>
+    <div class="chart" id="ch-fcf"></div>
+  </div>
+  <h3>Income statement (US$m, fiscal years to 31 March, GAAP)</h3>
+  <div class="tbl" id="t-pl"></div>
+  <p class="read" id="r-pl"></p>
+  <h3>Balance sheet</h3>
+  <div class="tbl" id="t-bs"></div>
+  <p class="read" id="r-bs"></p>
+  <h3>Cash flow and capital allocation</h3>
+  <div class="tbl" id="t-cf"></div>
+  <p class="read" id="r-cf"></p>
+</section>
+
+<section>
+  <h2><span class="q">05</span>Ratios: leverage, efficiency, returns</h2>
+  <div class="tbl" id="t-ratios"></div>
+  <p class="read" id="r-ratios"></p>
+</section>
+
+<section>
+  <h2><span class="q">06</span>What is the market paying?</h2>
+  <div class="cols">
+    <div class="tbl" id="t-val"></div>
+    <div class="tbl" id="t-valhist"></div>
+  </div>
+  <p class="read" id="r-val"></p>
+</section>
+
+<section>
+  <h2><span class="q">07</span>Industry and peers</h2>
+  <p id="industry"></p>
+  <div class="tbl" id="t-peers"></div>
+  <p class="read" id="r-peers"></p>
+</section>
+
+<section>
+  <h2><span class="q">08</span>Who runs it, and how do they allocate capital?</h2>
+  <ul id="mgmt"></ul>
+  <p class="read" id="r-mgmt"></p>
+</section>
+
+<section>
+  <h2><span class="q">09</span>What would break the story?</h2>
+  <div class="risk" id="risks"></div>
+</section>
+
+<section>
+  <h2><span class="q">10</span>Bear, base, bull</h2>
+  <p id="scen-intro"></p>
+  <div class="scen" id="scen"></div>
+  <p class="read" id="r-scen"></p>
+</section>
+
+<section>
+  <h2><span class="q">11</span>Takeaways and what to check next</h2>
+  <div class="cols">
+    <div><h3>Remember</h3><ul id="take"></ul></div>
+    <div><h3>Check next</h3><ul id="next"></ul></div>
+  </div>
+  <h3>Glossary</h3>
+  <dl class="gl" id="gloss"></dl>
+</section>
+
+<div class="foot">
+  <p id="disc"></p>
+  <span class="eyebrow">Sources</span>
+  <ol id="sources"></ol>
+</div>
+</div>
+
+<script>
+/* DATA: raw inputs only. Ratios, margins, FCF, multiples are computed below so the page stays internally consistent. US$m unless stated. null = not available. */
+const DATA = {
+  name:"Arm Holdings plc", ticker:"ARM", exchange:"Nasdaq", currency:"USD", fye:"31 March",
+  price:221.06, priceDate:"20 Oct 2026 close", shares:1068.1 /* m, implied by $236.1bn mkt cap */,
+  lede:"Arm designs the CPU blueprints inside most smartphones and a fast-growing share of data-center servers, and gets paid twice: an upfront licence fee and a royalty on every chip shipped. In 2026 it also started selling its own server chip. The business is excellent; the price already assumes years of 25 to 30% growth.",
+  verdict:[
+    ["Business quality","High, with a twist","Ecosystem lock-in and ~98% gross margins. GAAP margins are depressed by stock pay (21% of revenue)."],
+    ["Valuation","Very rich","~227x trailing GAAP P/E, ~99x FY27E adjusted EPS. Above every chip and EDA peer."],
+    ["Main risk","Expectations","Royalty growth guided down to high teens; own-chip push adds lower-margin revenue and licensee friction."],
+    ["Consensus","Buy, PT $291","43 analysts; avg target ~32% above price, range $125 to $500."]
+  ],
+  biz:"Arm does not make phones or (until 2026) chips. It designs instruction-set architecture (ISA), CPU cores and pre-integrated compute subsystems (CSS), then licenses them to chipmakers such as Apple, Qualcomm, MediaTek, Nvidia, Amazon and Google. Arm technology has shipped in more than 350 billion chips. In March 2026 it launched the Arm AGI CPU, its first own-brand data-center processor, with Meta as launch customer.",
+  model:[
+    "<b>Licensing (47% of FY26 revenue, $2.31bn):</b> upfront fees for access to designs, increasingly via subscription-style Arm Total Access (56 licensees) and Arm Flexible Access (329).",
+    "<b>Royalties (53%, $2.61bn):</b> a per-chip fee, usually a % of chip price, paid for years after a design ships. Newer Armv9 and CSS designs carry higher rates.",
+    "<b>Silicon (new):</b> selling the AGI CPU directly. Demand cited above $2bn across FY27 and FY28; first-generation gross margin guided high-30s to low-40s%, versus ~98% on IP."
+  ],
+  mix:{year:"FY26", parts:[["Royalty",2613],["Licence & other",2307]]},
+  timeline:[
+    ["1990","Founded as a joint venture of Acorn, Apple and VLSI."],
+    ["1993","Apple Newton flops; Arm adopts the licence-plus-royalty model."],
+    ["1998","Lists in London and on Nasdaq; Nokia phones make Arm the mobile standard."],
+    ["2016","SoftBank buys Arm for about $32bn and takes it private."],
+    ["2020-22","Nvidia's planned $40bn purchase collapses on regulatory pushback; Rene Haas becomes CEO (Feb 2022)."],
+    ["Sep 2023","Re-IPO on Nasdaq at $51, valued at $54.5bn."],
+    ["Mar 2026","Launches the AGI CPU, its first own chip."],
+    ["Oct 2026","Shares $221; market cap ~$236bn."]
+  ],
+  moat:[
+    "<b>Software ecosystem lock-in.</b> Android, iOS and a growing share of cloud software are compiled for the Arm ISA. Switching to another ISA means re-porting operating systems, toolchains and apps, which costs licensees years.",
+    "<b>Neutral standard with scale economics.</b> Arm spreads one R&D budget across hundreds of licensees, so each pays less than designing a core in-house. Its claimed CPU share among top hyperscalers is about 50%.",
+    "<b>Power efficiency.</b> Arm cores won mobile on performance per watt; the same logic now drives data-center adoption as power, not chips, limits AI build-outs.",
+    "<b>Pricing power through design generations.</b> Armv9 and CSS raise the royalty per chip without needing more units.",
+    "<b>Threats to the moat:</b> RISC-V is a free, open ISA; Qualcomm won its Delaware licensing case against Arm (Oct 2025, Arm appealing); selling its own chip turns Arm into a competitor of some customers."
+  ],
+  rMoat:"Real and durable: ~98% gross margin and royalties paid for years after a design ships are the signature of a toll road. The open question is new: whether making its own silicon erodes the neutrality that made licensees trust Arm.",
+  drivers:"Royalty revenue = chips shipped × chip price × royalty rate. Arm cannot control units (phones are flat, servers are growing), so the lever is rate: each move from Armv8 to Armv9 to CSS lifts the royalty per chip. Licensing revenue is lumpy and follows big contract signings; annualized contract value (ACV) smooths it. Silicon adds a third line from FY27.",
+  kpis:[
+    ["Royalty growth, Q1 FY27","+22%","$715m; FY27 guide cut to high teens (from ~20%)"],
+    ["Data-center royalties","> 2x YoY","Fastest-growing end market, Q4 FY26 and Q1 FY27"],
+    ["Licensing growth, Q1 FY27","+23%","$574m, of which $193m from SoftBank (related party)"],
+    ["ACV","+13% YoY","Q1 FY27; was +22% in Q4 FY26"],
+    ["AGI CPU demand","> $2bn","FY27 to FY28, vs $1bn committed supply"]
+  ],
+  rDrivers:"Growth has shifted from phones to servers. Mobile royalties are being squeezed by memory costs, so FY27 depends on data-center royalties keeping their 2x pace and on licensing (30% guided for Q2), a part of which comes from Arm's own parent.",
+  years:["FY22","FY23","FY24","FY25","FY26"],
+  pl:{ revenue:[2703,2679,3233,4007,4920], ebit:[679.8,712.5,76.5,831,900], da:[150.5,147.5,88.3,103.2,156.7], netIncome:[549,524,306,792,904], sbc:[26,79,1037,820,1052], epsDil:[0.54,0.51,0.29,0.75,0.85] },
+  bs:{ cash:[1004,1554,1923,2085,2751], sti:[631,661,1000,740,850], receivables:[1290,1153,1117,1749,2277], payables:[57,82,26,63,80], defRevCur:[334,293,198,209,294], defRevNonCur:[792,807,717,702,752], ppe:[417,391,420,714,1220], goodwill:[1636,1620,1625,1620,1623], intangibles:[205,138,152,151,230], totalAssets:[6510,6866,7927,8932,10703], debt:[261,221,226,371,491], equity:[3548,4051,5295,6839,8286] },
+  cf:{ ocf:[458,739,1090,397,1524], capex:[34,64,92,219,545], dividends:[0,0,0,0,0], netSettle:[0,0,158,120,529], acquisitions:[null,null,null,null,null] },
+  taxForRoic:0.20,
+  ttm:{ asOf:"TTM to 30 Jun 2026", revenue:5160, ebitda:1060, netIncome:1040, fcf:1510, debt:485, cash:3890 },
+  fwd:{ eps27:2.23, eps28:3.06, eps26:1.77, epsGrowth3y:0.318, basis:"adjusted (non-GAAP) EPS consensus" },
+  valHist:[["FY24 (Mar 24)",419.9,766.5,39.1],["FY25 (Mar 25)",142.1,117.9,27.5],["FY26 (Mar 26)",177.7,148.0,32.0],["Now (20 Oct 26)",null,null,null]],
+  peers:[
+    // name, mkt cap $bn, trailing P/E, fwd P/E, EV/EBITDA, PEG, op margin, ROIC
+    ["Arm (ARM)",null,null,null,null,null,17.3,14.2,true],
+    ["Nvidia (NVDA)",5230,27.4,17.9,25.9,0.36,65.2,92.0],
+    ["AMD (AMD)",873.0,137.2,48.1,90.4,0.73,15.8,9.8],
+    ["Qualcomm (QCOM)",187.6,20.5,19.0,16.2,3.07,23.7,25.6],
+    ["Cadence (CDNS)",88.1,64.8,37.9,41.7,2.53,31.4,17.2],
+    ["Synopsys (SNPS)",85.8,79.4,25.3,44.8,1.01,11.0,2.2]
+  ],
+  industry:"Arm sells into every compute market: smartphones (mature, units flat, value rising with each chip generation), PCs, autos, IoT and data centers. Data centers are the growth engine: one industry estimate puts the data-center CPU market at $76.6bn by 2029, growing about 35% a year, as AI agents need general-purpose CPUs next to accelerators. Management targets $15bn of total revenue by FY31, about 3x FY26.",
+  rPeers:"Arm trades at roughly 8x Nvidia's trailing earnings multiple despite a lower operating margin and ROIC. Only AMD comes close on trailing P/E. Even on forward adjusted EPS (~99x) Arm is twice AMD and three to four times the EDA software peers, the closest business-model analogues.",
+  mgmt:[
+    "<b>Rene Haas, CEO since Feb 2022.</b> Took over after the Nvidia deal collapsed, led the 2023 re-IPO and the push into CSS and own silicon. Also on SoftBank's board and part-time CEO of SoftBank Group International since April 2026.",
+    "<b>Pay:</b> $60.6m total pay in FY26. A proposed one-off award of 425,000 PSUs, worth up to ~$800m, vests if Arm reaches $1tn, $1.5tn and $2tn market cap by March 2029, 2030 and 2031. ISS and Glass Lewis advised against it; SoftBank's 86% vote controls the outcome.",
+    "<b>Ownership:</b> SoftBank owns ~86%, chaired by Masayoshi Son. Insiders hold ~0.06%; free float is small. SoftBank raised a margin loan backed by its Arm shares to $25bn in September 2026.",
+    "<b>Capital allocation:</b> no dividend, no open-market buyback. Cash goes to R&D, a step-up in capex for silicon and compute ($545m in FY26 vs $219m), and net-settling employee shares ($529m withholding tax in FY26). Cash and short-term investments: $3.6bn, no financial debt."
+  ],
+  rMgmt:"Management has executed well on growth, but governance is the weak spot for minority holders: a controlling parent that is also a licensing customer, a CEO with dual roles, and a pay plan tied to market cap milestones rather than per-share returns.",
+  risks:[
+    ["h","Valuation leaves no room","At ~227x trailing GAAP earnings, a slowdown from 25-30% growth to mid-teens could cut the multiple in half without any fall in profits."],
+    ["h","Channel conflict from own silicon","The AGI CPU competes with chips built by licensees (Nvidia Vera, hyperscaler custom CPUs). If customers hedge toward RISC-V, the royalty base erodes. Silicon also dilutes margins (high-30s to low-40s% gross)."],
+    ["m","Smartphone squeeze","Memory cost inflation is hurting handset demand; FY27 royalty growth guide already cut to high teens."],
+    ["m","Controlling shareholder","SoftBank (86%) is the largest related-party licensing customer ($193m in Q1 FY27) and has a $25bn margin loan secured on Arm shares. A forced sale or block placement would hit the price."],
+    ["m","Earnings quality","Stock pay of $1.05bn (21% of revenue) separates GAAP EPS ($0.85) from adjusted ($1.77). Receivables of $2.3bn equal ~169 days of revenue."],
+    ["m","Legal and RISC-V","Arm lost its licensing case against Qualcomm in Delaware (appeal pending; Qualcomm's countersuit continues). RISC-V offers a royalty-free alternative."]
+  ],
+  scenIntro:"Twelve-month illustrations on FY28 (year to March 2028) adjusted EPS, using consensus as the base. The values are my own estimates; edit them to test your view.",
+  scen:[
+    {k:"Bear",eps:2.50,pe:50,pts:["Royalty growth stays in low teens as phones weaken","AGI CPU supply-limited and margin-dilutive","Multiple de-rates toward AMD's forward level"]},
+    {k:"Base",eps:3.06,pe:95,pts:["Consensus: revenue $6.1bn FY27, EPS $2.23 then $3.06","Data-center royalties keep roughly doubling","Multiple holds near today's forward level"]},
+    {k:"Bull",eps:3.60,pe:120,pts:["AGI CPU above $2bn across FY27 to FY28 at ~45% gross margin","Armv9 and CSS mix lift royalty rates faster","Market prices the $15bn FY31 target as credible"]}
+  ],
+  rScen:"Consensus average target ($291, 43 analysts, range $125 to $500) sits at the base case. The bear case roughly matches the lowest target, so the downside if growth disappoints (about -43%) is larger than the upside to consensus (about +32%); only the bull case pays clearly more than it risks.",
+  take:[
+    "Arm is a toll road on computing: ~98% gross margin, royalties paid for years, and lock-in through software.",
+    "GAAP profit is a fraction of adjusted profit because of stock pay; judge it on FCF ($1.5bn TTM) and per-share dilution.",
+    "Growth has moved from phones to servers, and from pure IP to selling chips, which changes margins and customer relationships.",
+    "At ~$236bn, even hitting the $15bn FY31 revenue target at a 35-40% net margin would leave the stock on ~40-45x FY31 earnings. The price already assumes success."
+  ],
+  next:[
+    "Q2 FY27 results on 4 Nov 2026: royalty growth vs low-teens guide, licensing vs ~30%, and the promised AGI CPU detail (due with Q3).",
+    "Share of licensing revenue from SoftBank over time.",
+    "Any licensee announcing a RISC-V server or phone CPU.",
+    "Qualcomm appeal and countersuit outcomes.",
+    "SoftBank margin-loan terms and any secondary sale of Arm shares."
+  ],
+  gloss:[
+    ["ISA","Instruction-set architecture: the vocabulary of commands software uses to talk to a CPU."],
+    ["CSS","Compute subsystem: Arm's pre-integrated block of cores, interconnect and memory logic; carries higher royalties."],
+    ["ACV","Annualized contract value of licence agreements; a smoother gauge of licensing than quarterly revenue."],
+    ["SBC","Share-based compensation: employee pay in stock; a real cost excluded from adjusted earnings."],
+    ["ROIC","Return on invested capital: after-tax operating profit ÷ (equity + debt − cash)."],
+    ["PEG","P/E divided by expected EPS growth rate (%). Around 1 is considered fair for growth."]
+  ],
+  disc:"Education and analysis, not investment advice. Prices as of 20 Oct 2026 close; financial statements from company filings via the sources below. Definitions: EBITDA = GAAP operating income + D&A; debt = lease liabilities (Arm has no borrowings); capex = purchases of PP&E (FY26 excludes $30m of intangibles); forward EPS is adjusted consensus. Scenario values are the author's estimates.",
+  sources:[
+    ["Arm FY26 Q4 shareholder letter (Form 6-K)","https://www.sec.gov/Archives/edgar/data/0001973239/000197323926000062/exhibit992fye26q431-marx26.htm"],
+    ["Arm Q1 FY27 results press release","https://newsroom.arm.com/news/arm-holdings-plc-reports-results-for-the-first-quarter-of-the-fiscal-year-ending-2027"],
+    ["Nasdaq: Arm Q1 earnings call highlights","https://www.nasdaq.com/articles/arm-q1-earnings-call-highlights"],
+    ["Hudson Labs: Arm Q2 FY27 earnings preview","https://www.hudson-labs.com/research/arm-q2-2027-earnings-preview-arm-revenue-and-outlook"],
+    ["StockAnalysis: ARM income, balance sheet, cash flow, ratios, statistics, forecast","https://stockanalysis.com/stocks/arm/"],
+    ["StockAnalysis peer statistics: NVDA, AMD, QCOM, CDNS, SNPS","https://stockanalysis.com/stocks/qcom/statistics/"],
+    ["The Register: Arm AGI CPU launch","https://www.theregister.com/2026/03/24/arm_agi_cpu/"],
+    ["Futurum: Arm's $15bn CPU opportunity","https://futurumgroup.com/insights/arms-15-billion-cpu-opportunity-hinges-on-agentic-data-center-design/"],
+    ["TIKR: SoftBank's $25bn margin loan","https://www.tikr.com/blog/arm-holdings-stock-fell-8-in-a-day-heres-what-softbanks-25-billion-loan-means-for-the-stock"],
+    ["TechSpot: CEO pay plan and SoftBank control","https://techspot.com/news/113705-arm-faces-potential-shareholder-revolt-over-ceo-excessive.html"],
+    ["DatacenterDynamics: Qualcomm wins Delaware ruling","https://www.datacenterdynamics.com/en/news/delaware-judge-rules-in-favor-of-qualcomm-and-nuvia-in-licensing-dispute-with-arm/"],
+    ["Arm official history","https://newsroom.arm.com/blog/arm-official-history"],
+    ["Forbes Australia: Arm 2023 IPO","https://www.forbes.com.au/news/investing/arm-holding-the-biggest-ipo-of-2023/"],
+    ["Windows Central: Arm names Rene Haas CEO","https://windowscentral.com/arm-announces-new-ceo-after-acquisition-nvidia-falls-through"]
+  ]
+};
+
+/* ---------- compute ---------- */
+const D=DATA, Y=D.years, n=Y.length, P=D.pl, B=D.bs, C=D.cf;
+const map=(f)=>Y.map((_,i)=>f(i));
+const M={
+  growth:map(i=>i?P.revenue[i]/P.revenue[i-1]-1:null),
+  ebitda:map(i=>P.ebit[i]+P.da[i]),
+  ebitdaM:map(i=>(P.ebit[i]+P.da[i])/P.revenue[i]),
+  ebitM:map(i=>P.ebit[i]/P.revenue[i]),
+  netM:map(i=>P.netIncome[i]/P.revenue[i]),
+  sbcPct:map(i=>P.sbc[i]/P.revenue[i]),
+  fcf:map(i=>C.ocf[i]-C.capex[i]),
+  liquid:map(i=>B.cash[i]+B.sti[i]),
+  netDebt:map(i=>B.debt[i]-B.cash[i]-B.sti[i]),
+  wc:map(i=>B.receivables[i]-B.payables[i]-B.defRevCur[i]),
+};
+M.fcfM=map(i=>M.fcf[i]/P.revenue[i]);
+M.fcfConv=map(i=>M.fcf[i]/P.netIncome[i]);
+M.wcPct=map(i=>M.wc[i]/P.revenue[i]);
+M.dso=map(i=>B.receivables[i]/P.revenue[i]*365);
+M.ndE=map(i=>M.netDebt[i]/M.ebitda[i]);
+M.assetTurn=map(i=>P.revenue[i]/B.totalAssets[i]);
+M.eqMult=map(i=>B.totalAssets[i]/B.equity[i]);
+M.roe=map(i=>M.netM[i]*M.assetTurn[i]*M.eqMult[i]);
+M.ic=map(i=>B.equity[i]+B.debt[i]-B.cash[i]-B.sti[i]);
+M.roic=map(i=>P.ebit[i]*(1-D.taxForRoic)/M.ic[i]);
+M.capexPct=map(i=>C.capex[i]/P.revenue[i]);
+const T=D.ttm, mcap=D.price*D.shares, ev=mcap+T.debt-T.cash;
+const V={mcap,ev,pe:mcap/T.netIncome,evE:ev/T.ebitda,evS:ev/T.revenue,pfcf:mcap/T.fcf,fpe27:D.price/D.fwd.eps27,fpe28:D.price/D.fwd.eps28};
+V.peg=V.fpe27/(D.fwd.epsGrowth3y*100);
+D.valHist[3]=["Now (20 Oct 26)",V.pe,V.evE,V.evS];
+D.peers[0]=["Arm (ARM)",mcap/1000,V.pe,V.fpe27,V.evE,V.peg,D.peers[0][6],D.peers[0][7],true];
+
+/* ---------- format ---------- */
+const f0=v=>v==null||!isFinite(v)?"n/a":Math.round(v).toLocaleString("en-US");
+const f1=v=>v==null||!isFinite(v)?"n/a":v.toLocaleString("en-US",{minimumFractionDigits:1,maximumFractionDigits:1});
+const f2=v=>v==null||!isFinite(v)?"n/a":v.toFixed(2);
+const pc=v=>v==null||!isFinite(v)?"n/a":(v*100).toFixed(1)+"%";
+const xx=v=>v==null||!isFinite(v)?"n/a":v.toFixed(1)+"x";
+const days=v=>v==null||!isFinite(v)?"n/a":Math.round(v)+"d";
+const cls=v=>v!=null&&v<0?' class="num neg"':' class="num"';
+const $=id=>document.getElementById(id);
+
+function table(head,rows){
+  let h="<table><thead><tr>"+head.map(x=>"<th>"+x+"</th>").join("")+"</tr></thead><tbody>";
+  rows.forEach(r=>{ const c=r.cls?' class="'+r.cls+'"':""; h+="<tr"+c+"><td>"+r.l+"</td>"+r.v.map((v,i)=>{const fm=(r.f||f0)(v);return "<td"+(typeof v==="number"&&v<0&&r.neg!==false?' class="num neg"':' class="num"')+">"+fm+"</td>"}).join("")+"</tr>"; });
+  return h+"</tbody></table>";
+}
+
+/* ---------- charts (hand-drawn SVG, one scale per chart) ---------- */
+function bars(id,title,cap,series,opts={}){
+  const W=460,H=220,L=44,R=opts.line?44:12,Tp=26,Bt=28,iw=W-L-R,ih=H-Tp-Bt;
+  const all=series.flatMap(s=>s.v).filter(v=>v!=null);
+  const max=Math.max(...all)*1.08, min=Math.min(0,...all)*1.08, rng=max-min;
+  const step=niceStep(rng/4), ticks=[]; for(let t=Math.ceil(min/step)*step;t<=max;t+=step)ticks.push(t);
+  const y=v=>Tp+ih-(v-min)/rng*ih, gw=iw/n, bw=gw*0.72/series.length;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${title}">`;
+  s+=`<text x="0" y="14" fill="var(--ink)" font-family="Archivo,sans-serif" font-weight="700" font-size="13">${title}</text>`;
+  ticks.forEach(t=>{s+=`<line x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)" stroke-width="1"/><text x="${L-6}" y="${y(t)+3}" text-anchor="end" fill="var(--muted)" font-size="10" font-family="IBM Plex Mono,monospace">${(t/1000).toFixed(step<1000?1:0)}bn</text>`});
+  series.forEach((se,k)=>se.v.forEach((v,i)=>{ if(v==null)return; const x=L+i*gw+gw*0.14+k*bw, y0=y(Math.max(0,v)), h=Math.abs(y(v)-y(0));
+    s+=`<rect x="${x}" y="${y0}" width="${bw-2}" height="${h}" fill="${se.c}"><title>${se.n} ${Y[i]}: $${f0(v)}m</title></rect>`;}));
+  Y.forEach((yr,i)=>s+=`<text x="${L+i*gw+gw/2}" y="${H-10}" text-anchor="middle" fill="var(--muted)" font-size="10.5" font-family="IBM Plex Mono,monospace">${yr}</text>`);
+  if(opts.line){ const lv=opts.line.v, lmax=Math.max(...lv)*1.15, ly=v=>Tp+ih-v/lmax*ih;
+    const pts=lv.map((v,i)=>[L+i*gw+gw/2,ly(v)]);
+    s+=`<polyline points="${pts.map(p=>p.join(",")).join(" ")}" fill="none" stroke="var(--gold)" stroke-width="2"/>`;
+    pts.forEach((p,i)=>s+=`<circle cx="${p[0]}" cy="${p[1]}" r="3.2" fill="var(--gold)"><title>${opts.line.n} ${Y[i]}: ${pc(lv[i])}</title></circle><text x="${p[0]}" y="${p[1]-7}" text-anchor="middle" fill="var(--gold)" font-size="9.5" font-family="IBM Plex Mono,monospace">${Math.round(lv[i]*100)}%</text>`);
+  }
+  let lx=L; const leg=[...series.map(se=>[se.n,se.c]),...(opts.line?[[opts.line.n,"var(--gold)"]]:[])];
+  s+=`<g font-size="10" font-family="IBM Plex Sans,sans-serif">`; leg.forEach(([nm,c])=>{s+=`<rect x="${W-R-0}" y="0" width="0" height="0" fill="none"/>`;});
+  s+="</g></svg>";
+  const legend='<div class="cap">'+leg.map(([nm,c])=>`<span style="display:inline-flex;align-items:center;gap:5px;margin-right:12px"><span style="width:10px;height:10px;background:${c};display:inline-block"></span>${nm}</span>`).join("")+(cap?" · "+cap:"")+"</div>";
+  $(id).innerHTML=s+legend;
+}
+function niceStep(x){const p=Math.pow(10,Math.floor(Math.log10(x))),m=x/p;return (m<1.5?1:m<3?2:m<7?5:10)*p;}
+
+function mixChart(){
+  const parts=D.mix.parts, tot=parts.reduce((a,b)=>a+b[1],0), W=460,H=120; let x=0;
+  const cols=["var(--accent)","var(--gold)"];
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Revenue mix"><text x="0" y="14" fill="var(--ink)" font-family="Archivo,sans-serif" font-weight="700" font-size="13">Revenue mix, ${D.mix.year} ($${f0(tot)}m)</text>`;
+  parts.forEach((p,i)=>{const w=p[1]/tot*W; s+=`<rect x="${x}" y="28" width="${w-2}" height="40" fill="${cols[i]}"><title>${p[0]}: $${f0(p[1])}m</title></rect><text x="${x+4}" y="88" fill="var(--ink)" font-size="12" font-family="IBM Plex Sans,sans-serif" font-weight="600">${p[0]}</text><text x="${x+4}" y="104" fill="var(--muted)" font-size="11" font-family="IBM Plex Mono,monospace">$${f0(p[1])}m · ${pc(p[1]/tot)}</text>`; x+=w;});
+  s+="</svg>";
+  $("ch-mix").innerHTML=s+'<div class="cap">Q1 FY27: royalty $715m (+22%), licensing $574m (+23%). Silicon not yet reported as a line.</div>';
+}
+
+/* ---------- render ---------- */
+$("h-name").textContent=D.name;
+$("tick").innerHTML=[["Ticker",D.exchange+": "+D.ticker],["Price","$"+f2(D.price)+" ("+D.priceDate+")"],["Mkt cap","$"+f1(mcap/1000)+"bn"],["EV","$"+f1(ev/1000)+"bn"],["Currency",D.currency],["FY ends",D.fye]].map(([k,v])=>`<span>${k} <b>${v}</b></span>`).join("");
+$("lede").textContent=D.lede;
+$("verdict").innerHTML=D.verdict.map(([k,v,s])=>`<div><span class="eyebrow">${k}</span><span class="v">${v}</span><small>${s}</small></div>`).join("");
+$("biz").textContent=D.biz;
+$("model").innerHTML=D.model.map(x=>"<li>"+x+"</li>").join("");
+$("timeline").innerHTML=D.timeline.map(([y,t])=>`<div><div class="y">${y}</div>${t}</div>`).join("");
+mixChart();
+$("moat").innerHTML=D.moat.map(x=>"<li>"+x+"</li>").join("");
+$("r-moat").innerHTML="<b>Read</b>"+D.rMoat;
+$("drivers").textContent=D.drivers;
+$("kpis").innerHTML=D.kpis.map(([k,v,s])=>`<div class="kpi"><span class="eyebrow">${k}</span><span class="n">${v}</span><small>${s}</small></div>`).join("");
+$("r-drivers").innerHTML="<b>Read</b>"+D.rDrivers;
+
+bars("ch-rev","Revenue and GAAP operating margin","FY24 margin hit by IPO stock awards",[{n:"Revenue",c:"var(--accent)",v:P.revenue}],{line:{n:"GAAP op. margin",v:M.ebitM}});
+bars("ch-fcf","Free cash flow vs net income","",[{n:"Net income",c:"var(--muted)",v:P.netIncome},{n:"Free cash flow",c:"var(--accent)",v:M.fcf}]);
+
+const yh=["US$m",...Y];
+$("t-pl").innerHTML=table(yh,[
+  {l:"Revenue",v:P.revenue,cls:"hl"},{l:"Growth",v:M.growth,f:pc,cls:"sub"},
+  {l:"EBITDA",v:M.ebitda},{l:"EBITDA margin",v:M.ebitdaM,f:pc,cls:"sub"},
+  {l:"Operating income (EBIT)",v:P.ebit},{l:"EBIT margin",v:M.ebitM,f:pc,cls:"sub"},
+  {l:"Net income",v:P.netIncome},{l:"Net margin",v:M.netM,f:pc,cls:"sub"},
+  {l:"Diluted EPS ($)",v:P.epsDil,f:f2},
+  {l:"Stock-based comp.",v:P.sbc},{l:"SBC % revenue",v:M.sbcPct,f:pc,cls:"sub"}]);
+$("r-pl").innerHTML="<b>Read</b>Revenue grew 82% in four years, all organic. GAAP margins look ordinary (18% EBIT in FY26) only because stock pay has run at 20-32% of revenue since the IPO; adjusted operating margin was 43% in FY26 ($2.1bn). Gross margin is ~98%, so every extra royalty dollar is nearly pure profit.";
+$("t-bs").innerHTML=table(yh,[
+  {l:"Cash + short-term investments",v:M.liquid},{l:"Lease liabilities (only debt)",v:B.debt},{l:"Net debt (negative = net cash)",v:M.netDebt,neg:false},
+  {l:"PP&E",v:B.ppe},{l:"Goodwill + intangibles",v:map(i=>B.goodwill[i]+B.intangibles[i])},
+  {l:"Receivables",v:B.receivables},{l:"Deferred revenue (current)",v:B.defRevCur},
+  {l:"Operating working capital",v:M.wc},{l:"Working capital % revenue",v:M.wcPct,f:pc,cls:"sub"},
+  {l:"Total assets",v:B.totalAssets},{l:"Shareholders' equity",v:B.equity,cls:"hl"}]);
+$("r-bs").innerHTML="<b>Read</b>Fortress balance sheet: $3.6bn cash, no borrowings. Two things to watch: receivables of $2.3bn (169 days of revenue, as large licence deals are paid in instalments, partly by SoftBank) and PP&E nearly tripling in two years as Arm builds silicon and compute capacity.";
+$("t-cf").innerHTML=table(yh,[
+  {l:"Operating cash flow",v:C.ocf},{l:"Capex (PP&E)",v:C.capex.map(v=>-v)},{l:"Capex % revenue",v:M.capexPct,f:pc,cls:"sub"},
+  {l:"Free cash flow",v:M.fcf,cls:"hl"},{l:"FCF margin",v:M.fcfM,f:pc,cls:"sub"},{l:"FCF conversion (FCF ÷ net income)",v:M.fcfConv,f:pc,cls:"sub"},
+  {l:"Dividends",v:C.dividends},{l:"Withholding tax on vested shares",v:C.netSettle.map(v=>v?-v:0)},{l:"Acquisitions",v:C.acquisitions}]);
+$("r-cf").innerHTML="<b>Read</b>FCF conversion has averaged above 100% over five years but swings hard: FY25 was 22% as receivables jumped, FY26 back to 108%. Capex has risen from 1% to 11% of revenue, a structural shift from an asset-light IP model toward a chip company. Cash returned to shareholders is zero; $529m went to settling employee tax on vested stock.";
+
+$("t-ratios").innerHTML=table(["Ratio",...Y],[
+  {l:"Net debt ÷ EBITDA",v:M.ndE,f:xx,neg:false},{l:"Asset turnover (revenue ÷ assets)",v:M.assetTurn,f:xx},
+  {l:"Receivable days",v:M.dso,f:days},
+  {l:"DuPont: net margin",v:M.netM,f:pc,cls:"sub"},{l:"× asset turnover",v:M.assetTurn,f:xx,cls:"sub"},{l:"× equity multiplier",v:M.eqMult,f:xx,cls:"sub"},
+  {l:"= ROE (year-end equity)",v:M.roe,f:pc,cls:"hl"},
+  {l:"Invested capital (equity + debt − cash)",v:M.ic},{l:"ROIC (EBIT × 80% ÷ invested capital)",v:M.roic,f:pc,cls:"hl"}]);
+$("r-ratios").innerHTML="<b>Read</b>Net cash in every year, so leverage is not a question. ROE of ~11% is low for a toll road because equity is inflated by $1.6bn goodwill and $3.6bn idle cash, and GAAP profit is cut by stock pay. ROIC of ~14% (or roughly 30% on adjusted EBIT) is the better gauge; it fell from FY25 as capex ramped. (ROIC assumes a 20% tax rate.)";
+
+$("t-val").innerHTML=table(["Multiple ("+T.asOf+")","Value"],[
+  {l:"P/E, trailing GAAP",v:[V.pe],f:xx,cls:"hl"},{l:"P/E, FY27E adjusted EPS $"+f2(D.fwd.eps27),v:[V.fpe27],f:xx},{l:"P/E, FY28E adjusted EPS $"+f2(D.fwd.eps28),v:[V.fpe28],f:xx},
+  {l:"EV / EBITDA, trailing",v:[V.evE],f:xx,cls:"hl"},{l:"EV / sales, trailing",v:[V.evS],f:xx},{l:"Price / FCF, trailing",v:[V.pfcf],f:xx},
+  {l:"PEG (FY27E P/E ÷ 3-yr EPS growth "+pc(D.fwd.epsGrowth3y)+")",v:[V.peg],f:f2,cls:"hl"}]);
+$("t-valhist").innerHTML=table(["Own history","P/E","EV/EBITDA","EV/Sales"],D.valHist.map(r=>({l:r[0],v:r.slice(1),f:xx,cls:r[0].startsWith("Now")?"hl":""})));
+$("r-val").innerHTML="<b>Read</b>Arm is more expensive than at any fiscal year-end since the re-IPO except FY24, when GAAP earnings were crushed by IPO stock awards. A PEG above 3 means the market pays a premium even after crediting the 30%+ expected EPS growth. Forward multiples use adjusted EPS, which excludes stock pay, so the true gap to GAAP is larger.";
+
+$("industry").textContent=D.industry;
+$("t-peers").innerHTML=table(["Company","Mkt cap $bn","P/E TTM","Fwd P/E","EV/EBITDA","PEG","Op. margin","ROIC"],
+  D.peers.map(p=>({l:p[0],v:[p[1],p[2],p[3],p[4],p[5],p[6]/100,p[7]/100],cls:p[8]?"hl":"",f:null})).map(r=>{r.f=undefined;return r;}));
+// custom formats per column for peers
+(function(){const rows=$("t-peers").querySelectorAll("tbody tr");D.peers.forEach((p,i)=>{const c=rows[i].children;const vals=[f1(p[1]),xx(p[2]),xx(p[3]),xx(p[4]),f2(p[5]),f1(p[6])+"%",f1(p[7])+"%"];vals.forEach((v,j)=>c[j+1].textContent=v);});})();
+$("r-peers").innerHTML="<b>Read</b>"+D.rPeers+" Peer data as of 20 Oct 2026 close; all multiples trailing GAAP except forward P/E (consensus).";
+
+$("mgmt").innerHTML=D.mgmt.map(x=>"<li>"+x+"</li>").join("");
+$("r-mgmt").innerHTML="<b>Read</b>"+D.rMgmt;
+$("risks").innerHTML=D.risks.map(([s,h,t])=>`<span class="sev ${s}">${s==="h"?"High":"Medium"}</span><div><b>${h}.</b> ${t}</div>`).join("");
+
+$("scen-intro").textContent=D.scenIntro;
+function renderScen(){
+  $("scen").innerHTML=D.scen.map((s,i)=>{const px=s.eps*s.pe, up=px/D.price-1;
+    return `<div class="sc ${s.k==="Base"?"base":""}"><span class="eyebrow">${s.k}</span><span class="px">$${f0(px)}</span><span class="num ${up<0?"neg":"pos"}">${up>=0?"+":""}${pc(up)} vs $${f2(D.price)}</span>
+    <label for="eps${i}">FY28E adj. EPS ($)<input id="eps${i}" type="number" step="0.05" value="${s.eps}" data-i="${i}" data-k="eps"></label>
+    <label for="pe${i}">P/E multiple (x)<input id="pe${i}" type="number" step="1" value="${s.pe}" data-i="${i}" data-k="pe"></label>
+    <ul>${s.pts.map(p=>"<li>"+p+"</li>").join("")}</ul></div>`}).join("");
+  $("scen").querySelectorAll("input").forEach(inp=>inp.addEventListener("change",e=>{const v=parseFloat(e.target.value);if(isFinite(v)&&v>0){D.scen[+e.target.dataset.i][e.target.dataset.k]=v;const id=e.target.id;renderScen();const el=$(id);if(el)el.focus();}}));
+}
+renderScen();
+$("r-scen").innerHTML="<b>Read</b>"+D.rScen;
+$("take").innerHTML=D.take.map(x=>"<li>"+x+"</li>").join("");
+$("next").innerHTML=D.next.map(x=>"<li>"+x+"</li>").join("");
+$("gloss").innerHTML=D.gloss.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join("");
+$("disc").textContent=D.disc;
+$("sources").innerHTML=D.sources.map(([t,u])=>`<li><a href="${u}" target="_blank" rel="noopener">${t}</a></li>`).join("");
+</script>
+
+</body></html>

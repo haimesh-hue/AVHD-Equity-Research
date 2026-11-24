@@ -1,0 +1,506 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>CoreWeave ER101</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single research-note column, ~860px, numbered framework sections, data tables scroll inside their own frames */
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#141a24; --muted:#5b6475; --line:#dde1e8;
+  --accent:#1d4f91; --power:#c97a12; --good:#1f7a4d; --bad:#b4372f; --tint:#eaf0f8;
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f131a; --surface:#161c26; --ink:#e6e9ef; --muted:#9aa3b4; --line:#2a3240;
+  --accent:#7fa8e0; --power:#e6a14a; --good:#5cc08d; --bad:#ef7d74; --tint:#1b2533; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f131a; --surface:#161c26; --ink:#e6e9ef; --muted:#9aa3b4; --line:#2a3240;
+  --accent:#7fa8e0; --power:#e6a14a; --good:#5cc08d; --bad:#ef7d74; --tint:#1b2533; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:880px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:30px}
+h1,h2,h3{font-family:var(--f-display);font-stretch:80%;text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(30px,6vw,44px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:22px;font-weight:700;display:flex;gap:10px;align-items:baseline}
+h2 .n{font-family:var(--f-mono);font-size:13px;color:var(--power);font-weight:500}
+h3{font-size:16px;font-weight:700;margin-top:6px}
+p{margin:0;max-width:68ch}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.mono,.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+header{display:flex;flex-direction:column;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:18px}
+.quote{display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.quote b{color:var(--ink);font-weight:500}
+.verdict{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--power);padding:16px 18px;display:grid;gap:8px}
+.verdict ul{margin:0;padding-left:18px;display:grid;gap:4px}
+section{display:flex;flex-direction:column;gap:12px}
+.read{background:var(--tint);padding:10px 14px;font-size:14.5px;max-width:none}
+.read::before{content:"Read: ";font-weight:600;color:var(--accent)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.grid2>*{min-width:0}
+.box{background:var(--surface);border:1px solid var(--line);padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.box ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.tbl{overflow-x:auto;border:1px solid var(--line);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:7px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--surface)}
+thead th{font-family:var(--f-mono);font-weight:500;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+td{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+td:first-child{font-family:var(--f-body)}
+tr.sub td{color:var(--muted)}
+tr.hl td{background:var(--tint)}
+tr.hl td:first-child{background:var(--tint)}
+.neg{color:var(--bad)} .pos{color:var(--good)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);padding:10px 12px}
+.kpi .v{font-family:var(--f-display);font-stretch:80%;font-size:24px;font-weight:700}
+.kpi .l{font-size:12.5px;color:var(--muted)}
+.chart{background:var(--surface);border:1px solid var(--line);padding:12px;overflow-x:auto}
+.chart svg{display:block;width:100%;min-width:520px;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px}
+.timeline{display:grid;gap:0;border-left:2px solid var(--line);margin-left:6px}
+.timeline div{display:grid;grid-template-columns:86px 1fr;gap:10px;padding:5px 0 5px 14px;position:relative}
+.timeline div::before{content:"";position:absolute;left:-6px;top:12px;width:10px;height:10px;background:var(--surface);border:2px solid var(--accent);border-radius:50%}
+.timeline .d{font-family:var(--f-mono);font-size:12.5px;color:var(--muted)}
+.scen{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.scen .box{border-top:3px solid var(--line)}
+.scen .bear{border-top-color:var(--bad)} .scen .base{border-top-color:var(--accent)} .scen .bull{border-top-color:var(--good)}
+.scen .px{font-family:var(--f-display);font-stretch:80%;font-size:30px;font-weight:800}
+.calc{background:var(--surface);border:1px solid var(--line);padding:16px;display:grid;gap:14px}
+.calc .row{display:grid;grid-template-columns:minmax(150px,1fr) 2fr 80px;gap:10px;align-items:center}
+.calc label{font-size:13.5px}
+.calc input[type=range]{width:100%;accent-color:var(--accent)}
+.calc .out{display:flex;flex-wrap:wrap;gap:10px 28px;align-items:baseline;border-top:1px solid var(--line);padding-top:12px}
+.calc .big{font-family:var(--f-display);font-stretch:80%;font-size:34px;font-weight:800}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+button{font:500 13px var(--f-body);padding:6px 12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+details{background:var(--surface);border:1px solid var(--line);padding:10px 14px}
+summary{cursor:pointer;font-weight:600}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:10px 0 0;font-size:14px}
+dt{font-weight:600} dd{margin:0;color:var(--muted)}
+.sources{font-size:13px;color:var(--muted);display:grid;gap:3px;padding-left:18px;margin:0}
+.sources a{color:var(--accent)}
+.disc{font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:520px){.calc .row{grid-template-columns:1fr 70px}.calc .row input{grid-column:1/-1;grid-row:2}.timeline div{grid-template-columns:70px 1fr}dl{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Equity Research 101 · First-principles overview</div>
+  <h1>CoreWeave, Inc.</h1>
+  <div class="quote" id="quote"></div>
+</header>
+
+<div class="verdict">
+  <div class="eyebrow">Bottom line</div>
+  <ul>
+    <li><b>Business:</b> the largest independent "neocloud", renting Nvidia GPU capacity to AI labs and hyperscalers on multi-year take-or-pay contracts. Revenue is compounding at over 100% a year with a $104B backlog.</li>
+    <li><b>Quality:</b> not yet a good business on returns. Adjusted ROIC is under 3% while unsecured debt yields approach 15%. Every incremental dollar of growth is debt funded.</li>
+    <li><b>Valuation:</b> cheap on forward sales (EV about 6x 2026E revenue), but the equity is a thin slice on top of ~$46B net debt, so small changes in exit multiple swing the share price violently.</li>
+    <li><b>Main risk:</b> refinancing and counterparty risk. The story breaks if credit markets close before capex slows and cash flow turns positive.</li>
+  </ul>
+</div>
+
+<section id="s1">
+  <h2><span class="n">01</span>Business overview</h2>
+  <p>CoreWeave builds and runs data centers full of Nvidia GPUs and rents that compute, mostly to train and serve large AI models. Customers sign multi-year contracts for reserved capacity (98% of revenue is committed), often prepaying part of it. CoreWeave uses those contracts as collateral to borrow, buys GPUs, leases powered data-center shells, and earns the spread between contract revenue and the cost of power, depreciation and interest.</p>
+  <div class="grid2">
+    <div class="box"><h3>How it makes money</h3><ul>
+      <li>Reserved GPU capacity on 2 to 6 year contracts, billed per GPU-hour (the bulk of revenue)</li>
+      <li>On-demand capacity at higher rates</li>
+      <li>Software layer: managed Kubernetes, Mission Control, Weights &amp; Biases tooling</li>
+      <li>Customers: Microsoft (about 67% of 2025 revenue), OpenAI, Meta, Anthropic, plus a growing enterprise list</li>
+    </ul></div>
+    <div class="box"><h3>History</h3>
+      <div class="timeline" id="timeline"></div>
+    </div>
+  </div>
+  <p class="read">A crypto miner that pivoted at exactly the right moment. Its edge came from buying H100s early and having Nvidia as an investor and supplier. It is now a capital-intensive infrastructure lessor more than a software company.</p>
+</section>
+
+<section id="s2">
+  <h2><span class="n">02</span>Moat</h2>
+  <div class="grid2">
+    <div class="box"><h3>Real advantages</h3><ul>
+      <li>Speed: first to commercially deploy Nvidia GB300 NVL72 systems; stands up clusters faster than hyperscalers</li>
+      <li>Priority allocation from Nvidia, which owns about 10.7% of Class A shares and invested $2B in Jan 2026</li>
+      <li>Purpose-built AI stack and performance tuning that frontier labs value</li>
+      <li>Contracted power pipeline of 3.7 GW (4.2 GW incl. early Q3 adds); power is the scarce input</li>
+    </ul></div>
+    <div class="box"><h3>Why it may not last</h3><ul>
+      <li>The product (Nvidia GPUs in a building with power) is replicable by Oracle, Nebius, IREN and hyperscalers</li>
+      <li>Largest customers are also its competitors and are building their own capacity</li>
+      <li>Cost of capital disadvantage: hyperscalers fund near investment grade rates, CoreWeave at B+</li>
+      <li>No switching costs once a contract ends; capacity gets re-bid</li>
+    </ul></div>
+  </div>
+  <p class="read">A time-based edge (speed, allocation, power), not a structural one. It is real today because demand exceeds supply. Whether it survives a balanced market is the central question.</p>
+</section>
+
+<section id="s3">
+  <h2><span class="n">03</span>Drivers</h2>
+  <p>Revenue ≈ active power (MW) × utilization × revenue per MW. Contracted power converts into active power as sites are energized, and backlog converts into revenue as capacity goes live.</p>
+  <div class="kpis" id="kpis"></div>
+  <p class="read">The single number to watch is active power: 1.5 GW at Q2 2026 against 3.7 GW contracted. Each delayed megawatt pushes revenue right while debt costs keep running. Revenue per MW is our estimate from Q2 annualized revenue over average active power.</p>
+</section>
+
+<section id="s4">
+  <h2><span class="n">04</span>Financials</h2>
+  <h3>Profit and loss ($M)</h3>
+  <div class="tbl"><table id="pl"></table></div>
+  <div class="chart"><svg id="chart1" viewBox="0 0 640 260" role="img" aria-label="Revenue, operating cash flow and capex by year"></svg>
+    <div class="legend"><span><i style="background:var(--accent)"></i>Revenue</span><span><i style="background:var(--good)"></i>Operating cash flow</span><span><i style="background:var(--power)"></i>Capex</span></div></div>
+  <p class="read">Revenue went from $16M (2022) to $7.6B (TTM). Adjusted EBITDA margins near 58% look superb, but depreciation and interest consume all of it: GAAP operating income is slightly negative and the TTM net loss is $1.9B. Interest alone is ~25% of revenue.</p>
+  <h3>Balance sheet ($M)</h3>
+  <div class="tbl"><table id="bs"></table></div>
+  <p class="read">Assets quadrupled in 18 months, funded by $51.6B of debt and leases against only $5.0B of equity. Working capital is deeply negative because customers prepay ($8.2B of deferred revenue at Dec-25), which is a genuine source of funding.</p>
+  <h3>Cash flow ($M)</h3>
+  <div class="tbl"><table id="cf"></table></div>
+  <p class="read">Operating cash flow is real and growing ($6.9B TTM), but capex is 3x larger. FCF conversion is not meaningful while both FCF and profit are negative. Capital allocation is single-minded: everything goes to capex, funded by debt, converts and equity (Nvidia, Jane Street). No dividends to common holders.</p>
+</section>
+
+<section id="s5">
+  <h2><span class="n">05</span>Ratios</h2>
+  <div class="tbl"><table id="ratios"></table></div>
+  <p class="read">Leverage is 10.5x adjusted EBITDA including leases (6.7x excluding). Adjusted operating income covers interest only 0.2 to 0.5 times. Asset turnover of 0.15x means each dollar of assets earns 15 cents of revenue a year, so returns depend on high margins sustained over the full asset life. DuPont ROE is distorted by tiny book equity.</p>
+</section>
+
+<section id="s6">
+  <h2><span class="n">06</span>Valuation</h2>
+  <div class="tbl"><table id="val"></table></div>
+  <p class="read">P/E and PEG are not meaningful (losses through at least 2027 on consensus). On EV/forward sales CoreWeave trades below Oracle and Nebius. Against its own short history, the stock is 57% off its 52-week high of $141.79, below the $87.20 Nvidia paid in Jan 2026, and above its $40 IPO price.</p>
+</section>
+
+<section id="s7">
+  <h2><span class="n">07</span>Industry and competitors</h2>
+  <p>AI compute demand is still growing faster than supply; management targets at least 8 GW of active power by 2030. Peers range from cash-rich hyperscalers to other leveraged neoclouds. Trailing metrics, close on Oct 19, 2026; EBITDA as reported by StockAnalysis.</p>
+  <div class="tbl"><table id="peers"></table></div>
+  <p class="read">CoreWeave is the cheapest neocloud on forward sales and the most levered. Oracle is the closest scaled comparison and also burning cash on AI capex, but it has a profitable legacy business underneath. Microsoft shows what a moated cloud earns: 26% ROIC.</p>
+</section>
+
+<section id="s8">
+  <h2><span class="n">08</span>Management</h2>
+  <div class="grid2">
+    <div class="box"><h3>Who runs it</h3><ul>
+      <li><b>Michael Intrator</b>, co-founder and CEO since 2017 (9 years); 38.7% of voting power</li>
+      <li><b>Brian Venturo</b>, co-founder, Chief Strategy Officer; 20.3% of votes</li>
+      <li><b>Brannin McBee</b>, co-founder, Chief Development Officer; 14.6% of votes, 10b5-1 sale plan from Mar 2026</li>
+      <li><b>Nitin Agrawal</b>, CFO since 2024 (ex-Google); <b>Sachin Jain</b>, COO (ex-Oracle)</li>
+    </ul></div>
+    <div class="box"><h3>Governance and allocation</h3><ul>
+      <li>Dual class: Class B carries 10 votes; insiders control ~72% of votes until a 2032 sunset</li>
+      <li>Plan: 2026 capex $35 to $39B, at least 8 GW active by 2030</li>
+      <li>Bolt-on software M&amp;A: Weights &amp; Biases, OpenPipe, Monolith AI; the $9B Core Scientific deal was voted down by CORZ holders in Oct 2025</li>
+      <li>Financing creativity: delayed-draw term loans secured by contracts, converts, a Eurobond</li>
+    </ul></div>
+  </div>
+  <p class="read">Founder-led with heavy ownership, which aligns incentives on upside but leaves outside shareholders no real vote. Management has consistently chosen growth over balance-sheet safety.</p>
+</section>
+
+<section id="s9">
+  <h2><span class="n">09</span>Risks</h2>
+  <div class="grid2">
+    <div class="box"><h3>Financial</h3><ul>
+      <li><b>Refinancing:</b> S&amp;P rating B+; unsecured yields near 15% in Oct 2026; stock fell 20% in the week to Oct 16 on debt fears</li>
+      <li><b>Interest burden:</b> $640M in Q2 alone, about 25% of revenue</li>
+      <li><b>Dilution:</b> equity raises and converts as capex outruns cash flow</li>
+    </ul></div>
+    <div class="box"><h3>Business</h3><ul>
+      <li><b>Concentration:</b> top 3 customers ~72% of Q2 revenue; top one ~36%</li>
+      <li><b>Counterparty:</b> backlog is only as good as customers' ability to pay, including cash-burning AI labs</li>
+      <li><b>Obsolescence:</b> GPU depreciation lives may prove too long if Nvidia's cadence makes older chips uneconomic</li>
+      <li><b>Execution and politics:</b> power and construction delays; state moratoria on data centers</li>
+    </ul></div>
+  </div>
+  <p class="read">These risks compound each other. A delay pushes revenue out, which weakens coverage, which raises the cost of the next financing.</p>
+</section>
+
+<section id="s10">
+  <h2><span class="n">10</span>Scenarios (12-month view)</h2>
+  <p>Analyst consensus: Buy from 41 analysts; average target $140.58, median $147.50, range $39 to $278. Consensus revenue: $12.9B (2026), $26.3B (2027). The scenarios below are our illustrative estimates, valuing the equity on 2027 revenue less estimated year-end 2026 net debt.</p>
+  <div class="scen" id="scen"></div>
+  <div class="calc">
+    <div class="eyebrow">Try it: implied share price</div>
+    <div class="btns"><button type="button" data-p="bear">Bear</button><button type="button" data-p="base">Base</button><button type="button" data-p="bull">Bull</button><button type="button" data-p="mkt">Market-implied</button></div>
+    <div class="row"><label for="r">2027 revenue ($B)</label><input id="r" type="range" min="15" max="35" step="0.5"><span class="num" id="rv"></span></div>
+    <div class="row"><label for="m">EV / 2027 sales (x)</label><input id="m" type="range" min="2" max="8" step="0.1"><span class="num" id="mv"></span></div>
+    <div class="row"><label for="d">Net debt YE-26 incl. leases ($B)</label><input id="d" type="range" min="50" max="75" step="1"><span class="num" id="dv"></span></div>
+    <div class="row"><label for="s">Diluted shares (M)</label><input id="s" type="range" min="550" max="650" step="5"><span class="num" id="sv"></span></div>
+    <div class="out"><div><div class="eyebrow">Implied price</div><div class="big" id="px"></div></div><div class="mono" id="pxnote"></div></div>
+  </div>
+  <p class="read">Today's price implies about 3.6x EV/2027 sales once the debt needed for 2026 capex is counted. The equity behaves like an option: a one-turn change in the multiple moves the price by roughly $45. Consensus targets sit near our base case only if you accept ~4.5x 2027 sales.</p>
+</section>
+
+<section id="s11">
+  <h2><span class="n">11</span>Takeaways</h2>
+  <div class="grid2">
+    <div class="box"><h3>Remember</h3><ul>
+      <li>Hypergrowth with real contracted demand ($104B backlog plus $25B added early Q3)</li>
+      <li>Economics today: ~58% adj. EBITDA margin, ~0% GAAP operating margin, ~25% of revenue to interest</li>
+      <li>Returns on capital far below cost of capital; value depends entirely on the post-buildout steady state</li>
+      <li>Highly levered equity: outcome range is very wide</li>
+    </ul></div>
+    <div class="box"><h3>Check next (Q3 report, ~Nov 11, 2026)</h3><ul>
+      <li>Active power vs 1.5 GW, and any slippage in energization</li>
+      <li>2027 capex framework and how it will be funded</li>
+      <li>Terms of the next debt raise (spread, secured vs unsecured)</li>
+      <li>Microsoft share of revenue and new investment-grade customers</li>
+      <li>Depreciation life assumptions and any impairments</li>
+    </ul></div>
+  </div>
+</section>
+
+<details>
+  <summary>Glossary and definitions</summary>
+  <dl>
+    <dt>Neocloud</dt><dd>A cloud provider focused on renting GPUs for AI, as opposed to a general-purpose hyperscaler.</dd>
+    <dt>Backlog / RPO</dt><dd>Contracted revenue not yet recognized. $104.2B at Jun-26, of which $103.7B is remaining performance obligations.</dd>
+    <dt>Active vs contracted power</dt><dd>Megawatts energized and earning revenue vs megawatts secured under lease but not yet live.</dd>
+    <dt>Adjusted EBITDA</dt><dd>Company-defined: excludes stock compensation and other items. Used here because GAAP EBITDA is not reported.</dd>
+    <dt>Net debt</dt><dd>Debt plus finance and operating lease liabilities, minus unrestricted cash. Peers measured the same way (StockAnalysis basis).</dd>
+    <dt>ROIC (adj.)</dt><dd>Adjusted operating income × (1 − 21% tax) ÷ average (equity + debt incl. leases − cash).</dd>
+    <dt>DuPont ROE</dt><dd>Net margin × asset turnover × equity multiplier, using average assets and average book equity.</dd>
+    <dt>TTM</dt><dd>Trailing twelve months to Jun 30, 2026 = FY25 − H1'25 + H1'26.</dd>
+  </dl>
+</details>
+
+<section>
+  <div class="eyebrow">Sources</div>
+  <ol class="sources" id="sources"></ol>
+</section>
+
+<p class="disc">Education and analysis, not investment advice. Prices as of close Oct 19, 2026. Forward figures are consensus estimates (StockAnalysis / S&amp;P Global); scenario values and revenue per MW are our own estimates. Company figures from CoreWeave press releases; FY22 and FY23 from StockAnalysis. "n/a" means not available, "n/m" means not meaningful.</p>
+</div>
+
+<script>
+const DATA={
+  company:"CoreWeave, Inc.",ticker:"CRWV",exchange:"Nasdaq",currency:"USD",asOf:"Oct 19, 2026",
+  price:61.12,shares:551.54,hi52:141.79,lo52:59.51,
+  years:["FY22","FY23","FY24","FY25","TTM Jun-26"],
+  revenue:[15.8,229,1915,5131,7590],
+  adjEbitda:[null,null,1219,3093,4400],
+  da:[null,null,863,2454,null],
+  ebit:[-22.9,-14,324,-46,-231],
+  adjEbit:[null,null,356,666,452],
+  interest:[null,null,361,1229,1874],
+  netIncome:[-31.1,-594,-863,-1167,-1928],
+  ocf:[0.9,1833,2749,3058,6911],
+  capex:[72.4,2943,8702,10309,20566],
+  sbc:[1.5,15,31,630,619],
+  bsDates:["Dec-23","Dec-24","Dec-25","Jun-26"],
+  bsRev:[229,1915,5131,7590],
+  ppe:[null,11915,30557,46736],
+  totalAssets:[4977,17833,49302,77070],
+  cash:[217,1361,3127,5524],
+  debt:[null,7926,21373,35068],
+  leases:[null,2694,8449,16540],
+  debtInclLeases:[2000,10620,29822,51608],
+  equity:[-132,-414,3335,5024],
+  ar:[183,417,3169,null],
+  ap:[456,868,1623,null],
+  deferred:[2005,4064,8185,null],
+  kpi:{activeMW:1500,contractedMW:3700,backlog:104.2,q2Rev:2575,startMW:1000,top3:72,commit:98},
+  cons:{rev26:12.9,rev27:26.34,eps26:-3.96,eps27:-1.86,target:140.58,median:147.5,lo:39,hi:278,n:41},
+  peers:[
+    {n:"CoreWeave",t:"CRWV",mc:33.71,ev:79.74,rev:7.59,om:-3.0,roic:-0.3,evs:10.51,eve:21.04,fps:1.72,pe:null,nd:46.03,ebitda:3.79,fcf:-13.66},
+    {n:"Nebius",t:"NBIS",mc:46.66,ev:48.82,rev:1.36,om:-37.4,roic:-4.1,evs:36.01,eve:189.2,fps:6.49,pe:null,nd:2.15,ebitda:0.258,fcf:-5.88},
+    {n:"IREN",t:"IREN",mc:10.93,ev:12.87,rev:0.707,om:-53.6,roic:-7.2,evs:18.21,eve:335.7,fps:3.91,pe:null,nd:1.94,ebitda:0.038,fcf:-2.23},
+    {n:"Oracle",t:"ORCL",mc:392.85,ev:524.92,rev:71.78,om:34.3,roic:11.3,evs:7.31,eve:15.24,fps:3.98,pe:20.3,nd:132.07,ebitda:34.43,fcf:-28.72},
+    {n:"Microsoft",t:"MSFT",mc:3960,ev:4010,rev:331.84,om:46.8,roic:26.2,evs:12.10,eve:20.66,fps:10.13,pe:29.7,nd:51.97,ebitda:194.24,fcf:66.99}
+  ],
+  scen:{
+    bear:{r:20,m:3.5,d:62,s:560,why:["Power and build delays cut 2027 revenue to $20B","A key customer trims or re-bids capacity","Credit stress compresses multiple to 3.5x"]},
+    base:{r:26.34,m:4.5,d:62,s:560,why:["2027 revenue at consensus $26.3B","Financing stays open at current costs","Multiple re-rates modestly to 4.5x as FCF path clears"]},
+    bull:{r:30,m:6.0,d:62,s:560,why:["Faster energization lifts 2027 revenue to $30B","New investment-grade customers diversify mix","Spreads tighten; multiple moves toward 6x"]}
+  },
+  timeline:[
+    ["Sep 2017","Founded as Atlantic Crypto in New Jersey, mining Ethereum on GPUs"],
+    ["2019","Renamed CoreWeave after the crypto crash; repurposes GPUs for cloud"],
+    ["2022","Spends ~$100M on Nvidia H100s ahead of the AI boom"],
+    ["Apr 2023","Nvidia invests $100M; Aug: $2.3B GPU-backed debt facility"],
+    ["May 2024","$1.1B raise at ~$19B valuation"],
+    ["Mar 2025","~$12B OpenAI contract; Nasdaq IPO raises $1.5B at $40/share"],
+    ["Oct 2025","Core Scientific holders reject $9B takeover"],
+    ["Jan 2026","Nvidia invests $2B at $87.20/share"],
+    ["Apr 2026","Anthropic deal; $21B Meta expansion; $3.5B converts"],
+    ["Aug 2026","Q2 revenue +112%; backlog $104B; joins Nasdaq-100"],
+    ["Oct 2026","Stock falls ~20% in a week on debt fears"]
+  ],
+  sources:[
+    ["CoreWeave Q2 2026 results (Aug 11, 2026)","https://investors.coreweave.com/news/news-details/2026/CoreWeave-Reports-Strong-Second-Quarter-2026-Results/default.aspx"],
+    ["CoreWeave Q4 and FY2025 results (Business Wire)","https://www.businesswire.com/news/home/20260226281661/en/CoreWeave-Reports-Strong-Fourth-Quarter-and-Fiscal-Year-2025-Results"],
+    ["StockAnalysis: CRWV financials, statistics, forecast","https://stockanalysis.com/stocks/crwv/statistics/"],
+    ["StockAnalysis: NBIS, ORCL, IREN, MSFT statistics","https://stockanalysis.com/stocks/orcl/statistics/"],
+    ["Channelchek: Q2 2026 guidance","https://dashboard.channelchek.com/?p=104902"],
+    ["Beancount: CoreWeave FY2026 Q2 analysis","https://beancount.io/blog/2026/09/22/coreweave-fy2026-q2-earnings-analysis"],
+    ["Motley Fool: CoreWeave dropped 20% last week (Oct 19, 2026)","https://www.fool.com/investing/2026/10/19/coreweave-dropped-20-last-week-is-it-time-to-panic/"],
+    ["Forbes: Why is CoreWeave stock falling? (Oct 15, 2026)","https://www.forbes.com/sites/greatspeculations/2026/10/15/why-is-coreweave-stock-falling/"],
+    ["AI Funding Tracker: Who owns CoreWeave (Apr 2026 proxy)","https://aifundingtracker.com/who-owns-coreweave/"],
+    ["Wikipedia: CoreWeave","https://en.wikipedia.org/wiki/CoreWeave"]
+  ]
+};
+
+const $=id=>document.getElementById(id);
+const isN=v=>v!==null&&v!==undefined&&isFinite(v);
+const fm=(v,d=0)=>!isN(v)?'<span class="sub">n/a</span>':`<span class="${v<0?'neg':''}">${v<0?'(':''}${Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d})}${v<0?')':''}</span>`;
+const fp=v=>!isN(v)?'<span class="sub">n/a</span>':`<span class="${v<0?'neg':''}">${(v*100).toFixed(1)}%</span>`;
+const fx=v=>!isN(v)?'<span class="sub">n/a</span>':`${v.toFixed(1)}x`;
+const fx2=v=>!isN(v)?'<span class="sub">n/a</span>':`${v.toFixed(2)}x`;
+const nm='<span class="sub">n/m</span>';
+const div=(a,b)=>isN(a)&&isN(b)&&b!==0?a/b:null;
+const avg=(a,b)=>isN(a)&&isN(b)?(a+b)/2:null;
+function table(id,head,rows){
+  $(id).innerHTML=`<thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr class="${r.c||''}"><td>${r.l}</td>${r.v.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</tbody>`;
+}
+const D=DATA;
+
+// Quote
+const mcap=D.price*D.shares/1000;
+const ndJun=D.debtInclLeases[3]-D.cash[3];
+const ev=mcap+ndJun/1000;
+$('quote').innerHTML=[`<span><b>${D.exchange}: ${D.ticker}</b></span>`,`<span>Price <b>$${D.price.toFixed(2)}</b></span>`,`<span>Mkt cap <b>$${mcap.toFixed(1)}B</b></span>`,`<span>EV <b>$${ev.toFixed(1)}B</b></span>`,`<span>52-wk <b>$${D.lo52}–$${D.hi52}</b></span>`,`<span>${D.currency} · close ${D.asOf}</span>`].join('');
+
+// Timeline
+$('timeline').innerHTML=D.timeline.map(([d,t])=>`<div><span class="d">${d}</span><span>${t}</span></div>`).join('');
+
+// KPIs
+const k=D.kpi, revPerMW=D.kpi.q2Rev*4/((k.startMW+k.activeMW)/2);
+const intPctRev=div(D.interest[4],D.revenue[4]);
+$('kpis').innerHTML=[
+  [`${(k.activeMW/1000).toFixed(1)} GW`,"Active power, Jun-26"],
+  [`${(k.contractedMW/1000).toFixed(1)} GW`,"Contracted power, Jun-26"],
+  [`$${k.backlog}B`,"Revenue backlog, Jun-26"],
+  [`~$${revPerMW.toFixed(1)}M`,"Revenue per active MW-year (est.)"],
+  [`${k.top3}%`,"Top 3 customers, Q2 revenue"],
+  [`${(intPctRev*100).toFixed(0)}%`,"Net interest / revenue, TTM"]
+].map(([v,l])=>`<div class="kpi"><div class="v">${v}</div><div class="l">${l}</div></div>`).join('');
+
+// P&L
+const Y=D.years, rev=D.revenue;
+const growth=rev.map((v,i)=>i===0||i===4?null:div(v,rev[i-1])-1);
+growth[4]=null;
+table('pl',['',...Y],[
+  {l:'Revenue',v:rev.map(v=>fm(v)),c:'hl'},
+  {l:'Growth YoY',v:growth.map((g,i)=>i===4?'+112% (Q2)':fp(g)),c:'sub'},
+  {l:'Adj. EBITDA',v:D.adjEbitda.map(v=>fm(v))},
+  {l:'Adj. EBITDA margin',v:D.adjEbitda.map((v,i)=>fp(div(v,rev[i]))),c:'sub'},
+  {l:'Operating income (GAAP)',v:D.ebit.map(v=>fm(v))},
+  {l:'Operating margin',v:D.ebit.map((v,i)=>fp(div(v,rev[i]))),c:'sub'},
+  {l:'Net interest expense',v:D.interest.map(v=>fm(v))},
+  {l:'Net income',v:D.netIncome.map(v=>fm(v)),c:'hl'},
+  {l:'Net margin',v:D.netIncome.map((v,i)=>fp(div(v,rev[i]))),c:'sub'}
+]);
+
+// Chart
+(function(){
+  const svg=$('chart1'),W=640,H=260,L=56,R=10,T=14,B=30;
+  const max=22000, sx=(W-L-R)/Y.length, bw=sx/4.6;
+  const sy=v=>T+(H-T-B)*(1-v/max);
+  let s='';
+  [0,5000,10000,15000,20000].forEach(t=>{s+=`<line x1="${L}" x2="${W-R}" y1="${sy(t)}" y2="${sy(t)}" stroke="var(--line)" stroke-width="1"/><text x="${L-8}" y="${sy(t)+4}" text-anchor="end" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono,monospace">${t?'$'+t/1000+'B':'0'}</text>`});
+  const ser=[[rev,'var(--accent)'],[D.ocf,'var(--good)'],[D.capex,'var(--power)']];
+  Y.forEach((y,i)=>{
+    const x0=L+i*sx+sx/2-bw*1.5;
+    ser.forEach(([a,c],j)=>{const v=a[i];s+=`<rect x="${x0+j*bw}" y="${sy(v)}" width="${bw-2}" height="${Math.max(sy(0)-sy(v),0.5)}" fill="${c}"><title>${y}: $${v.toLocaleString()}M</title></rect>`});
+    s+=`<text x="${L+i*sx+sx/2}" y="${H-10}" text-anchor="middle" font-size="11.5" fill="var(--muted)" font-family="IBM Plex Mono,monospace">${y}</text>`;
+  });
+  svg.innerHTML=s;
+})();
+
+// Balance sheet
+const B=D.bsDates, br=D.bsRev;
+const wc=D.ar.map((a,i)=>isN(a)?a-D.ap[i]-D.deferred[i]:null);
+const nd=D.debtInclLeases.map((d,i)=>d-D.cash[i]);
+table('bs',['',...B],[
+  {l:'PP&E, net (excl. lease ROU)',v:D.ppe.map(v=>fm(v))},
+  {l:'Total assets',v:D.totalAssets.map(v=>fm(v)),c:'hl'},
+  {l:'Cash and equivalents',v:D.cash.map(v=>fm(v))},
+  {l:'Debt',v:D.debt.map(v=>fm(v))},
+  {l:'Lease liabilities',v:D.leases.map(v=>fm(v))},
+  {l:'Debt incl. leases',v:D.debtInclLeases.map(v=>fm(v)),c:'hl'},
+  {l:'Net debt incl. leases',v:nd.map(v=>fm(v))},
+  {l:'Book equity',v:D.equity.map(v=>fm(v))},
+  {l:'Working capital (AR − AP − deferred rev.)',v:wc.map(v=>fm(v))},
+  {l:'Working capital % revenue',v:wc.map((v,i)=>fp(div(v,br[i]))),c:'sub'},
+  {l:'Fixed assets % revenue',v:D.ppe.map((v,i)=>fp(div(v,br[i]))),c:'sub'}
+]);
+
+// Cash flow
+const fcf=D.ocf.map((o,i)=>o-D.capex[i]);
+table('cf',['',...Y],[
+  {l:'Operating cash flow',v:D.ocf.map(v=>fm(v))},
+  {l:'Capex',v:D.capex.map(v=>fm(-v))},
+  {l:'Free cash flow',v:fcf.map(v=>fm(v)),c:'hl'},
+  {l:'FCF margin',v:fcf.map((v,i)=>fp(div(v,rev[i]))),c:'sub'},
+  {l:'FCF conversion (FCF / net income)',v:fcf.map(()=>nm),c:'sub'},
+  {l:'Capex / revenue',v:D.capex.map((v,i)=>fx(div(v,rev[i])))},
+  {l:'Stock-based compensation',v:D.sbc.map(v=>fm(v))},
+  {l:'Dividends / buybacks / M&A',v:['0','0','58 pref. div.','29 / 144 / 108','0 / 11 / 62'].map(x=>`<span class="sub">${x}</span>`)}
+]);
+
+// Ratios (FY24, FY25, TTM)
+const a24=avg(D.totalAssets[0],D.totalAssets[1]),a25=avg(D.totalAssets[1],D.totalAssets[2]),aT=avg(D.totalAssets[2],D.totalAssets[3]);
+const e25=avg(D.equity[1],D.equity[2]);
+const ic=D.equity.map((e,i)=>e+D.debtInclLeases[i]-D.cash[i]);
+const roic=(adj,icA,icB)=>div(adj*0.79,avg(icA,icB));
+const nm25=div(D.netIncome[3],rev[3]),at25=div(rev[3],a25),em25=div(a25,e25);
+table('ratios',['','FY24','FY25','TTM / Jun-26'],[
+  {l:'Net debt incl. leases / adj. EBITDA',v:[fx(div(nd[1],D.adjEbitda[2])),fx(div(nd[2],D.adjEbitda[3])),fx(div(nd[3],D.adjEbitda[4]))],c:'hl'},
+  {l:'Net debt excl. leases / adj. EBITDA',v:[fx(div(D.debt[1]-D.cash[1],D.adjEbitda[2])),fx(div(D.debt[2]-D.cash[2],D.adjEbitda[3])),fx(div(D.debt[3]-D.cash[3],D.adjEbitda[4]))]},
+  {l:'Interest cover (adj. op. income / interest)',v:[fx(div(D.adjEbit[2],D.interest[2])),fx(div(D.adjEbit[3],D.interest[3])),fx(div(D.adjEbit[4],D.interest[4]))]},
+  {l:'Asset turnover (revenue / avg assets)',v:[fx2(div(rev[2],a24)),fx2(at25),fx2(div(rev[4],aT))]},
+  {l:'Receivable days (FY revenue basis)',v:[ (D.ar[1]/rev[2]*365).toFixed(0), (D.ar[2]/rev[3]*365).toFixed(0),'<span class="sub">n/a</span>']},
+  {l:'Deferred revenue days',v:[(D.deferred[1]/rev[2]*365).toFixed(0),(D.deferred[2]/rev[3]*365).toFixed(0),'<span class="sub">n/a</span>']},
+  {l:'DuPont: net margin',v:[fp(div(D.netIncome[2],rev[2])),fp(nm25),fp(div(D.netIncome[4],rev[4]))],c:'sub'},
+  {l:'DuPont: × asset turnover',v:[fx2(div(rev[2],a24)),fx2(at25),'<span class="sub">n/a</span>'],c:'sub'},
+  {l:'DuPont: × equity multiplier',v:[nm,fx(em25),'<span class="sub">n/a</span>'],c:'sub'},
+  {l:'ROE (DuPont, avg book equity)',v:[nm,fp(nm25*at25*em25),'<span class="sub">n/a</span>']},
+  {l:'ROIC, adjusted (after 21% tax)',v:[nm,fp(roic(D.adjEbit[3],ic[1],ic[2])),fp(roic(D.adjEbit[4],ic[2],ic[3]))],c:'hl'},
+  {l:'ROIC, GAAP operating income',v:[nm,fp(roic(D.ebit[3],ic[1],ic[2])),fp(roic(D.ebit[4],ic[2],ic[3]))]}
+]);
+
+// Valuation
+const C=D.cons;
+table('val',['Metric','Trailing (TTM)','2026E','2027E'],[
+  {l:'P/E',v:[nm,nm,nm]},
+  {l:'EPS (non-GAAP consensus)',v:[`(${Math.abs(D.netIncome[4]/D.shares).toFixed(2)}) GAAP`,`(${Math.abs(C.eps26).toFixed(2)})`,`(${Math.abs(C.eps27).toFixed(2)})`].map(x=>`<span class="neg">${x}</span>`)},
+  {l:'PEG',v:[nm,nm,nm]},
+  {l:'EV / sales',v:[fx(ev/(rev[4]/1000)),fx(ev/C.rev26),fx(ev/C.rev27)],c:'hl'},
+  {l:'Price / sales',v:[fx(mcap/(rev[4]/1000)),fx(mcap/C.rev26),fx(mcap/C.rev27)]},
+  {l:'EV / adj. EBITDA',v:[fx(ev/(D.adjEbitda[4]/1000)),'<span class="sub">n/a</span>','<span class="sub">n/a</span>']},
+  {l:'Price vs history',v:[`${((D.price/D.hi52-1)*100).toFixed(0)}% vs 52-wk high`,`${((D.price/87.2-1)*100).toFixed(0)}% vs Nvidia's $87.20`,`+${((D.price/40-1)*100).toFixed(0)}% vs $40 IPO`].map(x=>`<span class="sub">${x}</span>`)}
+]);
+
+// Peers
+table('peers',['Company','Mkt cap $B','EV $B','Rev TTM $B','Op margin','ROIC','Net debt / EBITDA','FCF $B','EV / sales','EV / EBITDA','Fwd P/S','P/E'],
+  D.peers.map(p=>({l:`${p.n} <span class="sub mono">${p.t}</span>`,c:p.t==='CRWV'?'hl':'',v:[
+    p.mc.toLocaleString('en-US',{maximumFractionDigits:1}),p.ev.toLocaleString('en-US',{maximumFractionDigits:1}),p.rev.toFixed(2),
+    fp(p.om/100),fp(p.roic/100),fx(p.nd/p.ebitda),fm(p.fcf,1),fx(p.evs),p.eve>100?'<span class="sub">n/m</span>':fx(p.eve),fx(p.fps),p.pe?fx(p.pe):nm]})));
+
+// Scenarios
+const price=(r,m,d,s)=>(r*m-d)/s*1000;
+$('scen').innerHTML=['bear','base','bull'].map(key=>{const x=D.scen[key];const p=price(x.r,x.m,x.d,x.s);
+  return `<div class="box ${key}"><div class="eyebrow">${key}</div><div class="px">$${Math.max(p,0).toFixed(0)}</div><div class="mono sub" style="font-size:12.5px">${((p/D.price-1)*100).toFixed(0)}% vs $${D.price} · ${x.m}x × $${x.r}B</div><ul>${x.why.map(w=>`<li>${w}</li>`).join('')}</ul></div>`}).join('');
+const mktMult=(mcap+62)/C.rev27;
+const presets={...D.scen,mkt:{r:C.rev27,m:+mktMult.toFixed(1),d:62,s:552}};
+function upd(){
+  const r=+$('r').value,m=+$('m').value,d=+$('d').value,s=+$('s').value;
+  $('rv').textContent='$'+r.toFixed(1)+'B';$('mv').textContent=m.toFixed(1)+'x';$('dv').textContent='$'+d+'B';$('sv').textContent=s+'M';
+  const p=price(r,m,d,s);
+  $('px').textContent=p<=0?'$0 (equity wiped)':'$'+p.toFixed(0);
+  $('pxnote').innerHTML=`EV $${(r*m).toFixed(0)}B − net debt $${d}B · ${p>0?((p/D.price-1)*100).toFixed(0)+'% vs today':''}<br>Consensus avg target $${C.target} · market-implied ${mktMult.toFixed(1)}x`;
+}
+function setP(k){const x=presets[k];$('r').value=x.r;$('m').value=x.m;$('d').value=x.d;$('s').value=x.s;upd()}
+document.querySelectorAll('[data-p]').forEach(b=>b.addEventListener('click',()=>setP(b.dataset.p)));
+['r','m','d','s'].forEach(id=>$(id).addEventListener('input',upd));
+setP('base');
+
+// Sources
+$('sources').innerHTML=D.sources.map(([t,u])=>`<li><a href="${u}" target="_blank" rel="noopener">${t}</a></li>`).join('');
+</script>
+
+</body></html>

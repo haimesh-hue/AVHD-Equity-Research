@@ -27,14 +27,21 @@ onChange(() => rerender());
 async function init() {
   renderChrome();
   await loadAll();
-  // first run: optionally seed from a committed backup (data/research.json)
-  if (!state.companies.length && !state.notes.length && !(await db.getKV('seeded'))) {
-    try {
-      const r = await fetch('data/research.json', { cache: 'no-cache' });
-      if (r.ok) { const res = await importAll(await r.json()); await loadAll(); toast(`Loaded ${res.companies} companies from data/research.json`); }
-    } catch {}
-    await db.setKV('seeded', true);
-  }
+  // import the committed research library (data/research.json) once per version; your own later edits always win
+  try {
+    const r = await fetch('data/research.json', { cache: 'no-cache' });
+    if (r.ok) {
+      const seed = await r.json();
+      const done = await db.getKV('seedIds', []);
+      const sid = seed.seedId || 'seed';
+      if (!done.includes(sid)) {
+        const res = await importAll(seed);
+        await db.setKV('seedIds', [...done, sid]);
+        await loadAll();
+        if (res.companies || res.notes) toast(`Imported ${res.companies} companies and ${res.notes} notes from your research library`, 'ok', 5000);
+      }
+    }
+  } catch (e) { console.warn('seed import', e); }
   renderSidebar();
   window.addEventListener('hashchange', () => route());
   route();
@@ -144,7 +151,10 @@ function stars(n, editable = false) {
 function tagChips(tags = [], removable = false) {
   return tags.map(t => `<span class="tag">${esc(t)}${removable ? `<button data-rmtag="${esc(t)}" aria-label="Remove tag">×</button>` : ''}</span>`).join('');
 }
-const money = v => (v == null ? '—' : fmtNum(v, { digits: 2, prefix: '$' }));
+const CUR = { USD: '$', INR: '₹', EUR: '€', GBP: '£', JPY: '¥', KRW: '₩', TWD: 'NT$' };
+const money = (v, cur = 'USD') => (v == null || isNaN(v) ? '—' : fmtNum(v, { digits: 2, prefix: CUR[cur] || (cur + ' ') }));
+const latestVerdict = c => (c.reports || []).find(r => r.verdict)?.verdict || null;
+const verdictPill = v => (v ? `<span class="pill verdict" style="--pc:${/UNDER/.test(v) ? 'var(--st-owned)' : /OVER/.test(v) ? 'var(--st-sold)' : 'var(--st-watch)'}">${esc(v.toLowerCase())}</span>` : '<span class="muted">—</span>');
 const big = v => (v == null ? '—' : fmtNum(v, { compact: true, digits: 1, prefix: v < 0 ? '-$' : '$' }).replace('$-', ''));
 const bigAbs = v => (v == null ? '—' : (v < 0 ? '-' : '') + fmtNum(Math.abs(v), { compact: true, digits: 1, prefix: '$' }));
 const pct = v => (v == null || !isFinite(v) ? '—' : (v * 100).toFixed(1) + '%');
@@ -338,7 +348,7 @@ function viewDashboard() {
       </section>
       <section class="card">
         <div class="card-head"><h2>Biggest upside to fair value</h2><a class="small" href="#/companies?sort=upside">All</a></div>
-        ${opportunities.length ? `<table class="mini"><tbody>${opportunities.map(({ c, m }) => `<tr data-href="#/company/${encodeURIComponent(c.id)}"><td><b>${esc(c.ticker)}</b></td><td class="muted ellipsis">${esc(c.name || '')}</td><td class="num">${money(m.price)}</td><td class="num">${money(Number(c.fairValue))}</td><td class="num ${upCls(m.upside)}">${fmtPct(m.upside)}</td></tr>`).join('')}</tbody></table>`
+        ${opportunities.length ? `<table class="mini"><tbody>${opportunities.map(({ c, m }) => `<tr data-href="#/company/${encodeURIComponent(c.id)}"><td><b>${esc(c.ticker)}</b></td><td class="muted ellipsis">${esc(c.name || '')}</td><td class="num">${money(m.price, c.currency)}</td><td class="num">${money(Number(c.fairValue), c.currency)}</td><td class="num ${upCls(m.upside)}">${fmtPct(m.upside)}</td></tr>`).join('')}</tbody></table>`
           : '<div class="empty small">Set a fair value on a company to rank opportunities here.</div>'}
         ${belowBuy.length ? `<div class="alert">${icon('check', 16)} Trading below your buy price: ${belowBuy.map(x => `<a href="#/company/${encodeURIComponent(x.c.id)}">${esc(x.c.ticker)}</a>`).join(', ')}</div>` : ''}
       </section>
@@ -383,7 +393,7 @@ function bindRowLinks(root) {
 
 const COLS = [
   ['ticker', 'Ticker'], ['name', 'Company'], ['status', 'Status'], ['rating', 'Conviction'], ['sector', 'Sector'],
-  ['price', 'Price', 'num'], ['fair', 'Fair value', 'num'], ['upside', 'Upside', 'num'], ['mcap', 'Mkt cap', 'num'],
+  ['verdict', 'Verdict'], ['price', 'Price', 'num'], ['fair', 'Fair value', 'num'], ['upside', 'Upside', 'num'], ['mcap', 'Mkt cap', 'num'],
   ['pe', 'P/E', 'num'], ['growth', 'Rev growth', 'num'], ['margin', 'Net margin', 'num'], ['notes', 'Notes', 'num'], ['updated', 'Updated', 'num'],
 ];
 
@@ -424,7 +434,7 @@ function viewCompanies(params) {
       .map(c => ({ c, m: metrics(c) }));
     const key = {
       ticker: x => x.c.ticker, name: x => x.c.name || '', status: x => STATUSES.findIndex(s => s.id === x.c.status), rating: x => x.c.rating || 0,
-      sector: x => x.c.sector || '', price: x => x.m.price, fair: x => Number(x.c.fairValue) || null, upside: x => x.m.upside, mcap: x => x.m.marketCap,
+      sector: x => x.c.sector || '', verdict: x => latestVerdict(x.c) || '', price: x => x.m.price, fair: x => Number(x.c.fairValue) || null, upside: x => x.m.upside, mcap: x => x.m.marketCap,
       pe: x => x.m.pe, growth: x => x.m.revGrowth, margin: x => x.m.netMargin, notes: x => noteCount[x.c.id] || 0, updated: x => x.c.updatedAt,
     }[f.sort] || (x => x.c.ticker);
     rows.sort((a, b) => {
@@ -440,8 +450,8 @@ function viewCompanies(params) {
         <div class="row between"><b class="tk-lg">${esc(c.ticker)}</b>${statusPill(c.status)}</div>
         <div class="ellipsis">${esc(c.name || '')}</div>
         <div class="muted small ellipsis">${esc([c.sector, c.industry].filter(Boolean).join(' · ') || '—')}</div>
-        <div class="row between"><span class="num big">${money(m.price)}</span>${sparkline((c.priceLog || []).map(p => p.price))}</div>
-        <div class="row between small"><span>FV ${money(Number(c.fairValue) || null)}</span><span class="${upCls(m.upside)}">${fmtPct(m.upside)}</span></div>
+        <div class="row between"><span class="num big">${money(m.price, c.currency)}</span>${sparkline((c.priceLog || []).map(p => p.price))}</div>
+        <div class="row between small"><span>FV ${money(Number(c.fairValue) || null, c.currency)}</span>${verdictPill(latestVerdict(c))}<span class="${upCls(m.upside)}">${fmtPct(m.upside)}</span></div>
         <div class="row between">${stars(c.rating)}<span class="muted small">${noteCount[c.id] || 0} notes</span></div>
         ${c.tags?.length ? `<div class="tags">${tagChips(c.tags.slice(0, 4))}</div>` : ''}
       </a>`).join('')}</div>`;
@@ -449,7 +459,7 @@ function viewCompanies(params) {
       host.innerHTML = `<div class="table-wrap"><table class="data"><thead><tr>${COLS.map(([k, l, cls]) => `<th class="${cls || ''}${f.sort === k ? ' sorted ' + f.dir : ''}" data-sort="${k}" tabindex="0" aria-sort="${f.sort === k ? (f.dir === 'asc' ? 'ascending' : 'descending') : 'none'}">${l}</th>`).join('')}</tr></thead>
         <tbody>${rows.map(({ c, m }) => `<tr data-href="#/company/${encodeURIComponent(c.id)}">
           <td><b>${esc(c.ticker)}</b>${c.pinned ? ` <span class="muted">${icon('pin', 12)}</span>` : ''}</td><td class="ellipsis w-name">${esc(c.name || '')}</td><td>${statusPill(c.status)}</td><td>${stars(c.rating)}</td>
-          <td class="ellipsis w-sector">${esc(c.sector || '—')}</td><td class="num">${money(m.price)}</td><td class="num">${money(Number(c.fairValue) || null)}</td>
+          <td class="ellipsis w-sector">${esc(c.sector || '—')}</td><td>${verdictPill(latestVerdict(c))}</td><td class="num">${money(m.price, c.currency)}</td><td class="num">${money(Number(c.fairValue) || null, c.currency)}</td>
           <td class="num ${upCls(m.upside)}">${fmtPct(m.upside)}</td><td class="num">${bigAbs(m.marketCap)}</td><td class="num">${m.pe ? m.pe.toFixed(1) : '—'}</td>
           <td class="num ${upCls(m.revGrowth)}">${fmtPct(m.revGrowth)}</td><td class="num">${pct(m.netMargin)}</td><td class="num">${noteCount[c.id] || 0}</td><td class="num muted">${timeAgo(c.updatedAt)}</td>
         </tr>`).join('')}</tbody></table></div>`;
@@ -571,7 +581,7 @@ async function viewCompany(id, params) {
         </div>
       </div>
       <div class="co-price">
-        <div class="price">${money(m.price)}</div>
+        <div class="price">${money(m.price, c.currency)}</div>
         ${c.auto?.price?.changePct != null ? `<div class="small ${upCls(c.auto.price.changePct)}">${c.auto.price.changePct >= 0 ? '+' : ''}${Number(c.auto.price.changePct).toFixed(2)}% today</div>` : ''}
         <div class="muted small">${c.auto?.price?.date ? 'as of ' + esc(c.auto.price.date) : c.manualPrice ? 'manual price' : 'no price yet'}</div>
         <div class="row gap mt">
@@ -583,7 +593,7 @@ async function viewCompany(id, params) {
     </div>`;
   };
 
-  const TABS = [['overview', 'Overview'], ['thesis', 'Thesis'], ['financials', 'Financials'], ['notes', `Notes (${notes.length})`], ['files', `Files (${files.length})`]];
+  const TABS = [['overview', 'Overview'], ['reports', `Reports (${(c.reports || []).length})`], ['thesis', 'Thesis'], ['financials', 'Financials'], ['notes', `Notes (${notes.length})`], ['files', `Files (${files.length})`]];
   main.innerHTML = `<div class="page company-page">
     <a class="back" href="#/companies">← Companies</a>
     <div id="coHead">${renderHeader()}</div>
@@ -622,6 +632,7 @@ async function viewCompany(id, params) {
 
   const body = $('#tabBody');
   if (tab === 'overview') renderOverview();
+  else if (tab === 'reports') renderReports();
   else if (tab === 'thesis') renderThesis();
   else if (tab === 'financials') renderFinancials();
   else if (tab === 'notes') renderNotes();
@@ -637,11 +648,14 @@ async function viewCompany(id, params) {
     ];
     const recentNotes = notes.slice(0, 4);
     const secUrl = c.cik ? `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${encodeURIComponent(c.cik)}&type=10-K&dateb=&owner=include&count=40` : null;
-    body.innerHTML = `<div class="grid-2">
+    const lr = (c.reports || [])[0];
+    const banner = lr ? `<section class="card report-banner span-2"><div class="row between wrap gap"><div><span class="muted small">Latest research · ${esc(lr.date || '')}</span><div><b>${esc(lr.title)}</b> ${lr.verdict ? verdictPill(lr.verdict) : ''}</div></div>
+      <a class="btn small" href="#/company/${encodeURIComponent(c.id)}?tab=reports">All ${(c.reports || []).length} reports</a></div>${lr.summary ? `<p class="report-sum">${esc(lr.summary)}</p>` : ''}</section>` : '';
+    body.innerHTML = `<div class="grid-2">${banner}
       <section class="card">
         <div class="card-head"><h2>Valuation</h2><span class="muted small">Your numbers</span></div>
         <div class="grid-form three">
-          <label>Fair value / share <input type="number" step="0.01" data-f="fairValue" value="${esc(c.fairValue ?? '')}" placeholder="—"></label>
+          <label>Fair value / share (${esc(c.currency || 'USD')}) <input type="number" step="0.01" data-f="fairValue" value="${esc(c.fairValue ?? '')}" placeholder="—"></label>
           <label>Buy below <input type="number" step="0.01" data-f="buyBelow" value="${esc(c.buyBelow ?? '')}" placeholder="—"></label>
           <label>Manual price <input type="number" step="0.01" data-f="manualPrice" value="${esc(c.manualPrice ?? '')}" placeholder="auto"></label>
         </div>
@@ -699,6 +713,18 @@ async function viewCompany(id, params) {
     const v = body.querySelector('.val-bar'); if (v) v.innerHTML = valuationBar(m.price, Number(c.buyBelow) || null, Number(c.fairValue) || null);
     const u = $('#upsideVal'); if (u) { u.textContent = fmtPct(m.upside); u.className = upCls(m.upside); }
     lineChart(host, hist.map(p => ({ label: p.date, value: p.price ?? p.close })), { format: v => '$' + fmtNum(v, { digits: 2 }), refLine: Number(c.fairValue) || null, refLabel: 'Fair value' });
+  }
+
+  function renderReports() {
+    const reps = c.reports || [];
+    body.innerHTML = reps.length ? `<div class="report-list">${reps.map(r => `<article class="card report">
+        <div class="row between wrap gap"><div><span class="tag">${esc(r.kind || 'Report')}</span> <b>${esc(r.title)}</b></div><span class="muted small">${esc(r.date || '')}</span></div>
+        ${r.verdict || r.iv ? `<div class="row gap wrap mt">${r.verdict ? verdictPill(r.verdict) : ''}${r.iv ? `<span>Intrinsic value <b>${money(r.iv, c.currency)}</b>${r.priceApprox ? ' <span class="muted small">(approx.)</span>' : ''}</span>` : ''}${r.price ? `<span class="muted">vs price ${money(r.price, c.currency)} at the time</span>` : ''}</div>` : ''}
+        ${r.summary ? `<p class="report-sum">${esc(r.summary)}</p>` : ''}
+        <div class="row gap wrap">${r.local ? `<a class="btn small primary" href="${esc(r.local)}" target="_blank" rel="noopener">${icon('file', 14)} Open full report</a>` : ''}<a class="btn small" href="${esc(r.url)}" target="_blank" rel="noopener">${icon('external', 14)} Open in Claude</a>
+        ${r.verdict && r.iv ? `<button class="btn small" data-usefv="${r.iv}">Use as fair value</button>` : ''}</div>
+      </article>`).join('')}</div>` : '<div class="empty">No reports linked yet. Add links on the Overview tab.</div>';
+    body.querySelectorAll('[data-usefv]').forEach(b => (b.onclick = async () => { c.fairValue = Number(b.dataset.usefv); await saveNow(); toast('Fair value updated', 'ok'); route(); }));
   }
 
   function renderThesis() {

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lam Research (LRCX): Equity Research 101</title>
+<style>
+.viz-root{
+  color-scheme:light;
+  --surface-0:#f4f3ef; --surface-1:#fcfcfb; --border:#e3e1da;
+  --text-primary:#0b0b0b; --text-secondary:#52514e; --text-muted:#7a7873;
+  --series-1:#2a78d6; --series-2:#eb6834;
+  --good:#008300; --bad:#c43b3a; --grid:#ebe9e3;
+}
+@media (prefers-color-scheme: dark){
+  :root:where(:not([data-theme="light"])) .viz-root{
+    color-scheme:dark;
+    --surface-0:#121211; --surface-1:#1a1a19; --border:#2e2d2a;
+    --text-primary:#f0efec; --text-secondary:#c3c2b7; --text-muted:#8f8d86;
+    --series-1:#3987e5; --series-2:#d95926;
+    --good:#3fae3f; --bad:#e66767; --grid:#2a2927;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif}
+.viz-root{background:var(--surface-0);color:var(--text-primary);min-height:100vh}
+.wrap{max-width:1120px;margin:0 auto;padding:28px 20px 60px}
+header h1{margin:0;font-size:28px;letter-spacing:-.01em}
+header .sub{color:var(--text-secondary);margin-top:4px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:20px 0}
+.tile{background:var(--surface-1);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.tile .k{font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em}
+.tile .v{font-size:22px;font-weight:650;margin-top:2px}
+.tile .n{font-size:12px;color:var(--text-secondary)}
+nav{position:sticky;top:0;z-index:5;background:var(--surface-0);border-bottom:1px solid var(--border);padding:8px 0;margin-bottom:8px;display:flex;flex-wrap:wrap;gap:6px}
+nav a{font-size:13px;color:var(--text-secondary);text-decoration:none;padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:var(--surface-1)}
+nav a:hover{color:var(--text-primary)}
+section{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin:14px 0}
+section h2{margin:0 0 2px;font-size:19px}
+section .q{color:var(--text-muted);font-size:13px;margin-bottom:12px}
+.read{border-left:3px solid var(--series-1);background:var(--surface-0);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0 0;font-size:14.5px}
+.read b{font-weight:650}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:820px){.grid2{grid-template-columns:1fr}}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:6px 8px;border-bottom:1px solid var(--grid);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{color:var(--text-muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.03em}
+tr.hl td{font-weight:650}
+tr.sub td{color:var(--text-secondary)}
+.tablewrap{overflow-x:auto}
+.pos{color:var(--good)} .neg{color:var(--bad)}
+ul{margin:6px 0;padding-left:20px} li{margin:4px 0}
+.timeline{display:grid;grid-template-columns:70px 1fr;gap:6px 14px;font-size:14px}
+.timeline .y{font-weight:650;color:var(--text-secondary)}
+.chart{position:relative}
+.chart svg{width:100%;height:auto;display:block}
+.chart .t{font-size:13px;font-weight:600;margin-bottom:4px}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--text-secondary);margin:2px 0 4px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.tip{position:absolute;pointer-events:none;background:var(--text-primary);color:var(--surface-1);font-size:12px;padding:6px 8px;border-radius:6px;white-space:nowrap;opacity:0;transition:opacity .08s;z-index:3}
+.scen{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:820px){.scen{grid-template-columns:1fr}}
+.card{border:1px solid var(--border);border-radius:10px;padding:14px;background:var(--surface-0)}
+.card h3{margin:0 0 4px;font-size:15px}
+.card .px{font-size:26px;font-weight:700}
+.card .ud{font-size:13px;font-weight:600}
+.gloss dt{font-weight:650;margin-top:8px} .gloss dd{margin:0;color:var(--text-secondary)}
+.small{font-size:12.5px;color:var(--text-muted)}
+.disc{font-size:12.5px;color:var(--text-muted);margin-top:18px}
+a{color:var(--series-1)}
+.pill{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:999px;border:1px solid var(--border);color:var(--text-secondary);margin-left:6px;vertical-align:2px}
+</style>
+</head>
+<body>
+<div class="viz-root">
+<div class="wrap">
+<header>
+  <h1 id="h-name"></h1>
+  <div class="sub" id="h-sub"></div>
+</header>
+<div class="tiles" id="tiles"></div>
+<nav>
+  <a href="#business">Business</a><a href="#moat">Moat</a><a href="#drivers">Drivers</a><a href="#financials">Financials</a><a href="#ratios">Ratios</a><a href="#valuation">Valuation</a><a href="#industry">Industry</a><a href="#management">Management</a><a href="#risks">Risks</a><a href="#scenarios">Scenarios</a><a href="#takeaways">Takeaways</a><a href="#sources">Sources</a>
+</nav>
+
+<section id="business"><h2>1. Business overview</h2><div class="q">What does it do, how does it make money, and how did it get here?</div>
+  <div class="grid2"><div id="biz-text"></div><div><div class="t" style="font-weight:600;font-size:13px;margin-bottom:6px">History and timeline</div><div class="timeline" id="timeline"></div></div></div>
+  <div class="grid2" style="margin-top:14px"><div class="tablewrap" id="mix-table"></div><div class="tablewrap" id="geo-table"></div></div>
+  <div class="read" id="read-business"></div>
+</section>
+
+<section id="moat"><h2>2. Moat</h2><div class="q">Why does it earn its returns, and can competitors copy it?</div>
+  <div id="moat-list"></div><div class="read" id="read-moat"></div>
+</section>
+
+<section id="drivers"><h2>3. Revenue drivers</h2><div class="q">What is revenue made of (volume x price x mix), and which KPIs move it?</div>
+  <div class="grid2"><div id="drivers-text"></div><div class="chart" id="ch-quarters"></div></div>
+  <div class="tablewrap" style="margin-top:12px" id="kpi-table"></div>
+  <div class="read" id="read-drivers"></div>
+</section>
+
+<section id="financials"><h2>4. Financials</h2><div class="q">Fiscal years end late June. $ millions unless stated. Margins, growth, FCF and conversion are calculated on this page from the raw filing figures.</div>
+  <div class="grid2"><div class="chart" id="ch-rev"></div><div class="chart" id="ch-fcf"></div></div>
+  <h3 style="font-size:15px;margin:18px 0 6px">P&amp;L</h3><div class="tablewrap" id="t-pl"></div>
+  <div class="read" id="read-pl"></div>
+  <h3 style="font-size:15px;margin:18px 0 6px">Balance sheet</h3><div class="tablewrap" id="t-bs"></div>
+  <div class="read" id="read-bs"></div>
+  <h3 style="font-size:15px;margin:18px 0 6px">Cash flow and capital allocation</h3><div class="tablewrap" id="t-cf"></div>
+  <div class="read" id="read-cf"></div>
+</section>
+
+<section id="ratios"><h2>5. Ratios</h2><div class="q">Leverage, efficiency, and returns on capital.</div>
+  <div class="tablewrap" id="t-ratios"></div><div class="read" id="read-ratios"></div>
+</section>
+
+<section id="valuation"><h2>6. Valuation</h2><div class="q">What is the market paying, versus its own history and peers?</div>
+  <div class="tablewrap" id="t-val"></div><div class="read" id="read-val"></div>
+</section>
+
+<section id="industry"><h2>7. Industry and competitors</h2><div class="q">How fast is the market growing, and how does Lam stack up?</div>
+  <div id="industry-text"></div>
+  <div class="tablewrap" style="margin-top:10px" id="t-peers"></div>
+  <div class="small" id="peers-note"></div>
+  <div class="read" id="read-industry"></div>
+</section>
+
+<section id="management"><h2>8. Management</h2><div class="q">Who runs it, how long, what they plan, what they own, and how they allocate capital.</div>
+  <div class="tablewrap" id="t-mgmt"></div><div id="mgmt-text" style="margin-top:10px"></div><div class="read" id="read-mgmt"></div>
+</section>
+
+<section id="risks"><h2>9. Risks</h2><div class="q">The specific things that would break the story.</div>
+  <div id="risk-list"></div>
+</section>
+
+<section id="scenarios"><h2>10. Scenarios (12-18 months)</h2><div class="q" id="scen-q"></div>
+  <div class="scen" id="scen"></div><div class="read" id="read-scen"></div>
+</section>
+
+<section id="takeaways"><h2>11. Takeaways</h2><div class="q">What to remember, and what to check next.</div>
+  <div class="grid2"><div><b>Remember</b><ul id="tk-remember"></ul></div><div><b>Check next</b><ul id="tk-check"></ul></div></div>
+</section>
+
+<section id="glossary"><h2>Glossary</h2><dl class="gloss" id="gloss"></dl></section>
+
+<section id="sources"><h2>Sources</h2><ul id="src" class="small"></ul>
+  <div class="disc" id="disc"></div>
+</section>
+</div>
+<div class="tip" id="tip"></div>
+</div>
+
+<script>
+/* ===================== DATA =====================
+ Raw inputs only; the page derives ratios. $ millions unless noted.
+ Fiscal years end late June (FY2026 = year to 28 Jun 2026).
+ Diluted shares restated for the 10-for-1 split (Oct 2024).
+ Debt = current + long-term debt incl. finance leases (carrying value).
+ Cash = cash & equivalents (Lam reports no separate investments line in these years).
+*/
+const DATA = {
+  company:{name:"Lam Research Corporation",ticker:"LRCX",exchange:"Nasdaq",currency:"USD",
+    hq:"Fremont, California",employees:"~23,300 (Aug 2026)",fyEnd:"Late June",
+    price:221.31,priceDate:"9 Nov 2026 close",sharesOut:1251.3 /* m, 4 Aug 2026 */,
+    latestCash:7450 /* 27 Sep 2026 */,latestDebt:3735 /* 28 Jun 2026; Sep-26 debt not yet filed */,
+    ttmEPS:6.72 /* GAAP, 4 quarters to Sep 2026 */,
+    fwdEPS:[{label:"FY2027E (Jun-27)",eps:9.65},{label:"FY2028E (Jun-28)",eps:12.24}],
+    epsBaseFY26adj:5.82,
+    consensusTarget:363.03,nAnalysts:34,rating:"Buy (consensus)",
+    hist:{fwdPE5yAvg:24,fwdPEPeak:57,fwdPEPeakDate:"30 Jun 2026",high52:438.50,low52:135.50}},
+  years:["FY2022","FY2023","FY2024","FY2025","FY2026"],
+  pl:{
+    revenue:[17227,17429,14905,18436,23233],
+    cogs:[9355,9652,7853,9457,11507],
+    ebit:[5382,5175,4264,5901,8200],
+    da:[334,342,360,386,442],
+    pretax:[5193,5109,4360,5958,8262],
+    tax:[588,598,532,600,997],
+    netIncome:[4605,4511,3828,5358,7265],
+    dilShares:[1406.3,1358.3,1319.9,1290.1,1261.1]
+  },
+  bs:{
+    cash:[3522,5337,5848,6391,5579],
+    receivables:[4314,2823,2519,3378,5340],
+    inventory:[3966,4816,4218,4308,4276],
+    ppe:[1648,1857,2155,2429,2956],
+    goodwillIntang:[1617,1791,1765,1809,1896],
+    totalAssets:[17196,18782,18745,21345,23530],
+    payables:[1011,471,614,854,1302],
+    deferredProfit:[1572,1695,1418,2566,2279],
+    debt:[5006,5012,4983,4485,3735],
+    equity:[6278,8210,8539,9862,12471]
+  },
+  cf:{
+    ocf:[3100,5179,4652,6173,5858],
+    capex:[546,502,397,759,966],
+    dividends:[815,908,1019,1150,1271],
+    buybacks:[3866,2017,2843,3422,3851],
+    acquisitions:[0,120,0,null,null]
+  },
+  quarters:[
+    {q:"Sep-25",rev:5323},{q:"Dec-25",rev:5350,derived:true},{q:"Mar-26",rev:5840},
+    {q:"Jun-26",rev:6720},{q:"Sep-26",rev:8219},{q:"Dec-26G",rev:8600,guide:true}
+  ],
+  mix:{label:"Revenue mix FY2026",rows:[["Systems (new tools)",14885],["Customer Support Business Group (spares, service, upgrades, Reliant legacy tools)",8347]]},
+  geo:{label:"Revenue by region, % (FY2026 / FY2025)",rows:[["China",34,34],["Taiwan",22,19],["Korea",19,22],["Japan",9,10],["United States",7,7],["Southeast Asia",6,5],["Europe",3,3]]},
+  timeline:[
+    ["1980","Founded by David K. Lam in Fremont, California; plasma etch is the founding product."],
+    ["1984","IPO on Nasdaq."],
+    ["2012","Acquires Novellus Systems, adding deposition (CVD, ALD, electroplating). Tim Archer arrives with it as COO."],
+    ["2016","Proposed merger with KLA abandoned after regulatory opposition."],
+    ["2018","Archer becomes CEO (December)."],
+    ["FY2024","Down-cycle: revenue -14.5% as NAND spending collapses; margins held."],
+    ["Oct 2024","10-for-1 stock split."],
+    ["FY2026","Record year: revenue $23.2bn (+26%), operating margin 35%; AI-driven memory and foundry demand."],
+    ["Sep-26 Q","Record $8.2bn quarter, 40% operating margin; $25bn buyback authorised (Nov 2026)."]
+  ],
+  peers:[
+    // latest reported quarter, GAAP. fwdPE as reported by the cited source on the date shown.
+    {name:"Lam Research",tk:"LRCX",q:"Sep-26 Q",rev:"$8.22bn",g:54.4,opm:40.0,nm:33.5,china:"35% (Sep Q)",fwdPE:22.9,peDate:"9 Nov (own calc)",focus:"Etch #1, deposition #2"},
+    {name:"Applied Materials",tk:"AMAT",q:"Jul-26 Q",rev:"$9.12bn",g:24.8,opm:33.7,nm:27.8,china:"28%",fwdPE:21,peDate:"2 Nov (TIKR)",focus:"Broadest: deposition, etch, CMP, implant"},
+    {name:"KLA",tk:"KLAC",q:"Sep-26 Q",rev:"$4.14bn",g:28.8,opm:null,nm:37.5,china:"high-20s% CY26",fwdPE:29.2,peDate:"30 Oct",focus:"Process control (inspection, metrology)"},
+    {name:"ASML",tk:"ASML",q:"Q3-26",rev:"EUR 11.66bn",g:55,opm:null,nm:42.5,china:"~20% of 2026",fwdPE:23,peDate:"5 Nov (TIKR)",focus:"Lithography (EUV monopoly)"},
+    {name:"Tokyo Electron",tk:"8035.T",q:"H1 FY27 (Apr-Sep 26)",rev:"JPY 1.67tn",g:41.3,opm:30.3,nm:null,china:"34% (FY26)",fwdPE:null,peDate:"",focus:"Coater/developer, etch, deposition"}
+  ],
+  mgmt:[
+    ["Tim Archer","President & CEO","CEO since Dec 2018; at Lam since 2012 (ex-Novellus COO)","~0.08%","$28.3m (FY25 total comp)"],
+    ["Doug Bettinger","EVP & CFO","Since 2013; ex-CFO Avago (now Broadcom)","~0.08%","$8.6m"],
+    ["Sesha Varadarajan","EVP & COO","COO since Mar 2026 (succeeded Pat Lord); at Lam since 2012","~0.02%","$7.2m"]
+  ],
+  scenarios:{
+    base:{eps:12.24,pe:22,title:"Base: consensus delivered",
+      a:["FY2028 EPS of $12.24 (consensus), i.e. 2027 WFE above $200bn as guided and margins near 40%","Supply constraints only shift shipments between quarters","Multiple stays near today's ~22x forward, slightly below the 5-year average of 24x"]},
+    bear:{eps:8.00,pe:16,title:"Bear: AI capex pause",
+      a:["Hyperscaler or memory capex is digested in 2027-28; FY2028 EPS falls to ~$8 (below FY2027 consensus), a FY2024-style down-year","China domestic demand keeps falling and new export rules bite","Multiple compresses to 16x, a typical trough for a peak-earnings cyclical"]},
+    bull:{eps:14.50,pe:26,title:"Bull: multi-year memory supercycle",
+      a:["WFE keeps growing into 2028 (ASML says its own 2027-28 supply is short of demand); FY2028 EPS ~$14.50","Etch and deposition intensity rises with 3D DRAM, HBM stacking and gate-all-around; margins above 41%","Multiple re-rates to 26x, between the 5-year average and the June 2026 peak of 57x"]}
+  },
+  text:{}
+};
+
+DATA.text = {
+  biz:`<p><b>What it does.</b> Lam designs, builds and services the machines that <b>etch</b> (carve) and <b>deposit</b> (lay down) the ultra-thin material layers that make up a chip. Every memory chip (DRAM, NAND, HBM) and every advanced logic chip passes through Lam tools hundreds of times. It does not make chips; it sells the "picks and shovels" to the people who do.</p>
+  <p><b>How it makes money.</b> Two streams. <b>Systems</b> (64% of FY2026 revenue): one-off sales of new tools, each costing millions of dollars, driven by customers' fab spending. <b>Customer Support (CSBG)</b> (36%): spare parts, service contracts, upgrades and refurbished legacy tools sold into an installed base that keeps running for decades. Systems is cyclical; CSBG is steadier and grows with the installed base.</p>
+  <p><b>Who pays.</b> A concentrated club: Micron, Samsung, SK hynix and TSMC were the largest customers in each of the last three years. Memory was 46% of systems revenue in the Sep-26 quarter, foundry 46%, logic and other 8%.</p>`,
+  readBusiness:`A focused, two-engine model: <b>cyclical tool sales on top of a recurring service base</b> that is now over a third of revenue. Customer concentration and 34% China exposure are the structural features to keep in mind.`,
+  moat:[
+    ["Process know-how and tool-of-record status","Once a fab qualifies a Lam chamber for a specific etch or deposition step, switching suppliers means re-qualifying the process, risking yield on billion-dollar lines. Customers rarely do it mid-node. Lam holds roughly 40-50% of plasma etch per industry estimates."],
+    ["Leadership where complexity is rising","High-aspect-ratio etch for 3D NAND and DRAM, atomic-layer deposition and etch, molybdenum metallisation and advanced-packaging steps. Each new generation (more NAND layers, HBM stacks, gate-all-around transistors) needs more etch and deposition steps per wafer, so Lam's served market grows faster than chip output."],
+    ["Installed base annuity","Decades of tools in the field feed CSBG: $8.3bn of FY2026 revenue from spares, service and upgrades, with three consecutive record quarters in 2026."],
+    ["Scale in R&amp;D","$2.4bn of R&amp;D in FY2026 (10% of revenue), co-developed with the four largest chipmakers. Smaller or Chinese entrants can copy older steps but not the leading edge on the same timeline."],
+    ["Oligopoly structure","Wafer fab equipment is effectively five large players (ASML, Applied, Lam, Tokyo Electron, KLA), each strongest in different steps. Competition is real in deposition (Applied) and etch (TEL), but pricing is disciplined."]
+  ],
+  readMoat:`Returns are earned by <b>switching costs plus technical leadership in the steps whose intensity rises every node</b>. The moat is strongest in memory etch and weakest in mature-node China tools, where local suppliers are gaining.`,
+  drivers:`<p><b>Revenue = WFE spend x Lam's share of that spend + installed base x service per tool.</b></p>
+  <ul><li><b>Volume:</b> industry wafer fab equipment (WFE) spending. KLA puts calendar 2026 in the low-$150bn range; Lam's early view is <b>above $200bn for 2027</b>, led by DRAM, leading-edge foundry and NAND.</li>
+  <li><b>Price and mix:</b> etch/deposition intensity per wafer (more steps per node), memory vs foundry mix, and leading-edge vs mature-node tools. Memory upgrades (NAND layer conversions) are high-margin.</li>
+  <li><b>Service:</b> CSBG grows with tool count and fab utilisation; upgrades spike when memory makers convert existing lines.</li></ul>`,
+  kpis:[
+    ["WFE market size (calendar)","Low-$150bn 2026 (KLA); >$200bn 2027 (Lam prelim.)","The tide that lifts all tools"],
+    ["Memory share of systems revenue","46% (Sep-26 Q), from 39% in Mar-26 Q","Memory is Lam's strongest franchise"],
+    ["China share of revenue","35% Sep-26 Q; 26% Jun-26 Q; guided 'significantly lower' Dec Q","Volatile, policy-driven demand"],
+    ["CSBG revenue","$2.49bn Sep-26 Q (flat q/q); $8.35bn FY26","Recurring cushion in down-cycles"],
+    ["Deferred revenue (customer advances)","$2.66bn at Sep-26, up from $2.43bn","Near-term order visibility"]
+  ],
+  readDrivers:`Revenue nearly doubled from ~$5.3bn to a guided $8.6bn a quarter in five quarters. The swing factors are <b>WFE growth in 2027, memory capex, and China</b>. Watch deferred revenue and China mix every quarter.`,
+  readPL:`Revenue recovered from the FY2024 dip to a record $23.2bn, and margins expanded through the cycle: operating margin rose from ~31% to 35% in FY2026 and hit 40% in the Sep-26 quarter. <b>Incremental margins are high (operating leverage)</b>, which is great on the way up and painful on the way down.`,
+  readBS:`Net cash every year since FY2023 (small net debt of $1.5bn in FY2022), debt falling ($5.0bn to $3.7bn), and goodwill small. Working capital is the swing item: receivables jumped $2.0bn in FY2026 as shipments back-loaded, which is why FY2026 cash flow lagged profit.`,
+  readCF:`Over five years Lam generated ~$21.8bn of FCF and returned ~$21.2bn (buybacks $16.0bn, dividends $5.2bn), about <b>97% of FCF</b>, cutting the diluted share count ~10%. FY2026 conversion dipped to ~67% on the receivables build and higher capex (US labs, manufacturing capacity); the Sep-26 quarter's record $3.2bn FCF suggests it is reversing. A new $25bn buyback (~9% of market cap) was authorised in Nov 2026.`,
+  readRatios:`ROIC of 49-68% (even at the FY2024 trough) and DuPont ROE of 45-73% are exceptional and well above any cost of capital. Note ROE is flattered by buybacks shrinking book equity, and ROIC is on a small invested-capital base (net cash is excluded). <b>Asset turnover near 1x and net cash</b> mean the returns come from margins, not leverage.`,
+  readVal:`At $221 the stock trades ~33x trailing GAAP EPS but ~23x FY2027 and ~18x FY2028 consensus, <b>below its 5-year average forward P/E of ~24x</b> after a ~34% fall from early October. PEG looks very low (~0.5) but it divides by cyclical peak growth; treat it with care. EV/EBITDA is on fiscal-2026 EBITDA. Versus peers, Lam sits in line with Applied and ASML and below KLA on forward P/E, despite the fastest latest-quarter growth.`,
+  industry:`<p>Wafer fab equipment is a ~$150bn (2026) market expected to exceed $200bn in 2027 per Lam's preliminary view, driven by AI data-centre chips, high-bandwidth memory, and advanced packaging. ASML says its planned 2027-28 supply will not fully meet demand. Lam, KLA and ASML gained share in 2025 while Applied and TEL lost share (Information Network data). Chinese domestic toolmakers (e.g. Naura) are growing fast at mature nodes.</p>`,
+  readIndustry:`Lam is growing faster than every large peer in the latest quarter and has the highest China exposure. The market prices all five at similar 21-29x forward multiples; <b>the debate is the length of the cycle, not Lam's position within it</b>.`,
+  mgmtText:`<ul><li><b>Strategy:</b> ride etch/deposition intensity in AI-era memory, gate-all-around logic and advanced packaging; expand capacity (US labs, global manufacturing; ~1,900 headcount added); grow CSBG and upgrades.</li>
+  <li><b>Capital allocation:</b> fund R&amp;D first, then return ~all FCF via buybacks and a growing dividend ($0.33/quarter from Nov 2026, up from $0.26). Large M&amp;A is rare (Novellus 2012; KLA attempt 2016).</li>
+  <li><b>Ownership:</b> insiders own well under 1%; pay is ~95% equity. Insiders sold ~$176m of stock over the past 12 months (normal for equity-paid executives, but no buying).</li></ul>`,
+  readMgmt:`A long-tenured, internally promoted team with a <b>shareholder-friendly, disciplined capital-return record</b> through both up and down cycles. Skin in the game is modest in percentage terms but large in dollars.`,
+  risks:[
+    ["Cyclical downturn in WFE","Equipment is the most volatile part of the chip chain. FY2024 revenue fell 14.5%; earlier cycles were deeper. If AI or memory capex is digested in 2027-28, earnings could fall 30%+ while the multiple also compresses."],
+    ["China and export controls","China was 34% of FY2026 revenue and swings sharply (26% to 35% in one quarter). New US rules, entity listings, or Chinese self-sufficiency could cut this quickly. Management already guides China 'significantly lower' in the Dec-26 quarter."],
+    ["Customer concentration","Four customers (Micron, Samsung, SK hynix, TSMC) dominate. One deferring a fab ramp moves Lam's quarter."],
+    ["Supply chain and execution","Component shortages and clean-room limits are already capping shipments; tariffs on aluminium and steel weighed on gross margin in FY2026."],
+    ["Policy and AI-sentiment shocks","November 2026 midterm results raised fears of AI regulation and slower data-centre build-outs; the stock fell ~34% in a month with no change in Lam's own numbers."],
+    ["Technology shifts","A process change that reduces etch steps (or favours a competitor's deposition approach) could erode share at a node transition."]
+  ],
+  scenQ:`Value = FY2028 EPS x P/E. Base anchored on analyst consensus EPS. All scenario values are illustrative estimates, not forecasts.`,
+  readScen:`The analyst consensus target of <b>$363 (34 analysts)</b> implies ~30x FY2028 consensus EPS, so it sits <b>near the bull case, not the base case</b>: the Street is assuming the multiple recovers as well as the earnings arriving. The asymmetry hinges almost entirely on whether 2027-28 WFE holds.`,
+  remember:[
+    "High-quality cyclical: 35-40% operating margins, ~50-70% ROIC, net cash, ~97% of FCF returned.",
+    "Record numbers now: Sep-26 Q revenue $8.2bn (+54% y/y), Dec-26 Q guide $8.6bn.",
+    "Valuation reset: ~23x FY2027E and ~18x FY2028E EPS, below its 5-year average forward P/E.",
+    "Consensus target $363 needs both the earnings and a higher multiple.",
+    "Main risk is the cycle (WFE in 2027-28), then China."
+  ],
+  check:[
+    "Dec-26 quarter (late Jan 2027): revenue vs $8.6bn guide, China share, deferred revenue.",
+    "First firm 2027 WFE outlook from Lam, ASML (27 Jan) and Applied (12 Nov).",
+    "Memory capex plans of Samsung, SK hynix, Micron for 2027.",
+    "Any new US export rules on China tools.",
+    "FCF conversion back above 90% as receivables unwind."
+  ],
+  gloss:[
+    ["WFE","Wafer fab equipment: the machines used to process silicon wafers into chips; the market Lam sells into."],
+    ["Etch / deposition","Deposition lays down a thin layer of material; etch removes it in a precise pattern. Repeated hundreds of times per chip."],
+    ["CSBG","Customer Support Business Group: Lam's spares, service, upgrades and refurbished-tool business."],
+    ["FCF conversion","Free cash flow / net profit. Above ~90% means profits turn into cash."],
+    ["ROIC","Return on invested capital: after-tax operating profit / (equity + debt - cash)."],
+    ["DuPont ROE","Net margin x asset turnover x equity multiplier (assets / equity)."],
+    ["PEG","Forward P/E divided by expected EPS growth (%). Below 1 looks cheap, but misleads at cyclical peaks."],
+    ["EV/EBITDA","Enterprise value (market cap + debt - cash) / EBITDA (operating profit + depreciation and amortisation)."]
+  ],
+  sources:[
+    ["Lam Research Form 10-K FY2026 (SEC EDGAR)","https://www.sec.gov/Archives/edgar/data/0000707549/000070754926000037/lrcx-20260628.htm"],
+    ["Lam Research Form 10-K FY2024 (SEC EDGAR)","https://www.sec.gov/Archives/edgar/data/707549/000070754924000106/lrcx-20240630.htm"],
+    ["Lam Research Form 10-K FY2023 (SEC EDGAR)","https://www.sec.gov/Archives/edgar/data/707549/000070754923000102/lrcx-20230625.htm"],
+    ["Lam Q1 FY2027 (Sep-26 quarter) results, 8-K exhibit","https://www.sec.gov/Archives/edgar/data/0000707549/000070754926000052/lrcx_exhibitx991xq1x2027.htm"],
+    ["Lam Q4 FY2026 results, 8-K exhibit","https://www.sec.gov/Archives/edgar/data/0000707549/000070754926000033/lrcx_exhibitx991xq4x2026.htm"],
+    ["MarketBeat: Lam Q1 earnings call highlights (Oct 2026)","https://www.marketbeat.com/instant-alerts/transcript-lam-research-q1-earnings-call-highlights-2026-10-21/"],
+    ["Earnings Whisper: Lam Sep-26 quarter","https://www.earningswhispers.com/epsdetails/LRCX/202609"],
+    ["Rivkin: Lam Q4 FY2026","https://rivkin.com.au/?p=37141"],
+    ["Asktraders: Lam Sep-quarter and Dec guidance","https://www.asktraders.com/?p=256876"],
+    ["TIKR: Lam lost 34% in a month (consensus EPS, forward P/E history)","https://www.tikr.com/blog/lam-research-lost-34-in-a-month-bernstein-sees-53-upside-from-here"],
+    ["Trefis: Is Lam's fall a bargain or a warning?","https://www.trefis.com/articles/622263/is-lam-research-stocks-fall-a-bargain-or-a-warning/2026-11-03?from=section_article"],
+    ["MarketScreener: LRCX quote and consensus target","https://www.marketscreener.com/quote/stock/LAM-RESEARCH-CORPORATION-4877/"],
+    ["Morningstar: LRCX quote (9 Nov 2026)","https://www.morningstar.com/stocks/xnas/lrcx/quote"],
+    ["Google Finance: LRCX (TTM EPS, 52-week range)","https://www.google.com/finance/quote/LRCX:NASDAQ"],
+    ["GuruFocus: insider sales, 9 Nov move","https://www.gurufocus.com/news/9186276/lam-research-corp-lrcx-shares-surge-104-what-gf-score-of-98-tells-investors"],
+    ["Applied Materials Q3 FY2026 results","https://investor.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-third-quarter-2026-results"],
+    ["TIKR: Applied Materials forward P/E","https://www.tikr.com/blog/applied-materials-sinks-12-lam-research-down-14-as-chip-stock-rout-deepens-after-midterms"],
+    ["Securities.io: KLA Q1 FY2027","https://www.securities.io/kla-posts-fiscal-q1-revenue-of-4-14-billion-above-guidance-midpoint/"],
+    ["De Belegger: KLA key figures","https://www.debelegger.nl/en/stock/KLAC.US"],
+    ["MarketBeat: KLA Q4 call (WFE outlook)","https://www.marketbeat.com/instant-alerts/kla-q4-earnings-call-highlights-2026-07-28/"],
+    ["ASML Q3 2026 results","https://seekingalpha.com/pr/20684919"],
+    ["TIKR: ASML forward P/E","https://www.tikr.com/blog/asml-sinks-8-as-post-election-chip-rout-deepens"],
+    ["Tokyo Electron H1 FY2027","https://www.itiger.com/news/1157765943"],
+    ["247 Wall St: Applied Materials market share (Information Network)","https://247wallst.com/investing/2026/10/11/applied-materials-faces-market-share-test-as-global-chip-equipment-spending-surges-23/?.tsrc=rss"],
+    ["Simply Wall St: Lam management tenure, ownership, pay","https://simplywall.st/stocks/de/semiconductors/fra-lar0/lam-research-shares/management"]
+  ],
+  disc:`Education and analysis, not investment advice. Prices as of the 9 Nov 2026 close; financials from SEC filings (FY2022-FY2026 and the Sep-26 quarter). Consensus EPS (FY2027E $9.65, FY2028E $12.24) is adjusted (non-GAAP) per TIKR; scenario values are illustrative estimates. History items (founding, IPO, Novellus, KLA attempt) are long-established public facts. Peer forward P/Es come from different sources and dates in a volatile week, so compare them as ranges. Dec-25 quarter revenue is derived (FY2026 less the other three quarters).`
+};
+
+/* ===================== ENGINE ===================== */
+const $=id=>document.getElementById(id);
+const Y=DATA.years, P=DATA.pl, B=DATA.bs, C=DATA.cf, n=Y.length;
+const isNum=v=>typeof v==="number"&&isFinite(v);
+const fm=(v,d=0)=>isNum(v)?v.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d}):"n/a";
+const pc=(v,d=1)=>isNum(v)?(v*100).toFixed(d)+"%":"n/a";
+const xx=(v,d=1)=>isNum(v)?v.toFixed(d)+"x":"n/a";
+const map=(f)=>Y.map((_,i)=>{try{const r=f(i);return isNum(r)?r:null}catch(e){return null}});
+
+const rev=P.revenue, ni=P.netIncome;
+const growth=map(i=>i?rev[i]/rev[i-1]-1:null);
+const gm=map(i=>(rev[i]-P.cogs[i])/rev[i]);
+const ebitda=map(i=>P.ebit[i]+P.da[i]);
+const ebitdaM=map(i=>ebitda[i]/rev[i]);
+const ebitM=map(i=>P.ebit[i]/rev[i]);
+const nm=map(i=>ni[i]/rev[i]);
+const eps=map(i=>ni[i]/P.dilShares[i]);
+const taxR=map(i=>P.tax[i]/P.pretax[i]);
+const fcf=map(i=>C.ocf[i]-C.capex[i]);
+const fcfM=map(i=>fcf[i]/rev[i]);
+const conv=map(i=>fcf[i]/ni[i]);
+const capexPct=map(i=>C.capex[i]/rev[i]);
+const returned=map(i=>C.dividends[i]+C.buybacks[i]);
+const retPct=map(i=>returned[i]/fcf[i]);
+const netDebt=map(i=>B.debt[i]-B.cash[i]);
+const nwc=map(i=>B.receivables[i]+B.inventory[i]-B.payables[i]-B.deferredProfit[i]);
+const nwcPct=map(i=>nwc[i]/rev[i]);
+const dso=map(i=>B.receivables[i]/rev[i]*365);
+const dio=map(i=>B.inventory[i]/P.cogs[i]*365);
+const dpo=map(i=>B.payables[i]/P.cogs[i]*365);
+const ccc=map(i=>dso[i]+dio[i]-dpo[i]);
+const ndE=map(i=>netDebt[i]/ebitda[i]);
+const at=map(i=>rev[i]/B.totalAssets[i]);
+const em=map(i=>B.totalAssets[i]/B.equity[i]);
+const roe=map(i=>nm[i]*at[i]*em[i]);
+const ic=map(i=>B.equity[i]+B.debt[i]-B.cash[i]);
+const nopat=map(i=>P.ebit[i]*(1-taxR[i]));
+const roic=map(i=>nopat[i]/ic[i]);
+
+function table(id,head,rows){
+  let h="<table><thead><tr>"+head.map(x=>`<th>${x}</th>`).join("")+"</tr></thead><tbody>";
+  rows.forEach(r=>{const cls=r.cls?` class="${r.cls}"`:"";h+=`<tr${cls}>`+r.cells.map(c=>`<td>${c}</td>`).join("")+"</tr>"});
+  $(id).innerHTML=h+"</tbody></table>";
+}
+const row=(label,arr,f,cls)=>({cls,cells:[label,...arr.map(v=>f(v))]});
+
+/* Header + tiles */
+const co=DATA.company;
+const mcap=co.price*co.sharesOut;
+const ev=mcap+co.latestDebt-co.latestCash;
+const pe=co.price/co.ttmEPS;
+const fpe1=co.price/co.fwdEPS[0].eps, fpe2=co.price/co.fwdEPS[1].eps;
+const g2=Math.sqrt(co.fwdEPS[1].eps/co.epsBaseFY26adj)-1;
+const peg=fpe1/(g2*100);
+const evE=ev/ebitda[n-1];
+$("h-name").textContent=`${co.name} (${co.ticker})`;
+$("h-sub").innerHTML=`${co.exchange} · ${co.currency} · HQ ${co.hq} · ${co.employees} employees · FY ends ${co.fyEnd} · Price $${co.price} (${co.priceDate})`;
+const tiles=[
+  ["Market cap",`$${fm(mcap/1000,0)}bn`,`EV $${fm(ev/1000,0)}bn`],
+  ["Revenue FY26",`$${fm(rev[n-1]/1000,1)}bn`,`${pc(growth[n-1],0)} y/y`],
+  ["Operating margin",pc(ebitM[n-1],1),"FY26; 40.0% Sep-26 Q"],
+  ["ROIC FY26",pc(roic[n-1],0),"on ending invested capital"],
+  ["P/E",xx(pe,1),`TTM · ${xx(fpe1,1)} FY27E`],
+  ["Consensus target",`$${fm(co.consensusTarget,0)}`,`${pc(co.consensusTarget/co.price-1,0)} vs price · ${co.nAnalysts} analysts`]
+];
+$("tiles").innerHTML=tiles.map(t=>`<div class="tile"><div class="k">${t[0]}</div><div class="v">${t[1]}</div><div class="n">${t[2]}</div></div>`).join("");
+
+/* 1 Business */
+const T=DATA.text;
+$("biz-text").innerHTML=T.biz;
+$("timeline").innerHTML=DATA.timeline.map(t=>`<div class="y">${t[0]}</div><div>${t[1]}</div>`).join("");
+const mixTot=DATA.mix.rows.reduce((a,r)=>a+r[1],0);
+table("mix-table",[DATA.mix.label,"$m","%"],DATA.mix.rows.map(r=>({cells:[r[0],fm(r[1]),pc(r[1]/mixTot,0)]})));
+table("geo-table",[DATA.geo.label,"FY26","FY25"],DATA.geo.rows.map(r=>({cells:[r[0],r[1]+"%",r[2]+"%"]})));
+$("read-business").innerHTML="<b>Read:</b> "+T.readBusiness;
+
+/* 2 Moat */
+$("moat-list").innerHTML="<ul>"+T.moat.map(m=>`<li><b>${m[0]}.</b> ${m[1]}</li>`).join("")+"</ul>";
+$("read-moat").innerHTML="<b>Read:</b> "+T.readMoat;
+
+/* 3 Drivers */
+$("drivers-text").innerHTML=T.drivers;
+table("kpi-table",["KPI","Latest","Why it matters"],T.kpis.map(k=>({cells:k})));
+document.querySelectorAll("#kpi-table td").forEach(td=>{td.style.whiteSpace="normal";td.style.textAlign="left"});
+$("read-drivers").innerHTML="<b>Read:</b> "+T.readDrivers;
+
+/* 4 Financials */
+table("t-pl",["$m",...Y],[
+  row("Revenue",rev,v=>fm(v),"hl"),
+  row("Growth y/y",growth,v=>pc(v)),
+  row("Gross margin",gm,v=>pc(v),"sub"),
+  row("EBITDA",ebitda,v=>fm(v)),
+  row("EBITDA margin",ebitdaM,v=>pc(v),"sub"),
+  row("Operating profit (EBIT)",P.ebit,v=>fm(v)),
+  row("Operating margin",ebitM,v=>pc(v),"sub"),
+  row("Net profit",ni,v=>fm(v),"hl"),
+  row("Net margin",nm,v=>pc(v),"sub"),
+  row("Tax rate",taxR,v=>pc(v),"sub"),
+  row("Diluted EPS ($, split-adj.)",eps,v=>fm(v,2)),
+  row("Diluted shares (m)",P.dilShares,v=>fm(v))
+]);
+$("read-pl").innerHTML="<b>Read:</b> "+T.readPL;
+table("t-bs",["$m",...Y],[
+  row("Property, plant & equipment",B.ppe,v=>fm(v)),
+  row("Goodwill & intangibles",B.goodwillIntang,v=>fm(v)),
+  row("Total assets",B.totalAssets,v=>fm(v),"hl"),
+  row("Cash",B.cash,v=>fm(v)),
+  row("Debt (incl. finance leases)",B.debt,v=>fm(v)),
+  row("Net debt (negative = net cash)",netDebt,v=>`<span class="${v<0?'pos':'neg'}">${fm(v)}</span>`,"hl"),
+  row("Receivables",B.receivables,v=>fm(v),"sub"),
+  row("Inventory",B.inventory,v=>fm(v),"sub"),
+  row("Payables",B.payables,v=>fm(v),"sub"),
+  row("Deferred profit (customer advances)",B.deferredProfit,v=>fm(v),"sub"),
+  row("Trade working capital",nwc,v=>fm(v),"hl"),
+  row("Working capital % revenue",nwcPct,v=>pc(v)),
+  row("Shareholders' equity",B.equity,v=>fm(v))
+]);
+$("read-bs").innerHTML="<b>Read:</b> "+T.readBS;
+const accNA=v=>v===null?"n/a":fm(v);
+table("t-cf",["$m",...Y,"5-yr total"],[
+  {cls:"",cells:["Operating cash flow",...C.ocf.map(v=>fm(v)),fm(C.ocf.reduce((a,b)=>a+b))]},
+  {cells:["Capex",...C.capex.map(v=>fm(-v)),fm(-C.capex.reduce((a,b)=>a+b))]},
+  {cls:"sub",cells:["Capex % revenue",...capexPct.map(v=>pc(v)),""]},
+  {cls:"hl",cells:["Free cash flow",...fcf.map(v=>fm(v)),fm(fcf.reduce((a,b)=>a+b))]},
+  {cls:"sub",cells:["FCF margin",...fcfM.map(v=>pc(v)),""]},
+  {cls:"hl",cells:["FCF conversion (FCF / net profit)",...conv.map(v=>pc(v,0)),pc(fcf.reduce((a,b)=>a+b)/ni.reduce((a,b)=>a+b),0)]},
+  {cells:["Dividends",...C.dividends.map(v=>fm(-v)),fm(-C.dividends.reduce((a,b)=>a+b))]},
+  {cells:["Buybacks",...C.buybacks.map(v=>fm(-v)),fm(-C.buybacks.reduce((a,b)=>a+b))]},
+  {cells:["Acquisitions",...C.acquisitions.map(v=>v===null?"n/a":(v===0?"0":fm(-v))),"~ -120"]},
+  {cls:"sub",cells:["Returned % of FCF",...retPct.map(v=>pc(v,0)),pc(returned.reduce((a,b)=>a+b)/fcf.reduce((a,b)=>a+b),0)]}
+]);
+$("read-cf").innerHTML="<b>Read:</b> "+T.readCF;
+
+/* 5 Ratios */
+table("t-ratios",["",...Y],[
+  row("Net debt / EBITDA",ndE,v=>xx(v,2)),
+  row("Asset turnover",at,v=>xx(v,2)),
+  row("Receivable days (DSO)",dso,v=>fm(v)),
+  row("Inventory days (DIO)",dio,v=>fm(v)),
+  row("Payable days (DPO)",dpo,v=>fm(v)),
+  row("Cash conversion cycle (days)",ccc,v=>fm(v)),
+  row("Net margin",nm,v=>pc(v),"sub"),
+  row("x Asset turnover",at,v=>xx(v,2),"sub"),
+  row("x Equity multiplier",em,v=>xx(v,2),"sub"),
+  row("= DuPont ROE (book equity)",roe,v=>pc(v),"hl"),
+  row("NOPAT (EBIT x (1 - tax rate))",nopat,v=>fm(v)),
+  row("Invested capital (equity + debt - cash)",ic,v=>fm(v)),
+  row("ROIC",roic,v=>pc(v),"hl")
+]);
+$("read-ratios").innerHTML="<b>Read:</b> "+T.readRatios;
+
+/* 6 Valuation */
+table("t-val",["Metric","Value","Basis","Own history / context"],[
+  {cells:["P/E (trailing)",xx(pe,1),`$${co.price} / GAAP TTM EPS $${co.ttmEPS}`,"Trailing P/E is high because earnings are growing ~70% y/y"]},
+  {cls:"hl",cells:["P/E forward",xx(fpe1,1),`${co.fwdEPS[0].label} consensus EPS $${co.fwdEPS[0].eps}`,`5-yr avg fwd P/E ~${co.hist.fwdPE5yAvg}x; peak ${co.hist.fwdPEPeak}x (${co.hist.fwdPEPeakDate})`]},
+  {cells:["P/E two years out",xx(fpe2,1),`${co.fwdEPS[1].label} consensus EPS $${co.fwdEPS[1].eps}`,"Assumes 2027 WFE >$200bn is delivered"]},
+  {cells:["EV/EBITDA",xx(evE,1),`EV $${fm(ev/1000,1)}bn / FY2026 EBITDA $${fm(ebitda[n-1]/1000,1)}bn`,"EV uses Sep-26 cash and Jun-26 debt"]},
+  {cells:["PEG",xx(peg,2),`Fwd P/E / ${pc(g2,0)} EPS CAGR FY26 adj. $${co.epsBaseFY26adj} to FY28E`,"Flattered by cyclical recovery growth"]},
+  {cells:["FCF yield (FY2026)",pc(fcf[n-1]/mcap,1),"FY2026 FCF / market cap","Depressed by receivables build"]},
+  {cells:["Dividend yield",pc(1.32/co.price,1),"$0.33 x 4 / price",""]},
+  {cells:["52-week range",`$${co.hist.low52} - $${co.hist.high52}`,"",`Price is ${pc(co.price/co.hist.high52-1,0)} from the high`]}
+]);
+document.querySelectorAll("#t-val td").forEach((td,i)=>{td.style.whiteSpace="normal";if(i%4>1)td.style.textAlign="left"});document.querySelectorAll("#t-val th").forEach((th,i)=>{if(i>1)th.style.textAlign="left"});
+$("read-val").innerHTML="<b>Read:</b> "+T.readVal;
+
+/* 7 Industry */
+$("industry-text").innerHTML=T.industry;
+table("t-peers",["Company","Latest period","Revenue","Growth y/y","Op. margin","Net margin","China exposure","Fwd P/E (date)","Core focus"],
+  DATA.peers.map(p=>({cls:p.tk==="LRCX"?"hl":"",cells:[`${p.name} <span class="small">${p.tk}</span>`,p.q,p.rev,isNum(p.g)?p.g.toFixed(1)+"%":"n/a",isNum(p.opm)?p.opm.toFixed(1)+"%":"n/a",isNum(p.nm)?p.nm.toFixed(1)+"%":"n/a",p.china,isNum(p.fwdPE)?`${p.fwdPE.toFixed(1)}x <span class="small">${p.peDate}</span>`:"n/a",p.focus]})));
+$("peers-note").textContent="GAAP figures from each company's latest release; net margin = net income / revenue. Forward P/Es are next-twelve-month multiples from the cited sources; they moved 10%+ in a day this week, so treat them as approximate.";
+$("read-industry").innerHTML="<b>Read:</b> "+T.readIndustry;
+
+/* 8 Management */
+table("t-mgmt",["Name","Role","Tenure","Ownership","Pay"],DATA.mgmt.map(m=>({cells:m})));
+$("mgmt-text").innerHTML=T.mgmtText;
+$("read-mgmt").innerHTML="<b>Read:</b> "+T.readMgmt;
+
+/* 9 Risks */
+$("risk-list").innerHTML="<ol>"+T.risks.map(r=>`<li><b>${r[0]}.</b> ${r[1]}</li>`).join("")+"</ol>";
+
+/* 10 Scenarios */
+$("scen-q").textContent=T.scenQ;
+const S=DATA.scenarios;
+$("scen").innerHTML=["bear","base","bull"].map(k=>{const s=S[k];const v=s.eps*s.pe;const ud=v/co.price-1;
+  return `<div class="card"><h3>${s.title}</h3><div class="px">$${fm(v,0)}</div><div class="ud ${ud>=0?'pos':'neg'}">${ud>=0?'+':''}${pc(ud,0)} vs $${co.price}</div>
+  <div class="small">FY2028 EPS $${s.eps.toFixed(2)} x ${s.pe}x</div><ul style="font-size:13.5px">${s.a.map(x=>`<li>${x}</li>`).join("")}</ul></div>`}).join("");
+$("read-scen").innerHTML="<b>Read:</b> "+T.readScen;
+
+/* 11 Takeaways, glossary, sources */
+$("tk-remember").innerHTML=T.remember.map(x=>`<li>${x}</li>`).join("");
+$("tk-check").innerHTML=T.check.map(x=>`<li>${x}</li>`).join("");
+$("gloss").innerHTML=T.gloss.map(g=>`<dt>${g[0]}</dt><dd>${g[1]}</dd>`).join("");
+$("src").innerHTML=T.sources.map(s=>`<li><a href="${s[1]}">${s[0]}</a></li>`).join("");
+$("disc").textContent=T.disc;
+
+/* ===================== CHARTS (inline SVG, one axis each) ===================== */
+const tip=$("tip");
+function showTip(e,html){const r=document.querySelector(".viz-root").getBoundingClientRect();tip.innerHTML=html;tip.style.opacity=1;
+  tip.style.left=(e.clientX-r.left+12)+"px";tip.style.top=(e.clientY-r.top+window.scrollY*0+12)+"px";}
+function hideTip(){tip.style.opacity=0}
+document.querySelector(".viz-root").style.position="relative";
+
+function barChart(id,{title,labels,series,fmtV,yTicks,hatchLast,note}){
+  const W=520,H=230,L=46,R=8,Tp=10,Bm=26,pw=W-L-R,ph=H-Tp-Bm;
+  const raw=Math.max(...series.flatMap(s=>s.values));const step=raw>12000?5000:2000;const max=Math.ceil(raw*1.04/step)*step;
+  const gw=pw/labels.length, ns=series.length, bw=Math.min(34,(gw-14)/ns);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${title}"><defs><pattern id="hatch-${id}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="var(--series-1)" opacity=".35"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--series-1)" stroke-width="2.5"/></pattern></defs>`;
+  const ticks=Math.round(max/step);
+  for(let t=0;t<=ticks;t++){const v=max/ticks*t;const y=Tp+ph-ph*v/max;
+    s+=`<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" stroke="var(--grid)"/><text x="${L-6}" y="${y+4}" text-anchor="end" font-size="10.5" fill="var(--text-muted)">${fmtV(v,true)}</text>`;}
+  labels.forEach((lb,i)=>{
+    const gx=L+gw*i+(gw-(bw*ns+2*(ns-1)))/2;
+    series.forEach((se,j)=>{const v=se.values[i];const h=Math.max(1,ph*v/max);const x=gx+j*(bw+2),y=Tp+ph-h;
+      const fill=(hatchLast&&i===labels.length-1)?`url(#hatch-${id})`:`var(--${se.color})`;
+      s+=`<path d="M${x},${Tp+ph} V${y+4} Q${x},${y} ${x+4},${y} H${x+bw-4} Q${x+bw},${y} ${x+bw},${y+4} V${Tp+ph} Z" fill="${fill}" data-tip="${lb} · ${se.name}: ${fmtV(v)}"/>`;
+      s+=`<rect x="${x-3}" y="${Tp}" width="${bw+6}" height="${ph}" fill="transparent" data-tip="${lb} · ${se.name}: ${fmtV(v)}"/>`;});
+    s+=`<text x="${L+gw*i+gw/2}" y="${H-8}" text-anchor="middle" font-size="11" fill="var(--text-secondary)">${lb}</text>`;});
+  s+=`<line x1="${L}" x2="${W-R}" y1="${Tp+ph}" y2="${Tp+ph}" stroke="var(--text-muted)"/></svg>`;
+  const leg=series.length>1?`<div class="legend">${series.map(se=>`<span><i style="background:var(--${se.color})"></i>${se.name}</span>`).join("")}</div>`:"";
+  $(id).innerHTML=`<div class="t">${title}</div>${leg}${s}${note?`<div class="small">${note}</div>`:""}`;
+  $(id).querySelectorAll("[data-tip]").forEach(el=>{el.addEventListener("mousemove",e=>showTip(e,el.dataset.tip));el.addEventListener("mouseleave",hideTip)});
+}
+const bn=(v,ax)=>ax?"$"+(v/1000).toFixed(0)+"bn":"$"+(v/1000).toFixed(2)+"bn";
+barChart("ch-rev",{title:"Revenue by fiscal year ($bn)",labels:Y.map(y=>y.replace("FY20","FY")),series:[{name:"Revenue",values:rev,color:"series-1"}],fmtV:bn,
+  note:"Operating margin: "+Y.map((y,i)=>y.replace("FY20","FY")+" "+pc(ebitM[i],0)).join(" · ")});
+barChart("ch-fcf",{title:"Net profit vs free cash flow ($bn)",labels:Y.map(y=>y.replace("FY20","FY")),series:[{name:"Net profit",values:ni,color:"series-1"},{name:"Free cash flow",values:fcf,color:"series-2"}],fmtV:bn});
+barChart("ch-quarters",{title:"Quarterly revenue ($bn), hatched = guidance midpoint",labels:DATA.quarters.map(q=>q.q),series:[{name:"Revenue",values:DATA.quarters.map(q=>q.rev),color:"series-1"}],fmtV:bn,hatchLast:true,
+  note:"Dec-25 derived from FY2026 total; Dec-26 is guidance ($8.6bn ± $0.4bn)."});
+</script>
+</body>
+</html>

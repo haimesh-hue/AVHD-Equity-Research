@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verisk Analytics (VRSK): Equity Research 101</title>
+<style>
+:root{--bg:#fbfaf7;--card:#fff;--ink:#1d2329;--mute:#5e6a75;--line:#e4e1da;--acc:#1f5f8b;--pos:#2e7d4f;--neg:#b23b3b;--warn:#a86a00;--chip:#eef3f7}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif}
+header{background:#14324a;color:#fff;padding:28px 20px 20px}
+header .wrap{max-width:1080px;margin:0 auto}
+header h1{margin:0;font-size:26px;letter-spacing:-.01em}
+header .sub{opacity:.85;margin-top:4px;font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:18px}
+.kpi{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:10px 12px}
+.kpi .l{font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.75}
+.kpi .v{font-size:20px;font-weight:650;margin-top:2px}
+nav{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav .wrap{max-width:1080px;margin:0 auto;padding:0 12px}
+nav a{display:inline-block;padding:11px 10px;color:var(--mute);text-decoration:none;font-size:13px;font-weight:550;border-bottom:2px solid transparent}
+nav a.on{color:var(--acc);border-bottom-color:var(--acc)}
+main{max-width:1080px;margin:0 auto;padding:18px 16px 60px}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:16px 0;scroll-margin-top:52px}
+h2{margin:0 0 4px;font-size:19px}
+.q{color:var(--mute);font-size:13px;margin-bottom:12px}
+h3{font-size:15px;margin:16px 0 6px}
+.read{background:#f3f7fa;border-left:3px solid var(--acc);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0 4px}
+.read b{color:var(--acc)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}section{padding:16px}}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+th{background:#f6f4ef;font-weight:600;color:#3c4650;font-size:12px}
+td:first-child,th:first-child{text-align:left}
+td.l,th.l{text-align:left}
+.tw{overflow-x:auto}
+.pos{color:var(--pos)}.neg{color:var(--neg)}.mut{color:var(--mute)}
+.chip{display:inline-block;background:var(--chip);border-radius:20px;padding:2px 9px;font-size:12px;margin:2px 4px 2px 0}
+ul{padding-left:20px;margin:6px 0}li{margin:3px 0}
+.timeline{border-left:2px solid var(--line);margin:8px 0 0 6px;padding-left:16px}
+.timeline div{position:relative;margin:0 0 9px}
+.timeline div:before{content:"";position:absolute;left:-22px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--acc)}
+.timeline b{display:inline-block;min-width:74px}
+.toggle{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:4px 0 8px}
+.toggle button{border:0;background:#fff;padding:6px 12px;font-size:12px;cursor:pointer;color:var(--mute)}
+.toggle button.on{background:var(--acc);color:#fff}
+.scen{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.scen{grid-template-columns:1fr}}
+.sc{border:1px solid var(--line);border-radius:10px;padding:14px}
+.sc h4{margin:0 0 4px}.sc .p{font-size:24px;font-weight:700}
+.bear{border-top:4px solid var(--neg)}.base{border-top:4px solid var(--acc)}.bull{border-top:4px solid var(--pos)}
+svg text{font-family:inherit}
+.foot{font-size:12px;color:var(--mute)}
+details{margin-top:8px}summary{cursor:pointer;color:var(--acc);font-weight:600;font-size:13px}
+.gl dt{font-weight:600;margin-top:6px}.gl dd{margin:0 0 0 0;color:var(--mute)}
+.risk td:nth-child(2),.risk td:nth-child(3){text-align:center}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1 id="ttl"></h1>
+  <div class="sub" id="subttl"></div>
+  <div class="kpis" id="kpis"></div>
+</div></header>
+<nav><div class="wrap" id="nav"></div></nav>
+<main id="main"></main>
+
+<script>
+/* ============================================================
+   DATA: raw inputs only. Ratios are computed below so the page
+   stays internally consistent. $ millions unless noted.
+   ============================================================ */
+const DATA = {
+  company:{name:"Verisk Analytics, Inc.",ticker:"VRSK",exchange:"Nasdaq",currency:"USD",hq:"Jersey City, New Jersey",
+    oneLiner:"The data and analytics utility of the US property & casualty insurance industry: policy forms, loss costs, catastrophe models, fraud and claims-estimating software.",
+    asOf:"Price as of Nov 13, 2026 close; financials through Q3 2026 (Sep 30, 2026)"},
+  market:{price:207.82,shares:128.25,debt:4495.3,cash:556.8,divPerShare:2.00,
+    consensusTarget:235.94,analysts:19,rating:"Buy",ntmEps:8.42,guideAdjEpsLo:7.45,guideAdjEpsHi:7.75,eps3yGrowth:10.9},
+
+  /* Quarter columns: latest Q, prior Q (QoQ), prior-year Q (YoY). TTM columns: latest TTM to Sep-26 and prior TTM to Sep-25 */
+  q:{
+    labels:["Q3 2026","Q2 2026","Q3 2025"],
+    revenue:[809.0,806.3,768.3], cogs:[242.0,null,229.5], opInc:[365.3,363.7,345.9], netInc:[219.2,228.6,225.5],
+    da:[83.9,80.6,82.3], adjEbitda:[459.0,463.6,429.1], eps:[1.70,1.75,1.61], adjEps:[1.96,1.98,1.72],
+    ocf:[267.2,366.0,403.5], capex:[67.2,68.1,67.4], sbc:[14.5,14.7,12.1], taxRate:[0.257,0.246,0.253],
+    occGrowth:[7.4,5.8,5.5], buybacks:[100.1,170.1,100.1], dilShares:[129.2,130.9,139.9],
+    avgIC:[2652.9,2668.2,2878.2], netDebt:[3938.5,3922.1,2610.2], ttmEbitdaAtQ:[1722.5,1701.5,1670.8]
+  },
+  ttm:{
+    labels:["TTM Sep-26","TTM Sep-25"],
+    revenue:[3176.8,3029.6], grossProfit:[2228.9,null], opInc:[1394.8,1346.6], netInc:[879.2,921.4], da:[327.7,324.2],
+    adjEbitda:[1796.7,1688.1], eps:[6.60,6.50], adjEps:[7.58,6.94], ocf:[1366.9,1348.1], capex:[266.5,232.3],
+    sbc:[60.0,52.5], taxRate:[0.24,0.24], occGrowth:[null,null], buybacks:[2150.9,715.2],
+    avgIC:[2794.9,2827.4], icEnd:[2711.6,2878.2], gwIntEnd:[2187.3,2326.2], icStart:[2878.2,2776.6]
+  },
+  /* Annual history (company reports, continuing operations; FY21-FY22 from stockanalysis.com) */
+  hist:{years:["FY21","FY22","FY23","FY24","FY25","TTM"],
+    revenue:[2463,2497,2681,2882,3073,3177], fcf:[887,784,831,920,1192,1100], adjEbitdaMargin:[null,null,null,54.7,56.2,56.6]},
+
+  segments:[{name:"Underwriting (forms, rules & loss costs, catastrophe models, specialty, life)",q:568,growth:"+7.7% OCC"},
+            {name:"Claims (Xactimate estimating, anti-fraud, casualty)",q:241,growth:"+6.7% OCC"}],
+
+  history:[
+    ["1971","Insurance Services Office (ISO) formed as a non-profit advisory and rating organization for US property/casualty insurers."],
+    ["2002","Buys AIR Worldwide, the catastrophe-modeling pioneer."],
+    ["2006","Buys Xactware (Xactimate), the repair-estimating standard used by adjusters and contractors."],
+    ["2008","Verisk Analytics formed as ISO's parent holding company."],
+    ["Oct 2009","IPO at $22/share; ~$1.9bn raised for insurer owners (AIG, Hartford, Travelers), the largest US IPO of 2009. The company itself raised nothing."],
+    ["2015","Buys Wood Mackenzie (energy research) for $2.8bn: the diversification era."],
+    ["2016-22","Unwinds diversification: healthcare sold (2016), financial services to TransUnion ($515m) and Wood Mackenzie to Veritas ($3.1bn) in 2022."],
+    ["May 2022","CFO Lee Shavel becomes CEO; Elizabeth Mann (ex-S&P Global) joins as CFO in Sep 2022."],
+    ["Jul 2025","Agrees to buy AccuLynx (roofing contractor software) for $2.35bn cash."],
+    ["Dec 2025","Terminates AccuLynx after FTC Second Request runs past the deadline; sells Verisk Marketing Solutions ($68m revenue)."],
+    ["2026","$1.5bn accelerated buyback; Investor Day reiterates 6-8% OCC growth. Delaware courts (Aug, then Supreme Court Oct 23) rule the AccuLynx termination invalid: Verisk must keep pursuing the deal."]
+  ],
+
+  peers:[
+    /* name, ticker, revenue $bn TTM, op margin %, P/E TTM, EV/EBITDA TTM, as-of note */
+    {n:"Verisk",t:"VRSK",rev:3.18,om:43.9,pe:null,ev:null,src:"This page, Nov 13 2026"},
+    {n:"S&P Global",t:"SPGI",rev:16.12,om:41.6,pe:23.5,ev:16.5,src:"roic.ai, 2026 (undated)"},
+    {n:"Moody's",t:"MCO",rev:8.16,om:46.1,pe:28.7,ev:19.9,src:"roic.ai, 2026 (undated)"},
+    {n:"MSCI",t:"MSCI",rev:3.33,om:55.7,pe:30.6,ev:22.6,src:"roic.ai, Jun 2026 financials"},
+    {n:"Equifax",t:"EFX",rev:6.45,om:17.9,pe:27.7,ev:12.7,src:"roic.ai, 2026 (rev derived from EBITDA/margin)"},
+    {n:"FactSet",t:"FDS",rev:null,om:null,pe:13.2,ev:9.7,src:"stockanalysis, Mar 16 2026"},
+    {n:"CCC Intelligent Sol.",t:"CCCS",rev:1.00,om:6.4,pe:null,ev:35.2,src:"roic.ai, undated; P/E not meaningful"}
+  ],
+  valHist:{pe5y:42.0,ev5y:23.6,pe10y:40.1,src:"fullratio.com (P/E, Nov 11 2026), tickerleague.com (EV/EBITDA 5-yr avg, Jun 2026)"},
+
+  scenarios:{
+    bear:{eps:7.90,pe:21,assume:["AccuLynx forced to close at $2.35bn, debt-funded: net debt/EBITDA to ~3.5x, buybacks paused, returns diluted","Soft P&C pricing cycle pushes OCC growth to ~4-5% (below the 6-8% target)","Market keeps de-rating info-services names on AI disintermediation fears"]},
+    base:{eps:8.42,pe:27,assume:["OCC growth 6-8% (Investor Day target), subscription ~8%","Adj. EBITDA margin +25-75 bp a year","Buybacks of at least 75% of FCF; AccuLynx closes or settles without derailing capital return"]},
+    bull:{eps:8.80,pe:31,assume:["OCC growth at the top of 7-8% as AI products (XactAI, Digital Media Forensics) monetize","Normal storm activity lifts transactional claims revenue","Multiple recovers toward ~31x, still well below the 42x 5-yr average"]}
+  },
+
+  reads:{
+    business:"Verisk sells the 'plumbing' P&C insurers need to price, write and settle policies. About 84% of revenue is subscription (Q1 2026), and every top-100 US insurer is a client. It is now a pure insurance play after selling its health, financial and energy arms in 2016-2022.",
+    moat:"The moat is contributory data: insurers send Verisk their policy and claims data, Verisk standardizes it and sells the aggregate back. A new entrant cannot buy 50 years of industry loss history. Network effects in Xactimate (adjusters and contractors must use the same estimate) reinforce it.",
+    drivers:"Growth is mostly price plus more modules sold to the same carriers, not volume. Subscription grew 8.2% OCC in Q3 2026; transactional (16% of revenue) swings with storms and claims activity and was the drag in H1 2026.",
+    earnings:"Q3 2026 was a clean beat on operations: OCC growth back to 7.4%, adj. EPS $1.96 (+14%). GAAP net income fell 2.8% because interest costs rose after a debt-funded $1.9bn of buybacks, and Q3 free cash flow fell 40% on timing. Margins and ROIC are excellent and stable.",
+    scorecard:"Operating margin ~45% and ROIC near 40% on all capital (about 175% excluding goodwill and intangibles) mark an elite business. The change versus last year is the balance sheet: net debt/EBITDA went from 1.6x to 2.3x as cash was spent on buybacks.",
+    valuation:"At ~31.5x trailing GAAP EPS and ~18x EBITDA, VRSK trades roughly 25% below its own 5-year average multiples (42x, 23.6x) but still above most data peers, which also de-rated in 2026. A PEG above 2x says you are paying a full price for ~11% EPS growth.",
+    industry:"US P&C premiums have compounded about 5% a year and Verisk grows a bit faster than its clients' premiums. The peer set is rated lower in 2026: FactSet sits near 13x earnings, S&P Global near 24x.",
+    management:"A finance-led team (CEO Shavel was CFO; CFO Mann came from S&P Global) focused on margin and capital return. Insider ownership is tiny (~0.2%). The AccuLynx episode is a capital-allocation and governance blemish: a court found Verisk's own conduct caused the failed closing condition.",
+    risks:"The near-term risk is AccuLynx: being made to buy a $2.35bn business the company tried to walk away from. Longer term, watch for a soft P&C market and for AI lowering the value of standardized data and estimating tools.",
+    scenarios:"Consensus target ($236) sits between our base ($227) and bull ($273) cases, so the Street is mildly constructive. The bear case is mostly about capital allocation and the multiple, not the core franchise."
+  },
+  takeaways:[
+    "Elite business: ~45% operating margin, ~40% ROIC, FCF above NOPAT over the cycle, 84% subscription revenue.",
+    "Growth re-accelerated through 2026: OCC growth 4.7% (Q1), 5.8% (Q2), 7.4% (Q3). Subscription is the engine.",
+    "Cheaper than its own history (~31x vs 42x 5-yr P/E), not cheap vs peers or on PEG (~2.2x).",
+    "Balance sheet now carries more debt after $2.15bn of TTM buybacks; net debt/EBITDA 2.3x.",
+    "AccuLynx is the swing factor: watch FTC review, any settlement or reverse break fee, and the funding plan."
+  ],
+  checkNext:["FTC decision or settlement on AccuLynx and how Verisk would fund it","Q4 2026 results and FY2027 guidance (Feb 2027): is OCC growth staying in the 6-8% range?","Transactional revenue and storm activity in Q4","Pace of buybacks vs the 75%-of-FCF target now that excess cash is gone","Read the 10-K risk factors on litigation (telematics class actions, data privacy)"],
+  glossary:[
+    ["OCC growth","Organic constant currency: revenue growth excluding acquisitions, disposals and FX. Verisk's own headline growth metric."],
+    ["Contributory data","Data insurers contribute to Verisk (policies, premiums, losses), which it pools and sells back as industry benchmarks."],
+    ["Loss costs","ISO's estimate of expected claims per unit of exposure, which carriers use as a base for their rates."],
+    ["NOPAT","Net operating profit after tax: operating income x (1 - tax rate). Profit before financing choices."],
+    ["ROIC","NOPAT / invested capital. Above ~10% beats the cost of capital for most firms."],
+    ["PEG","Forward P/E divided by expected EPS growth. Around 1x is 'growth at a fair price'; above 2x is a premium."],
+    ["ASR","Accelerated share repurchase: a bank delivers shares up front and the price is settled later."]
+  ],
+  sources:[
+    ["Verisk Q3 2026 earnings release (8-K Ex. 99.1, SEC EDGAR)","https://www.sec.gov/Archives/edgar/data/0001442145/000143774926035082/ex_1007822.htm"],
+    ["Verisk Q2 2026 earnings release","https://s29.q4cdn.com/767340216/files/doc_news/Verisk-Reports-SecondQuarter-2026Financial-Results-2026.pdf"],
+    ["Verisk Q1 2026 earnings release","https://www.verisk.com/company/newsroom/verisk-reports-first-quarter-2026-financial-results/"],
+    ["Verisk Q4/FY2025 earnings release","https://s29.q4cdn.com/767340216/files/doc_news/Verisk-Reports-Fourth-Quarter-and-Full-Year-2025-Financial-Results-2026.pdf"],
+    ["Verisk Q3 2025 earnings release","https://s29.q4cdn.com/767340216/files/doc_news/Verisk-Reports-Third-Quarter-2025-Financial-Results-2025.pdf"],
+    ["Verisk 2026 Investor Day release and slides","https://www.verisk.com/company/newsroom/verisk-reiterates-its-growth-targets-and-outlines-strategy-for-its-next-phase-of-compounding-growth-at-2026-investor-day/"],
+    ["MarketBeat: Q1 2026 call highlights (subscription 84% of revenue)","https://www.marketbeat.com/instant-alerts/verisk-analytics-q1-earnings-call-highlights-2026-04-29/"],
+    ["stockanalysis.com: VRSK quote, financials, statistics","https://stockanalysis.com/stocks/VRSK/"],
+    ["Barchart/Webull: Q3 2026 vs consensus, NTM EPS","https://www.webull.com/news/15871396062061568"],
+    ["Reuters via Yahoo: AccuLynx termination (Dec 2025)","https://finance.yahoo.com/news/verisk-pulls-plug-2-4-135006374.html"],
+    ["Cooley: Delaware Supreme Court keeps Verisk-AccuLynx deal alive (Oct 2026)","https://www.cooley.com/news/insight/2026/2026-10-29-still-not-dead-delaware-supreme-court-keeps-verisk-acculynx-deal-alive"],
+    ["Beinsure: Verisk loses appeal over AccuLynx","https://beinsure.com/news/verisk-loses-appeal-over-2-35-bn-acculynx-acquisition/"],
+    ["Verisk: Elizabeth Mann named CFO (2022)","https://www.verisk.com/company/newsroom/verisk-names-elizabeth-mann-chief-financial-officer/"],
+    ["Wikipedia: Verisk Analytics history","https://en.wikipedia.com/wiki/Verisk"],
+    ["fullratio.com: VRSK P/E history","https://fullratio.com/stocks/nasdaq-vrsk/pe-ratio"],
+    ["tickerleague.com: VRSK EV/EBITDA history","https://tickerleague.com/companies/VRSK/financials/ev-ebitda"],
+    ["roic.ai peer statistics (MCO, MSCI, SPGI, EFX, CCCS)","https://www.roic.ai/quote/MSCI/statistics"],
+    ["stockanalysis.com: FactSet ratios","https://stockanalysis.com/stocks/fds/financials/ratios/"]
+  ]
+};
+
+/* ============================ helpers ============================ */
+const $=s=>document.querySelector(s);
+const n=(v,d=1)=>v==null||!isFinite(v)?"n/a":v.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct=(v,d=1)=>v==null||!isFinite(v)?"n/a":(v*100).toFixed(d)+"%";
+const x=(v,d=1)=>v==null||!isFinite(v)?"n/a":v.toFixed(d)+"x";
+const usd=(v,d=2)=>v==null?"n/a":"$"+n(v,d);
+const ch=(a,b)=>a==null||b==null||b===0?null:(a/b-1);
+const pp=(a,b)=>a==null||b==null?null:(a-b);
+const cls=v=>v==null?"mut":(v>=0?"pos":"neg");
+const fmtCh=v=>`<span class="${cls(v)}">${v==null?"n/a":(v>=0?"+":"")+(v*100).toFixed(1)+"%"}</span>`;
+const fmtPP=v=>`<span class="${cls(v)}">${v==null?"n/a":(v>=0?"+":"")+(v*100).toFixed(1)+" pp"}</span>`;
+const read=t=>`<div class="read"><b>Read:</b> ${t}</div>`;
+
+/* ======================== derived metrics ======================== */
+const D=DATA, M=D.market, Q=D.q, T=D.ttm;
+const mcap=M.price*M.shares, ev=mcap+M.debt-M.cash;
+const qd={}, td={};
+["revenue","opInc","netInc","adjEbitda","eps","adjEps","ocf","capex","sbc","buybacks"].forEach(k=>{qd[k]=Q[k];});
+qd.gp=Q.revenue.map((r,i)=>Q.cogs[i]==null?null:r-Q.cogs[i]);
+qd.fcf=Q.ocf.map((o,i)=>o-Q.capex[i]);
+qd.ebitda=Q.opInc.map((o,i)=>o+Q.da[i]);
+qd.opm=Q.opInc.map((o,i)=>o/Q.revenue[i]);
+qd.nopat=Q.opInc.map((o,i)=>o*(1-Q.taxRate[i]));
+qd.nopatm=qd.nopat.map((v,i)=>v/Q.revenue[i]);
+qd.roic=qd.nopat.map((v,i)=>v*4/Q.avgIC[i]);
+qd.s2c=Q.revenue.map((r,i)=>r*4/Q.avgIC[i]);
+qd.fcfm=qd.fcf.map((f,i)=>f/Q.revenue[i]);
+qd.fcfc=qd.fcf.map((f,i)=>f/qd.nopat[i]);
+qd.nde=Q.netDebt.map((d,i)=>d/Q.ttmEbitdaAtQ[i]);
+qd.sbcr=Q.sbc.map((s,i)=>s/Q.revenue[i]);
+
+td.gp=T.grossProfit; td.fcf=T.ocf.map((o,i)=>o-T.capex[i]);
+td.ebitda=T.opInc.map((o,i)=>o+T.da[i]);
+td.opm=T.opInc.map((o,i)=>o/T.revenue[i]);
+td.nopat=T.opInc.map((o,i)=>o*(1-T.taxRate[i]));
+td.nopatm=td.nopat.map((v,i)=>v/T.revenue[i]);
+td.roic=td.nopat.map((v,i)=>v/T.avgIC[i]);
+td.roicExGw=td.nopat.map((v,i)=>v/(T.avgIC[i]-T.gwIntEnd[i]));
+td.s2c=T.revenue.map((r,i)=>r/T.avgIC[i]);
+td.fcfm=td.fcf.map((f,i)=>f/T.revenue[i]);
+td.fcfc=td.fcf.map((f,i)=>f/td.nopat[i]);
+td.sbcr=T.sbc.map((s,i)=>s/T.revenue[i]);
+const dNopat=td.nopat[0]-td.nopat[1], dIC=T.icEnd[0]-T.icStart[0];
+const incRoic=dIC>0?dNopat/dIC:null;
+
+const peTTM=M.price/T.eps[0], peAdj=M.price/T.adjEps[0], peFwd=M.price/M.ntmEps;
+const evEbitda=ev/td.ebitda[0], evAdj=ev/T.adjEbitda[0], peg=peFwd/M.eps3yGrowth;
+D.peers[0].pe=peTTM; D.peers[0].ev=evEbitda;
+const scenPx=k=>D.scenarios[k].eps*D.scenarios[k].pe;
+
+/* ============================ render ============================ */
+$("#ttl").textContent=`${D.company.name} (${D.company.exchange}: ${D.company.ticker})`;
+$("#subttl").textContent=`${D.company.oneLiner} ${D.company.asOf}.`;
+const k=[["Price",usd(M.price)],["Market cap","$"+n(mcap/1000,1)+"bn"],["EV","$"+n(ev/1000,1)+"bn"],["P/E (TTM GAAP)",x(peTTM)],["P/E (NTM adj.)",x(peFwd)],["EV/EBITDA",x(evEbitda)],["ROIC (TTM)",pct(td.roic[0],0)],["Consensus PT",usd(M.consensusTarget,0)]];
+$("#kpis").innerHTML=k.map(a=>`<div class="kpi"><div class="l">${a[0]}</div><div class="v">${a[1]}</div></div>`).join("");
+
+const secs=[["biz","Business"],["moat","Moat"],["drv","Drivers"],["earn","Earnings"],["val","Valuation"],["ind","Industry & peers"],["mgmt","Management"],["risk","Risks"],["scen","Scenarios"],["take","Takeaways"],["src","Sources"]];
+$("#nav").innerHTML=secs.map(s=>`<a href="#${s[0]}">${s[1]}</a>`).join("");
+
+/* small SVG bar chart */
+function bars(labels,vals,fmt,color){
+  const W=460,H=170,pad=26,bw=(W-pad*2)/vals.length, mx=Math.max(...vals.filter(v=>v!=null))*1.15;
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img">`;
+  vals.forEach((v,i)=>{ if(v==null)return; const h=(H-50)*v/mx, xx=pad+i*bw+bw*.18, y=H-26-h;
+    s+=`<rect x="${xx}" y="${y}" width="${bw*.64}" height="${h}" rx="3" fill="${i==vals.length-1?'#14324a':color}"/>`+
+       `<text x="${xx+bw*.32}" y="${y-5}" text-anchor="middle" font-size="11" fill="#1d2329">${fmt(v)}</text>`+
+       `<text x="${xx+bw*.32}" y="${H-9}" text-anchor="middle" font-size="11" fill="#5e6a75">${labels[i]}</text>`;});
+  return s+"</svg>";
+}
+
+let h="";
+/* 1 Business */
+h+=`<section id="biz"><h2>1. Business overview</h2><div class="q">What does it do, how does it make money, and how did it get here?</div>
+<div class="grid2"><div>
+<h3>What it does</h3>
+<ul><li><b>Underwriting (~70% of revenue)</b>: ISO policy forms, rules and loss costs; AIR catastrophe models; property data and aerial imagery; specialty and life insurance software.</li>
+<li><b>Claims (~30%)</b>: Xactimate repair estimating for adjusters and contractors; ClaimSearch anti-fraud database; casualty and digital media forensics tools.</li></ul>
+<h3>How it makes money</h3>
+<ul><li><b>Subscriptions (84% of revenue)</b>: multi-year, annually escalating licences for data, models and software.</li>
+<li><b>Transactional (16%)</b>: per-use fees that rise and fall with claims volume, storms and policy activity.</li>
+<li>Customers: 100% of the top-100 US P&C insurers; HQ ${D.company.hq}; ~8,000 staff.</li></ul>
+<h3>Revenue by segment, Q3 2026</h3>
+<table><tr><th class="l">Segment</th><th>$m</th><th>Growth</th></tr>${D.segments.map(s=>`<tr><td class="l">${s.name}</td><td>${n(s.q,0)}</td><td>${s.growth}</td></tr>`).join("")}<tr><td><b>Total</b></td><td><b>809</b></td><td><b>+7.4% OCC</b></td></tr></table>
+</div><div>
+<h3>History</h3><div class="timeline">${D.history.map(e=>`<div><b>${e[0]}</b> ${e[1]}</div>`).join("")}</div>
+</div></div>
+<div class="grid2"><div><h3>Revenue, $m (continuing ops)</h3>${bars(D.hist.years,D.hist.revenue,v=>n(v,0),"#7fa7c4")}</div>
+<div><h3>Free cash flow, $m</h3>${bars(D.hist.years,D.hist.fcf,v=>n(v,0),"#9cc3a8")}</div></div>
+${read(D.reads.business)}</section>`;
+
+/* 2 Moat */
+h+=`<section id="moat"><h2>2. Moat</h2><div class="q">Why does it earn its returns, and can competitors copy it?</div>
+<table><tr><th class="l">Source of advantage</th><th class="l">Why it is hard to copy</th><th>Strength</th></tr>
+<tr><td class="l">Contributory data (~40% of revenue; &gt;90% from unique data and IP)</td><td class="l">Built from decades of insurers' own policy and loss data. A rival would need every carrier to start sharing with it.</td><td>Very strong</td></tr>
+<tr><td class="l">Regulatory embedding (ISO forms, rules, loss costs)</td><td class="l">ISO was created to help insurers meet state regulatory requirements; carriers file rates on ISO's standard forms, so switching means re-filing.</td><td>Very strong</td></tr>
+<tr><td class="l">Network effects (Xactimate, ClaimSearch)</td><td class="l">Adjusters and contractors must agree on one estimate; a fraud database gets better with every carrier that contributes.</td><td>Strong</td></tr>
+<tr><td class="l">Scientific IP (AIR catastrophe models)</td><td class="l">Models are a 'currency' between insurers, reinsurers and rating agencies; Moody's RMS is the main alternative.</td><td>Moderate-strong</td></tr>
+<tr><td class="l">Switching costs and price power</td><td class="l">Mission-critical, small share of a carrier's costs; annual price escalators are the main growth lever.</td><td>Strong</td></tr></table>
+<p><span class="chip">USP: industry 'utility' status</span><span class="chip">USP: proprietary pooled data</span><span class="chip">USP: embedded in claims workflow</span></p>
+${read(D.reads.moat)}</section>`;
+
+/* 3 Drivers */
+h+=`<section id="drv"><h2>3. Revenue drivers</h2><div class="q">What is revenue made of, and which KPIs move it?</div>
+<p><b>Revenue ≈ (number of carriers and lines covered) x (modules per carrier) x (price escalators) + transactional volume (claims, storms, policies).</b> Volume of clients is near saturation in the US, so growth comes from price, cross-sell and new products.</p>
+<table><tr><th class="l">KPI</th><th>Q1 26</th><th>Q2 26</th><th>Q3 26</th><th class="l">Why it matters</th></tr>
+<tr><td class="l">OCC revenue growth</td><td>4.7%</td><td>5.8%</td><td>7.4%</td><td class="l">Target 6-8%; back in range in Q3</td></tr>
+<tr><td class="l">Subscription OCC growth</td><td>~7%</td><td>8.0%</td><td>8.2%</td><td class="l">84% of revenue; the compounding engine</td></tr>
+<tr><td class="l">Transactional OCC growth</td><td>-6.1%</td><td>n/a</td><td>+3.2%</td><td class="l">Storm and claims sensitive; H1 drag reversed</td></tr>
+<tr><td class="l">Adj. EBITDA margin</td><td>55.9%</td><td>57.5%</td><td>56.7%</td><td class="l">Target +25-75 bp a year</td></tr>
+<tr><td class="l">Claims OCC growth</td><td>3.4%</td><td>6.1%</td><td>6.7%</td><td class="l">Xactimate, anti-fraud and AI tools</td></tr></table>
+<p class="foot">Q2 transactional OCC growth was not disclosed in the sources read. Q3 adj. EBITDA margin = $459m / $809m.</p>
+${read(D.reads.drivers)}</section>`;
+
+/* 4 Earnings */
+const hl=[["Revenue",Q.revenue,T.revenue,0],["Gross profit",qd.gp,td.gp,0],["Operating income (GAAP)",Q.opInc,T.opInc,0],["Net income (GAAP)",Q.netInc,T.netInc,0],["Diluted EPS (GAAP)",Q.eps,T.eps,2],["Diluted EPS (adjusted)",Q.adjEps,T.adjEps,2],["Adjusted EBITDA",Q.adjEbitda,T.adjEbitda,0],["Operating cash flow",Q.ocf,T.ocf,0],["Free cash flow",qd.fcf,td.fcf,0]];
+const fm=(v,d)=>d==2?usd(v):n(v,0);
+let tb=`<table><tr><th class="l">$m (EPS in $)</th><th>Q3 26</th><th>Q2 26</th><th>Q3 25</th><th>QoQ %</th><th>YoY %</th><th>TTM Sep-26</th><th>TTM Sep-25</th><th>TTM %</th></tr>`;
+hl.forEach(r=>{tb+=`<tr><td class="l">${r[0]}</td><td>${fm(r[1][0],r[3])}</td><td>${fm(r[1][1],r[3])}</td><td>${fm(r[1][2],r[3])}</td><td>${fmtCh(ch(r[1][0],r[1][1]))}</td><td>${fmtCh(ch(r[1][0],r[1][2]))}</td><td>${fm(r[2][0],r[3])}</td><td>${fm(r[2][1],r[3])}</td><td>${fmtCh(ch(r[2][0],r[2][1]))}</td></tr>`;});
+tb+="</table>";
+/* scorecard rows: [category, metric, q values, ttm values, type] */
+const sc=[
+ ["Growth","Organic (OCC) revenue growth",Q.occGrowth.map(v=>v/100),[0.064,0.066],"pp","TTM = avg of quarterly OCC (est.): Q4'25 5.2, Q1-Q3'26 4.7/5.8/7.4 vs FY25 6.6% reported"],
+ ["Profitability","Operating margin",qd.opm,td.opm,"pp"],
+ ["Profitability","NOPAT margin",qd.nopatm,td.nopatm,"pp"],
+ ["Capital efficiency","ROIC (annualized / TTM)",qd.roic,td.roic,"pp"],
+ ["Capital efficiency","ROIC ex goodwill & intangibles",[null,null,null],td.roicExGw,"pp"],
+ ["Capital efficiency","Incremental ROIC",[null,null,null],[incRoic,null],"pp","n/m: invested capital fell $"+n(-dIC,0)+"m while NOPAT rose $"+n(dNopat,0)+"m"],
+ ["Reinvestment","Sales / capital",qd.s2c,td.s2c,"x"],
+ ["Cash","FCF margin",qd.fcfm,td.fcfm,"pp"],
+ ["Quality","FCF conversion (FCF / NOPAT)",qd.fcfc,td.fcfc,"pp"],
+ ["Balance sheet","Net debt / EBITDA (TTM GAAP)",qd.nde,[qd.nde[0],qd.nde[2]],"x"],
+ ["Capital allocation","Buybacks ($m)",Q.buybacks,T.buybacks,"$"],
+ ["Capital allocation","Diluted shares (m)",Q.dilShares,[129.2,139.9],"sh"],
+ ["Capital allocation","Acquisition ROIC",[null,null,null],[null,null],"pp","Not determinable: only small tuck-ins (e.g. McKenzie Intelligence, 2026), no disclosed contribution"],
+ ["Dilution","SBC / revenue",qd.sbcr,td.sbcr,"pp"]];
+const fv=(v,t)=>t=="x"?x(v,2):t=="$"?n(v,0):t=="sh"?n(v,1):pct(v);
+const fd=(a,b,t)=>t=="pp"?fmtPP(pp(a,b)):fmtCh(ch(a,b));
+let st=`<table><tr><th class="l">Category</th><th class="l">Metric</th><th>Latest Q</th><th>Prior Q</th><th>Prior-yr Q</th><th>QoQ Δ</th><th>YoY Δ</th><th>Latest TTM</th><th>Prior TTM</th><th>TTM Δ</th></tr>`;
+sc.forEach(r=>{st+=`<tr><td class="l">${r[0]}</td><td class="l">${r[1]}${r[5]?`<div class="foot">${r[5]}</div>`:""}</td><td>${fv(r[2][0],r[4])}</td><td>${fv(r[2][1],r[4])}</td><td>${fv(r[2][2],r[4])}</td><td>${fd(r[2][0],r[2][1],r[4])}</td><td>${fd(r[2][0],r[2][2],r[4])}</td><td>${fv(r[3][0],r[4])}</td><td>${fv(r[3][1],r[4])}</td><td>${fd(r[3][0],r[3][1],r[4])}</td></tr>`;});
+st+="</table>";
+h+=`<section id="earn"><h2>4. Earnings report summary: Q3 2026 (reported Nov 5, 2026)</h2><div class="q">What happened in the latest quarter and the last twelve months?</div>
+<div class="toggle"><button class="on" data-t="hl">Headline results</button><button data-t="sc">Metric scorecard</button></div>
+<div class="tw" id="t-hl">${tb}</div><div class="tw" id="t-sc" style="display:none">${st}</div>
+<ul><li>Adj. EPS $1.96 beat consensus of $1.92 (Zacks); revenue $809m vs $806.5m expected. FY2026 guidance held: revenue $3.19-3.24bn, adj. EPS $7.45-7.75.</li>
+<li>GAAP net income -2.8% YoY: net interest rose to $53m (from $42m) and the tax rate to 25.7%.</li>
+<li>FCF -40% in the quarter on timing of cash payments; 9M FCF $824m (-10%).</li>
+<li>Bought back $1.93bn of stock in 9M 2026 (~10.5m shares at ~$185); $700m authorization left.</li></ul>
+<details><summary>Methodology footnote</summary><div class="foot">
+Organic growth = company-disclosed OCC growth. Operating margin = GAAP operating income / revenue. NOPAT = operating income x (1 - tax); quarters use the reported effective rate, TTM uses a normalized 24% (TTM effective ~23.7%). Invested capital (operating approach) = (current assets - cash) - (current liabilities - short-term debt) + net fixed assets + operating-lease ROU assets + goodwill + intangibles; averages of opening and closing balances (prior-year quarter uses the closing Sep-25 balance; prior TTM uses Dec-24 and Sep-25). Verisk's net working capital is negative (deferred revenue), so invested capital is ~$2.7bn. ROIC = annualized quarterly or TTM NOPAT / average invested capital. Incremental ROIC = ΔNOPAT / Δinvested capital (TTM vs prior TTM). Sales/capital = revenue / average invested capital. FCF = operating cash flow - capex. FCF conversion = FCF / NOPAT. Net debt / EBITDA = (short + long-term debt - cash) / TTM GAAP EBITDA (operating income + D&A), leases excluded; on adjusted EBITDA it is ${x(3938.5/T.adjEbitda[0],2)}. TTM = FY2025 + 9M 2026 - 9M 2025. Q2 2026 gross profit and prior-TTM gross profit are n/a because quarterly cost of revenues was not in the sources read. SBC / revenue = stock-based compensation / revenue.</div></details>
+${read(D.reads.earnings)} ${read(D.reads.scorecard)}</section>`;
+
+/* 5 Valuation */
+h+=`<section id="val"><h2>5. Valuation</h2><div class="q">What is the market paying, versus its own history and its peers?</div>
+<table><tr><th class="l">Multiple</th><th>VRSK now</th><th>VRSK 5-yr avg</th><th>Peer median*</th><th class="l">Basis</th></tr>
+<tr><td class="l">P/E (TTM GAAP)</td><td>${x(peTTM)}</td><td>${x(D.valHist.pe5y)}</td><td>${x(med(D.peers.slice(1).map(p=>p.pe)))}</td><td class="l">$${M.price} / GAAP EPS $${T.eps[0]}</td></tr>
+<tr><td class="l">P/E (TTM adjusted)</td><td>${x(peAdj)}</td><td>n/a</td><td>n/a</td><td class="l">Adj. EPS $${T.adjEps[0]}</td></tr>
+<tr><td class="l">P/E (NTM, consensus)</td><td>${x(peFwd)}</td><td>n/a</td><td>n/a</td><td class="l">NTM EPS $${M.ntmEps} (S&P via Barchart, est.)</td></tr>
+<tr><td class="l">EV/EBITDA (TTM GAAP)</td><td>${x(evEbitda)}</td><td>${x(D.valHist.ev5y)}</td><td>${x(med(D.peers.slice(1).map(p=>p.ev)))}</td><td class="l">EV $${n(ev/1000,1)}bn / EBITDA $${n(td.ebitda[0],0)}m; on adj. EBITDA ${x(evAdj)}</td></tr>
+<tr><td class="l">PEG</td><td>${x(peg,2)}</td><td>n/a</td><td>n/a</td><td class="l">NTM P/E / ${M.eps3yGrowth}% 3-yr EPS growth forecast (est.)</td></tr>
+<tr><td class="l">FCF yield</td><td>${pct(td.fcf[0]/mcap)}</td><td>n/a</td><td>n/a</td><td class="l">TTM FCF / market cap</td></tr>
+<tr><td class="l">Dividend yield</td><td>${pct(M.divPerShare/M.price,2)}</td><td></td><td></td><td class="l">$2.00 annual</td></tr></table>
+<p class="foot">*Peer median of SPGI, MCO, MSCI, EFX, FDS, CCCS where available; peer data from free pages with mixed 2026 as-of dates, so treat it as directional. History: ${D.valHist.src}. EV excludes operating leases.</p>
+${read(D.reads.valuation)}</section>`;
+function med(a){a=a.filter(v=>v!=null).sort((p,q)=>p-q);if(!a.length)return null;const m=Math.floor(a.length/2);return a.length%2?a[m]:(a[m-1]+a[m])/2;}
+
+/* 6 Industry */
+h+=`<section id="ind"><h2>6. Industry and competitors</h2><div class="q">Is the market growing, and how does Verisk compare?</div>
+<ul><li><b>End market:</b> US P&C net written premiums grew from ~$456bn (2007) to a projected ~$935bn (2028E), about +5% a year (Verisk Investor Day, citing NAIC/Swiss Re).</li>
+<li><b>Cycle:</b> after record profitability in 2025 (low catastrophe losses), carriers are competing on growth and property pricing is softening, especially commercial property (Q1-Q3 2026 calls).</li>
+<li><b>Competitors by line:</b> CCC Intelligent Solutions (auto claims), Moody's RMS (catastrophe models), LexisNexis Risk (data, fraud), Guidewire and Duck Creek (core systems), EagleView and Nearmap (aerial imagery), plus AI-native startups.</li></ul>
+<div class="tw"><table><tr><th class="l">Company</th><th>Revenue TTM ($bn)</th><th>Op. margin</th><th>P/E TTM</th><th>EV/EBITDA</th><th class="l">As of / source</th></tr>
+${D.peers.map(p=>`<tr${p.t=="VRSK"?' style="font-weight:650;background:#f3f7fa"':""}><td class="l">${p.n} (${p.t})</td><td>${n(p.rev,2)}</td><td>${p.om==null?"n/a":n(p.om,1)+"%"}</td><td>${x(p.pe)}</td><td>${x(p.ev)}</td><td class="l foot">${p.src}</td></tr>`).join("")}</table></div>
+${read(D.reads.industry)}</section>`;
+
+/* 7 Management */
+h+=`<section id="mgmt"><h2>7. Management and capital allocation</h2><div class="q">Who runs it, what do they plan, and how do they spend the cash?</div>
+<div class="grid2"><div>
+<table><tr><th class="l">Person</th><th class="l">Role</th><th class="l">Background</th></tr>
+<tr><td class="l">Lee Shavel</td><td class="l">President & CEO since May 2022</td><td class="l">Verisk CFO before that; succeeded long-time CEO Scott Stephenson</td></tr>
+<tr><td class="l">Elizabeth Mann</td><td class="l">CFO since Sep 2022</td><td class="l">Ex-CFO of S&P Global Ratings and Mobility; Goldman Sachs; Oxford math PhD</td></tr></table>
+<p><b>Ownership:</b> insiders ~0.21% of shares (stockanalysis). Three directors bought 2,500 shares at ~$179-180 in 2026.</p>
+</div><div>
+<h3>2026 Investor Day 3-year targets</h3>
+<ul><li>OCC revenue growth 6-8%; OCC adj. EBITDA growth 7-10%</li><li>Adj. EBITDA margin +25-75 bp a year; double-digit adj. EPS growth</li><li>Return at least 75% of FCF via dividends and buybacks</li></ul>
+<h3>Capital allocation, TTM to Sep-26</h3>
+<ul><li>Buybacks $${n(T.buybacks[0],0)}m + dividends ~$258m vs FCF $${n(td.fcf[0],0)}m: ~${n((T.buybacks[0]+257.5)/td.fcf[0]*100,0)}% of FCF, funded by year-end 2025 cash and new 2026 notes.</li>
+<li>Diluted share count -7.6% YoY (129.2m vs 139.9m).</li><li>Capex $${n(td.fcf[0]?T.capex[0]:0,0)}m (~8% of revenue), mostly capitalized software.</li></ul>
+</div></div>${read(D.reads.management)}</section>`;
+
+/* 8 Risks */
+h+=`<section id="risk"><h2>8. Risks</h2><div class="q">What would break the story?</div>
+<table class="risk"><tr><th class="l">Risk</th><th>Likelihood</th><th>Impact</th><th class="l">What to watch</th></tr>
+<tr><td class="l"><b>AccuLynx forced closing.</b> Delaware Supreme Court (Oct 23, 2026) affirmed that Verisk must keep pursuing the $2.35bn deal, subject to the FTC. Closing would add ~$2.35bn of debt-funded spend on a non-core asset; a settlement could mean a large payment.</td><td>Medium-high</td><td>High</td><td class="l">FTC Second Request outcome; settlement talks</td></tr>
+<tr><td class="l"><b>Soft P&C cycle.</b> Carriers under margin pressure push back on price escalators and buy fewer new modules.</td><td>Medium</td><td>Medium</td><td class="l">Subscription OCC growth below 7%</td></tr>
+<tr><td class="l"><b>AI disruption.</b> Generative AI could commoditize estimating, forms and analytics, or let carriers build in-house.</td><td>Low-medium</td><td>High</td><td class="l">Win rates, pricing of XactAI and similar tools</td></tr>
+<tr><td class="l"><b>Leverage.</b> Net debt/EBITDA rose to ~2.3x; interest cost +26% YoY in Q3.</td><td>Medium</td><td>Low-medium</td><td class="l">Rating (Baa1, Moody's), interest guidance</td></tr>
+<tr><td class="l"><b>Litigation and regulation.</b> Telematics class actions and data-privacy claims raised legal fees in 2026; antitrust scrutiny of data pooling.</td><td>Medium</td><td>Medium</td><td class="l">10-Q legal notes, reserves</td></tr>
+<tr><td class="l"><b>Weather volatility.</b> Low storm activity cut transactional claims revenue in 2025-H1 2026.</td><td>High</td><td>Low</td><td class="l">Q4 storm season, transactional growth</td></tr></table>
+${read(D.reads.risks)}</section>`;
+
+/* 9 Scenarios */
+const S=D.scenarios;
+h+=`<section id="scen"><h2>9. Scenarios (12-month view, our estimates)</h2><div class="q">What is it worth under different assumptions, and where is the consensus?</div>
+<div class="scen">${["bear","base","bull"].map(k=>`<div class="sc ${k}"><h4>${k[0].toUpperCase()+k.slice(1)}</h4><div class="p">${usd(scenPx(k),0)}</div><div class="${cls(scenPx(k)/M.price-1)}">${fmtCh(scenPx(k)/M.price-1)} vs $${M.price}</div><div class="foot">NTM adj. EPS $${S[k].eps.toFixed(2)} x ${S[k].pe}x P/E</div><ul>${S[k].assume.map(a=>`<li>${a}</li>`).join("")}</ul></div>`).join("")}</div>
+<p><b>Consensus baseline:</b> ${M.analysts} analysts, average rating "${M.rating}", average target ${usd(M.consensusTarget,2)} (${fmtCh(M.consensusTarget/M.price-1)}); NTM EPS consensus $${M.ntmEps} (estimate). Company FY2026 adj. EPS guidance $${M.guideAdjEpsLo}-${M.guideAdjEpsHi}. Scenario EPS and multiples are illustrative estimates, not forecasts.</p>
+${read(D.reads.scenarios)}</section>`;
+
+/* 10 Takeaways */
+h+=`<section id="take"><h2>10. Takeaways</h2><div class="q">What to remember and what to check next</div>
+<div class="grid2"><div><h3>Remember</h3><ul>${D.takeaways.map(t=>`<li>${t}</li>`).join("")}</ul></div>
+<div><h3>Check next</h3><ul>${D.checkNext.map(t=>`<li>${t}</li>`).join("")}</ul></div></div>
+<details><summary>Glossary</summary><dl class="gl">${D.glossary.map(g=>`<dt>${g[0]}</dt><dd>${g[1]}</dd>`).join("")}</dl></details></section>`;
+
+h+=`<section id="src"><h2>Sources</h2><ol class="foot">${D.sources.map(s=>`<li><a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a></li>`).join("")}</ol>
+<p class="foot"><b>Disclaimer:</b> educational analysis, not investment advice. Figures come from the sources listed; estimates (consensus, scenarios, TTM OCC growth, peer data with mixed dates) are labelled as such. Verify before acting.</p></section>`;
+
+$("#main").innerHTML=h;
+
+/* interactivity */
+document.querySelectorAll(".toggle button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".toggle button").forEach(o=>o.classList.remove("on"));b.classList.add("on");
+  $("#t-hl").style.display=b.dataset.t=="hl"?"":"none";$("#t-sc").style.display=b.dataset.t=="sc"?"":"none";});
+const links=[...document.querySelectorAll("nav a")];
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle("on",l.getAttribute("href")=="#"+e.target.id));}}),{rootMargin:"-40% 0px -55% 0px"});
+document.querySelectorAll("section").forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SK hynix (SKHY) ER101 Overview</title>
+<style>
+:root{--bg:#fbfaf7;--card:#fff;--ink:#1d1d1b;--ink2:#55534e;--mute:#8a877f;--line:#e6e3dc;--acc:#2f5fb3;--accl:#dbe5f6;--good:#2e7d4f;--bad:#b3412f;--warn:#a86b12}
+@media (prefers-color-scheme:dark){:root{--bg:#161615;--card:#1f1f1d;--ink:#eeece6;--ink2:#bdbab2;--mute:#8d8a82;--line:#34332f;--acc:#7da2e8;--accl:#26324a;--good:#6cc092;--bad:#e8826f;--warn:#e0aa55}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:24px 18px 60px}
+header h1{font-size:26px;margin:0 0 4px}
+.sub{color:var(--ink2);font-size:14px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:18px 0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.tile .k{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em}
+.tile .v{font-size:22px;font-weight:650;font-variant-numeric:tabular-nums}
+.tile .n{font-size:12px;color:var(--ink2)}
+nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 0;z-index:5;display:flex;gap:6px;flex-wrap:wrap}
+nav a{font-size:13px;color:var(--ink2);text-decoration:none;padding:4px 9px;border-radius:999px;border:1px solid var(--line)}
+nav a:hover{color:var(--acc);border-color:var(--acc)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:16px 0}
+section h2{font-size:18px;margin:0 0 2px}
+.q{color:var(--mute);font-size:13px;margin:0 0 10px}
+.read{background:var(--accl);border-radius:8px;padding:9px 12px;margin:10px 0 0;font-size:14px}
+.read b{color:var(--acc)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--mute);font-weight:600;font-size:12px}
+td.l{text-align:left}
+.scroll{overflow-x:auto}
+.est{color:var(--warn);font-size:11px}
+.pos{color:var(--good)}.neg{color:var(--bad)}
+ul{margin:6px 0 0;padding-left:20px}li{margin:3px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+.tl{border-left:2px solid var(--line);margin-left:6px;padding-left:14px}
+.tl div{margin:6px 0;position:relative}
+.tl div::before{content:"";position:absolute;left:-19px;top:7px;width:8px;height:8px;border-radius:50%;background:var(--acc)}
+.tl b{display:inline-block;min-width:70px}
+.chart{position:relative}
+.chart svg{width:100%;height:auto;display:block}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12px;padding:5px 8px;border-radius:6px;opacity:0;transition:opacity .1s;white-space:nowrap}
+.scen{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:760px){.scen{grid-template-columns:1fr}}
+.sc{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.sc h3{margin:0;font-size:15px}.sc .p{font-size:24px;font-weight:650}
+.toggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin:4px 0 10px}
+.toggle button{border:0;background:transparent;color:var(--ink2);padding:5px 12px;font-size:13px;cursor:pointer}
+.toggle button.on{background:var(--acc);color:#fff}
+details{margin-top:8px}summary{cursor:pointer;color:var(--acc);font-size:13px}
+.foot{font-size:12px;color:var(--ink2)}
+.foot li{margin:2px 0}
+dl.gl{display:grid;grid-template-columns:150px 1fr;gap:4px 12px;font-size:13px;margin:0}dl.gl dt{font-weight:600}dl.gl dd{margin:0;color:var(--ink2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1 id="title"></h1>
+  <div class="sub" id="subtitle"></div>
+</header>
+<div class="tiles" id="tiles"></div>
+<nav>
+  <a href="#overview">Business</a><a href="#moat">Moat</a><a href="#drivers">Drivers</a><a href="#earnings">Earnings</a><a href="#valuation">Valuation</a><a href="#industry">Industry & peers</a><a href="#mgmt">Management</a><a href="#risks">Risks</a><a href="#scenarios">Scenarios</a><a href="#takeaways">Takeaways</a>
+</nav>
+
+<section id="overview">
+  <h2>1. Business overview</h2>
+  <p class="q">What does it do, how does it make money, and how did it get here?</p>
+  <div class="grid2">
+    <div id="bizText"></div>
+    <div><div class="tl" id="timeline"></div></div>
+  </div>
+  <div class="read" id="readOverview"></div>
+</section>
+
+<section id="moat">
+  <h2>2. Moat</h2>
+  <p class="q">Why does it earn its returns, and can competitors copy it?</p>
+  <div class="grid2">
+    <div><b>Real advantages (USPs)</b><ul id="usp"></ul></div>
+    <div><b>Why it is not a wide moat</b><ul id="antiMoat"></ul></div>
+  </div>
+  <div class="read" id="readMoat"></div>
+</section>
+
+<section id="drivers">
+  <h2>3. Drivers</h2>
+  <p class="q">Revenue = bits shipped × average selling price (ASP) × mix. Which KPIs move it?</p>
+  <div class="chart" id="revChart"></div>
+  <div class="scroll"><table id="kpiTable"></table></div>
+  <div class="read" id="readDrivers"></div>
+</section>
+
+<section id="earnings">
+  <h2>4. Earnings report summary: Q3 2026 (reported 28 Oct 2026)</h2>
+  <p class="q">Headline results, trillion KRW unless stated. K-IFRS, preliminary and unaudited.</p>
+  <div class="scroll"><table id="headline"></table></div>
+  <h3 style="font-size:15px;margin:16px 0 6px">Metric scorecard</h3>
+  <div class="scroll"><table id="scorecard"></table></div>
+  <div class="read" id="readEarnings"></div>
+  <details><summary>Methodology and definitions</summary><div class="foot" id="method"></div></details>
+</section>
+
+<section id="valuation">
+  <h2>5. Valuation</h2>
+  <p class="q">What is the market paying, versus its own history and peers?</p>
+  <div class="toggle" id="basisToggle"><button data-b="seoul" class="on">Seoul share price</button><button data-b="adr">SKHY ADR price</button></div>
+  <div class="scroll"><table id="valTable"></table></div>
+  <div class="read" id="readVal"></div>
+</section>
+
+<section id="industry">
+  <h2>6. Industry and competitors</h2>
+  <p class="q">How fast is the market growing, and how does SK hynix stack up on fundamentals and price?</p>
+  <ul id="industryList"></ul>
+  <div class="scroll" style="margin-top:10px"><table id="peerTable"></table></div>
+  <div class="read" id="readPeers"></div>
+</section>
+
+<section id="mgmt">
+  <h2>7. Management and capital allocation</h2>
+  <p class="q">Who runs it, what do they own, and what do they do with the cash?</p>
+  <div class="grid2"><div><ul id="mgmtList"></ul></div><div><ul id="capList"></ul></div></div>
+  <div class="read" id="readMgmt"></div>
+</section>
+
+<section id="risks">
+  <h2>8. Risks</h2>
+  <p class="q">What would break the story?</p>
+  <div class="scroll"><table id="riskTable"></table></div>
+</section>
+
+<section id="scenarios">
+  <h2>9. Scenarios (12 months, per SKHY ADR)</h2>
+  <p class="q">Bear / base / bull, with analyst consensus as the reference point. Scenario values are my estimates.</p>
+  <div class="scen" id="scen"></div>
+  <div class="read" id="readScen"></div>
+</section>
+
+<section id="takeaways">
+  <h2>10. Takeaways</h2>
+  <div class="grid2"><div><b>Remember</b><ul id="remember"></ul></div><div><b>Check next</b><ul id="checkNext"></ul></div></div>
+</section>
+
+<section>
+  <h2>Glossary</h2>
+  <dl class="gl" id="gloss"></dl>
+</section>
+
+<section>
+  <h2>Sources</h2>
+  <ul class="foot" id="sources"></ul>
+  <p class="foot" id="disclaimer"></p>
+</section>
+</div>
+
+<script>
+// ===================== DATA =====================
+// Units: trillion KRW unless noted. "est" flags = estimate or derived by me.
+const DATA = {
+  company:"SK hynix Inc.", ticker:"SKHY (Nasdaq ADR, 10 ADR = 1 share) / 000660 (KRX)", currency:"KRW",
+  asOf:"13 Nov 2026 close",
+  price:{ seoul:1216000, adr:131.79, fx:1340, adrRatio:10 },  // fx ~1,340 KRW/USD (approx, early-Nov range 1,335-1,360)
+  sharesM:730,   // ~730M shares implied by Naver market value (Nov 2026); treasury from the 40T buyback pending cancellation
+  netCash:98.7,  // end-Q3 2026: cash 114.5, borrowings 15.8
+  taxRate:0.24,  // normalized; Q3 effective ~21.5% (pre-tax 50.7, net 39.8)
+  quarters:[ // label, revenue, operating profit, net profit, D&A
+    ["Q4'24",19.767,8.0828,8.0065,null],
+    ["Q1'25",17.6391,7.4405,8.1082,null],
+    ["Q2'25",22.232,9.2129,6.9962,null],
+    ["Q3'25",24.4489,11.3834,12.5975,3.6],
+    ["Q4'25",32.8267,19.1696,15.246,3.6],
+    ["Q1'26",52.5763,37.6103,40.3459,3.69],
+    ["Q2'26",79.3187,60.5426,93.9226,4.0],
+    ["Q3'26",104.6155,83.3338,39.7756,4.3]
+  ],
+  annual:{FY2024:{rev:66.193,op:23.4673,np:19.7969},FY2025:{rev:97.1467,op:47.2063,np:42.9479}},
+  // Invested capital, operating approach: receivables + inventory - payables + net PP&E + intangibles
+  ic:{ "Dec'25":{rec:18.56,inv:14.29,ap:2.85,ppe:79.84,intang:3.42}, "Sep'26":{rec:59.12,inv:19.36,ap:2.73,ppe:97.21,intang:4.27} },
+  cash:{ // OCF, capex, FCF
+    "Q3'26":{ocf:54.8,capex:12.7,fcf:42.1}, "Q2'26":{ocf:65.71,capex:10.67,fcf:55.04},
+    ttmFcfEst:127, ttmNote:"TTM Jun-26 FCF 92.0 + Q3'26 42.1 - Q3'25 FCF (not disclosed; assumed 5-10) = 124-129"
+  },
+  consensus:{ fy26NI:258.8, fy27NI:348.6, fy27EpsAdr:35.34, avgTarget:243, targetN:14, low:200, high:400, morningstarFV:160 },
+  peers:[
+    {name:"SK hynix", px:"1,216,000 won (13 Nov)", mcap:"~$662B (Seoul) / ~$962B (ADR-implied)", opm:"74.5% TTM; 80% Q3", hbm:"50%", dram:"25%", pe:null, fpe:null, eve:null, netcash:"98.7T won", self:true},
+    {name:"Micron (MU)", px:"$725.11 (10 Nov)", mcap:"$820B", opm:"74.6% FY26 (Aug); 80.7% FQ4", hbm:"18%", dram:"24%", pe:9.8, fpe:4.1, eve:6.9, netcash:"$68.3B"},
+    {name:"Samsung Electronics", px:"206,000 won (11 Nov)", mcap:"~1,200T won (common)", opm:"55% group Q3; 72% chips (DS)", hbm:"33%", dram:"38%", pe:null, fpe:2.8, eve:null, netcash:"211.8T won"},
+    {name:"CXMT (private, China)", px:"n/a", mcap:"n/a", opm:"n/a", hbm:"~0%", dram:"10%", pe:null, fpe:null, eve:null, netcash:"n/a"}
+  ]
+};
+
+// ===================== helpers =====================
+const $=id=>document.getElementById(id);
+const f=(x,d=1)=>x==null||isNaN(x)?"n/a":x.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct=(x,d=1)=>x==null||isNaN(x)?"n/a":(x*100).toFixed(d)+"%";
+const chg=(a,b)=>a==null||b==null?null:a/b-1;
+const cls=x=>x==null?"":(x>=0?"pos":"neg");
+const sum=a=>a.reduce((s,x)=>s+x,0);
+const Q=DATA.quarters, idx=l=>Q.findIndex(q=>q[0]===l);
+const col=(i,k)=>Q.map(q=>q[i]);
+const ttm=(i,from)=>sum(Q.slice(from,from+4).map(q=>q[i]));
+const T={rev:ttm(1,4),op:ttm(2,4),np:ttm(3,4),da:ttm(4,4)}, P={rev:ttm(1,0),op:ttm(2,0),np:ttm(3,0)};
+T.ebitda=T.op+T.da; T.nopat=T.op*(1-DATA.taxRate); P.nopat=P.op*(1-DATA.taxRate);
+const icv=o=>o.rec+o.inv-o.ap+o.ppe+o.intang;
+const IC0=icv(DATA.ic["Dec'25"]), IC1=icv(DATA.ic["Sep'26"]), ICavg=(IC0+IC1)/2;
+const q3=Q[idx("Q3'26")], q2=Q[idx("Q2'26")], q3p=Q[idx("Q3'25")];
+const pr=DATA.price, mcapS=pr.seoul*DATA.sharesM*1e6/1e12; // trillion KRW
+const adrKrw=pr.adr*pr.adrRatio*pr.fx, prem=adrKrw/pr.seoul-1, mcapA=mcapS*(1+prem);
+
+// ===================== header =====================
+$("title").textContent=`${DATA.company} (SKHY) · ER101 overview`;
+$("subtitle").innerHTML=`${DATA.ticker} · Reporting currency KRW · Prices as of ${DATA.asOf} · FX ≈ ${pr.fx.toLocaleString()} KRW/USD (approx.) · Not investment advice`;
+const tiles=[
+ ["ADR price",`$${f(pr.adr,2)}`,`Seoul ${pr.seoul.toLocaleString()} won`],
+ ["ADR premium to Seoul",pct(prem,0),"Conversion into new ADRs is restricted"],
+ ["Market cap (Seoul)",`${f(mcapS,0)}T won`,`≈ $${f(mcapS*1e12/pr.fx/1e9,0)}B; ADR-implied ≈ $${f(mcapA*1e12/pr.fx/1e9,0)}B`],
+ ["TTM revenue",`${f(T.rev,1)}T`,`+${pct(chg(T.rev,P.rev),0)} vs prior TTM`],
+ ["TTM operating margin",pct(T.op/T.rev),`Q3'26: ${pct(q3[2]/q3[1])}`],
+ ["Net cash",`${DATA.netCash}T won`,"End Q3 2026"],
+ ["Fwd P/E (FY27, Seoul)",`${f(mcapS/DATA.consensus.fy27NI,1)}x`,`ADR: ${f(pr.adr/DATA.consensus.fy27EpsAdr,1)}x`],
+ ["Consensus target",`$${DATA.consensus.avgTarget}`,`${DATA.consensus.targetN} targets, range $${DATA.consensus.low}-${DATA.consensus.high}`]
+];
+$("tiles").innerHTML=tiles.map(t=>`<div class="tile"><div class="k">${t[0]}</div><div class="v">${t[1]}</div><div class="n">${t[2]}</div></div>`).join("");
+
+// ===================== 1. Business =====================
+$("bizText").innerHTML=`
+<p><b>What it does.</b> SK hynix designs and manufactures memory chips: <b>DRAM</b> (working memory, about 75% of Q3 2026 revenue, roughly 78T won) and <b>NAND flash</b> (storage, roughly 25T won, including enterprise SSDs from its Solidigm unit). Its crown jewel is <b>HBM</b> (high-bandwidth memory), stacked DRAM that sits next to AI accelerators such as Nvidia's GPUs.</p>
+<p><b>How it makes money.</b> It sells chips by the bit. Profit is driven by price per bit minus cost per bit; cost falls as it moves to denser process nodes (1c DRAM, 321-layer NAND). Fabs are mostly in Korea (Icheon, Cheongju M15X, Yongin under construction), with DRAM and NAND fabs in China.</p>
+<p><b>Who buys.</b> AI accelerator makers and cloud providers. Long-term agreements (LTAs) with 14 customers cover more than half of 2027-2028 capacity, typically for about five years, with prices moving inside an agreed band.</p>`;
+const tl=[["1994","Today's CEO joins Hyundai Electronics' chip R&D, the company's predecessor"],["2001","Renamed Hynix Semiconductor after separating from Hyundai"],["2012","SK Group takes control; becomes SK hynix"],["2018","Invests in Toshiba Memory (now Kioxia) via a Bain-led consortium"],["2022","Kwak Noh-jung becomes co-CEO (sole CEO from late 2023)"],["2023","Memory bust: operating margin about -24%"],["2025","Record year: 97.1T won revenue, 47.2T op. profit, beats Samsung's total op. profit"],["Jul 2026","$26.5B Nasdaq ADR listing, largest ever by a foreign company; Kioxia stake partly sold (Q2 gain)"],["Oct 2026","First quarter above 100T won revenue; ~100T won FY26 shareholder-return plan"]];
+$("timeline").innerHTML=tl.map(t=>`<div><b>${t[0]}</b> ${t[1]}</div>`).join("");
+$("readOverview").innerHTML=`<b>Read:</b> A near pure-play memory maker that turned from a 2023 loss into the world's most profitable memory company on the back of AI. That means earnings are tied to the memory price cycle, not to a product with sticky pricing.`;
+
+// ===================== 2. Moat =====================
+$("usp").innerHTML=["HBM leadership: #1 HBM supplier by revenue (50% in Q2 2026, Counterpoint); reportedly over two-thirds of HBM4 volume for Nvidia's Vera Rubin.","Process and packaging know-how: HBM4 in full mass production in Q3 2026; 1c DRAM and 321-layer NAND ramping. Yield on stacked dies is hard to copy quickly.","Customer qualification: getting designed into an accelerator takes many months; LTAs with 14 customers lock in volume through 2028.","Scale and balance sheet: 98.7T won net cash funds capex through a downturn without borrowing."].map(x=>`<li>${x}</li>`).join("");
+$("antiMoat").innerHTML=["DRAM and NAND are standardized commodities; three players (plus CXMT) can make substitutes.","HBM share already slipping: 64% (Q2 2025) to 50% (Q2 2026) as Samsung reached 33%.","Returns attract capacity: SK hynix, Samsung, Micron and CXMT are all expanding; new fabs arrive in 3-5 years.","Morningstar rates SK hynix as having no economic moat and 'very high' uncertainty."].map(x=>`<li>${x}</li>`).join("");
+$("readMoat").innerHTML=`<b>Read:</b> The edge is a technology and timing lead in HBM, not a structural moat. It earns 80% margins today because supply is short; the lead is real but must be re-won every product generation (HBM3E, HBM4, HBM4E).`;
+
+// ===================== 3. Drivers =====================
+(function chart(){
+  const w=720,h=230,pad={l:44,r:10,t:16,b:38}, n=Q.length, max=110;
+  const bw=(w-pad.l-pad.r)/n, y=v=>pad.t+(h-pad.t-pad.b)*(1-v/max);
+  let s=`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Quarterly revenue, trillion won"><title>Quarterly revenue, trillion KRW</title>`;
+  [0,25,50,75,100].forEach(v=>{s+=`<line x1="${pad.l}" x2="${w-pad.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${pad.l-6}" y="${y(v)+4}" font-size="11" fill="var(--mute)" text-anchor="end">${v}</text>`});
+  Q.forEach((q,i)=>{const x=pad.l+i*bw+bw*0.2, bwid=bw*0.6, top=y(q[1]), hh=y(0)-top;
+    s+=`<path d="M${x},${y(0)} V${top+4} q0,-4 4,-4 h${bwid-8} q4,0 4,4 V${y(0)} Z" fill="var(--acc)"/>`;
+    s+=`<rect class="hit" data-i="${i}" x="${pad.l+i*bw}" y="${pad.t}" width="${bw}" height="${h-pad.t-pad.b}" fill="transparent"/>`;
+    s+=`<text x="${x+bwid/2}" y="${h-pad.b+15}" font-size="11" fill="var(--ink2)" text-anchor="middle">${q[0]}</text>`;
+    s+=`<text x="${x+bwid/2}" y="${h-pad.b+29}" font-size="10" fill="var(--mute)" text-anchor="middle">${pct(q[2]/q[1],0)}</text>`;
+    if(i===n-1) s+=`<text x="${x+bwid/2}" y="${top-5}" font-size="11" fill="var(--ink)" text-anchor="middle">${f(q[1],1)}</text>`;
+  });
+  s+=`<text x="${pad.l}" y="11" font-size="11" fill="var(--mute)">Revenue, T won (bars) · operating margin below each quarter</text></svg><div class="tip" id="tip"></div>`;
+  $("revChart").innerHTML=s;
+  const tip=$("tip");
+  $("revChart").querySelectorAll(".hit").forEach(r=>{
+    r.addEventListener("mousemove",e=>{const q=Q[+r.dataset.i],b=$("revChart").getBoundingClientRect();
+      tip.innerHTML=`<b>${q[0]}</b> · Revenue ${f(q[1],1)}T · Op. profit ${f(q[2],1)}T (${pct(q[2]/q[1],0)}) · Net ${f(q[3],1)}T`;
+      tip.style.left=Math.min(e.clientX-b.left+10,b.width-320)+"px";tip.style.top=(e.clientY-b.top-34)+"px";tip.style.opacity=1;});
+    r.addEventListener("mouseleave",()=>tip.style.opacity=0);
+  });
+})();
+$("kpiTable").innerHTML=`<tr><th>KPI</th><th>Latest</th><th>Next / outlook</th><th>Why it matters</th></tr>`+[
+ ["DRAM ASP (price/bit)","Q3'26: up high-20s % QoQ","Price gains slowing per peers (Micron)","Single biggest swing factor for margin"],
+ ["DRAM bit shipments","Q3'26: about +10% QoQ","Q4'26 guide: +mid-20s % QoQ; 2027 demand +mid-20s %","Volume growth as M15X ramps"],
+ ["NAND ASP / bits","Q3'26: ASP +mid-20s %, bits slightly down","Q4'26 bits +mid-single-digit %","~25% of revenue; eSSD for AI"],
+ ["HBM share & mix","50% HBM share (Q2'26); HBM4 to pass HBM3E in Q4'26","Samsung gaining with HBM4","Highest-margin, contracted product"],
+ ["Contracted capacity (LTAs)","14 customers, >50% of 2027-28 capacity","Extensions under discussion","Visibility; floor under volume"],
+ ["Capex / revenue","2026 plan: high-40T won (~15% of revenue)","2027: 'significant' increase","Leading indicator of future supply"]
+].map(r=>`<tr>${r.map((c,i)=>`<td class="l">${i===0?"<b>"+c+"</b>":c}</td>`).join("")}</tr>`).join("");
+$("readDrivers").innerHTML=`<b>Read:</b> Revenue quadrupled in a year mostly through <b>price</b>, not volume: Q3 DRAM prices rose high-20s % in one quarter while bits rose about 10%. Price is the variable that can reverse fastest, which is why the market pays so little for these earnings.`;
+
+// ===================== 4. Earnings =====================
+const sharesEstQ3=720, sharesEst25=728; // millions, est
+const eps=(np,sh)=>np*1e12/(sh*1e6);
+const gpQ3=q3[1]*(1-0.143), gpQ2=q2[1]*(1-0.168);
+const rows=[
+ ["Revenue",q3[1],q3p[1],q2[1],T.rev,P.rev],
+ ["Gross profit <span class='est'>est.</span>",gpQ3,null,gpQ2,null,null],
+ ["Operating income",q3[2],q3p[2],q2[2],T.op,P.op],
+ ["Net profit (GAAP)",q3[3],q3p[3],q2[3],T.np,P.np],
+ ["EPS GAAP, won <span class='est'>est.</span>",eps(39.53,sharesEstQ3),eps(12.5975,sharesEst25),131478,null,null],
+ ["EPS adjusted",null,null,null,null,null],
+ ["Operating cash flow",DATA.cash["Q3'26"].ocf,null,DATA.cash["Q2'26"].ocf,null,null],
+ ["Free cash flow",DATA.cash["Q3'26"].fcf,null,DATA.cash["Q2'26"].fcf,DATA.cash.ttmFcfEst,null]
+];
+$("headline").innerHTML=`<tr><th>Item</th><th>Q3'26</th><th>Q3'25</th><th>Q2'26</th><th>QoQ %</th><th>YoY %</th><th>TTM</th><th>Prior TTM</th><th>TTM %</th></tr>`+
+ rows.map(r=>{const isEps=r[0].startsWith("EPS"),d=isEps?0:1,qq=chg(r[1],r[3]),yy=chg(r[1],r[2]),tt=chg(r[4],r[5]);
+  return `<tr><td>${r[0]}</td><td>${f(r[1],d)}</td><td>${f(r[2],d)}</td><td>${f(r[3],d)}</td><td class="${cls(qq)}">${pct(qq,0)}</td><td class="${cls(yy)}">${pct(yy,0)}</td><td>${f(r[4],d)}${r[0]==="Free cash flow"?" <span class='est'>est.</span>":""}</td><td>${f(r[5],d)}</td><td class="${cls(tt)}">${pct(tt,0)}</td></tr>`}).join("");
+
+const nopQ=q=>q[2]*(1-DATA.taxRate);
+const roicTTM=T.nopat/ICavg, roicQ3=nopQ(q3)*4/IC1;
+const nopFY25=DATA.annual.FY2025.op*(1-DATA.taxRate), incROIC=(T.nopat-nopFY25)/(IC1-IC0);
+const sc=[
+ ["Growth","Organic revenue growth",pct(chg(q3[1],q2[1]),0)+" QoQ / "+pct(chg(q3[1],q3p[1]),0)+" YoY","n/a",pct(chg(T.rev,P.rev),0),"No acquisitions; reported ≈ organic (FX not stripped)"],
+ ["Profitability","Operating margin",pct(q3[2]/q3[1]),pct(q3p[2]/q3p[1]),pct(T.op/T.rev)+" vs "+pct(P.op/P.rev),"GAAP (K-IFRS)"],
+ ["Profitability","NOPAT margin",pct(nopQ(q3)/q3[1]),pct(nopQ(q3p)/q3p[1]),pct(T.nopat/T.rev)+" vs "+pct(P.nopat/P.rev),"24% normalized tax"],
+ ["Capital efficiency","ROIC",pct(roicQ3,0)+" annualized <span class='est'>est.</span>","n/a",pct(roicTTM,0)+" <span class='est'>est.</span>","Avg IC Dec-25/Sep-26 = "+f(ICavg,0)+"T"],
+ ["Capital efficiency","Incremental ROIC","n/a","n/a",pct(incROIC,0)+" <span class='est'>est.</span>","ΔNOPAT FY25→TTM / ΔIC Dec-25→Sep-26"],
+ ["Reinvestment","Sales / Capital",f(q3[1]*4/IC1,2)+"x ann.","n/a",f(T.rev/ICavg,2)+"x",""],
+ ["Cash","FCF margin",pct(DATA.cash["Q3'26"].fcf/q3[1]),"n/a",pct(DATA.cash.ttmFcfEst/T.rev,0)+" <span class='est'>est.</span>","Q2'26: "+pct(DATA.cash["Q2'26"].fcf/q2[1],0)],
+ ["Quality","FCF conversion (FCF/NOPAT)",pct(DATA.cash["Q3'26"].fcf/nopQ(q3),0),"n/a",pct(DATA.cash.ttmFcfEst/T.nopat,0)+" <span class='est'>est.</span>","Q2'26: "+pct(DATA.cash["Q2'26"].fcf/nopQ(q2),0)],
+ ["Balance sheet","Net debt / EBITDA",f(-DATA.netCash/(T.ebitda),2)+"x (TTM)","≈ -0.08x <span class='est'>est.</span>",f(-DATA.netCash/T.ebitda,2)+"x","Net cash 98.7T vs 3.8T a year ago"],
+ ["Capital allocation","Buybacks","40T won program bought Aug-Oct (done after quarter end); new 20T approved","None","FY26 target ≥60T won","Plus ~10T won of shares for employee pay, outside the total"],
+ ["Capital allocation","Acquisition ROIC","Not determinable","","","No material deal; Solidigm and Kioxia returns not disclosed"],
+ ["Dilution","SBC / Revenue","n/a","n/a","0.15% (TTM Jun-26)","Low reported SBC, but 10T won employee share buyback ≈ "+pct(10/T.rev,1)+" of TTM revenue"]
+];
+$("scorecard").innerHTML=`<tr><th>Category</th><th>Metric</th><th>Latest Q (Q3'26)</th><th>Prior-yr Q</th><th>TTM vs prior TTM</th><th>Note</th></tr>`+sc.map(r=>`<tr>${r.map((c,i)=>`<td class="${i<2||i===5?"l":""}">${c}</td>`).join("")}</tr>`).join("");
+$("readEarnings").innerHTML=`<b>Read:</b> Operating profit of 83.3T won at an 80% margin beat consensus (~77T) by about 8%, and returns on capital are above 100% on any reasonable definition. Net profit fell 58% QoQ because of a 22.9T won loss on investment assets and an 11.6T won FX loss below the operating line; Q2's net profit had been inflated by a Kioxia stake sale. Judge this business on operating profit and cash, and treat net profit as noisy. FCF conversion near 80-85% TTM says the profits are real cash.`;
+$("method").innerHTML=`<ul>
+<li>Organic growth = reported growth; SK hynix made no material acquisitions in the window. Currency effects not stripped (most sales are USD-priced).</li>
+<li>Operating margin = K-IFRS operating profit / revenue. The company does not publish an adjusted EPS.</li>
+<li>NOPAT = operating profit × (1 - 24%). Q3 effective tax ≈ 21.5% (pre-tax 50.7T, net 39.8T).</li>
+<li>Invested capital = receivables + inventory - accounts payable + net PP&E + intangibles (operating approach). Other accrued liabilities, customer deposits under LTAs and lease assets are excluded, which overstates IC and so understates ROIC. Average of Dec-25 and Sep-26 (Sep-25 balance not available).</li>
+<li>ROIC = TTM NOPAT / average IC; Q3 annualized uses Sep-26 IC. Incremental ROIC = (TTM NOPAT - FY2025 NOPAT) / (IC Sep-26 - IC Dec-25); noisy over three quarters.</li>
+<li>FCF = operating cash flow - capex. TTM FCF ≈ 127T is an estimate: ${DATA.cash.ttmNote}. Gross profit derived from COGS at 14.3% (Q3) and 16.8% (Q2) of revenue.</li>
+<li>EBITDA = operating profit + D&A (company-stated D&A of 3.6T, 4.0T, 4.3T; Q1'26 3.69T derived). TTM EBITDA = ${f(T.ebitda,1)}T.</li>
+<li>EPS estimates use ~720M (Q3'26) and ~728M (2025) weighted shares; Q2'26 EPS 131,478 won as reported.</li>
+<li>Q2'25 and Q1'25 figures derived from FY2025 totals minus reported quarters.</li></ul>`;
+
+// ===================== 5. Valuation =====================
+function val(basis){
+  const mc=basis==="adr"?mcapA:mcapS, ev=mc-DATA.netCash;
+  const pe=mc/T.np, peOp=ev/T.nopat, eve=ev/T.ebitda, fpe=mc/DATA.consensus.fy27NI, g=DATA.consensus.fy27NI/DATA.consensus.fy26NI-1, peg=fpe/(g*100);
+  $("valTable").innerHTML=`<tr><th>Multiple</th><th>SK hynix (${basis==="adr"?"ADR-implied":"Seoul"})</th><th>Own history</th><th>Micron</th><th>Samsung</th></tr>`+[
+   ["Market cap / EV",`${f(mc,0)}T / ${f(ev,0)}T won`,"","$820B / $752B","~1,200T won"],
+   ["P/E, TTM reported",f(pe,1)+"x","Korean shares averaged 9.2x at quarter-ends since 2014",f(9.8,1)+"x (FY26)","n/a"],
+   ["EV / NOPAT, TTM (strips Kioxia & FX items)",f(peOp,1)+"x","","n/a","n/a"],
+   ["EV / EBITDA, TTM",f(eve,1)+"x","","6.9x (FY26)","n/a"],
+   ["Forward P/E, FY2027 consensus",f(fpe,1)+"x","ADR fwd P/E averaged 4.0x since July listing; 3.3x on 27 Oct","~4.1x","~2.8x"],
+   ["PEG (fwd P/E / FY27 EPS growth %)",f(peg,2),`EPS growth ${pct(g,0)} (consensus)`,"~0.03","n/a"]
+  ].map(r=>`<tr>${r.map((c,i)=>`<td class="${i===0||i===2?"l":""}">${c}</td>`).join("")}</tr>`).join("");
+}
+val("seoul");
+$("basisToggle").querySelectorAll("button").forEach(b=>b.onclick=()=>{$("basisToggle").querySelectorAll("button").forEach(x=>x.classList.remove("on"));b.classList.add("on");val(b.dataset.b)});
+$("readVal").innerHTML=`<b>Read:</b> At roughly 2.5x next year's earnings in Seoul (3.7x on the ADR) the market is pricing a sharp earnings fall, not a continuation. That is cheap against its own 9.2x long-run average and in line with Micron and Samsung, which are priced the same way. The ADR costs about <b>${pct(prem,0)} more</b> than the same claim on Seoul shares; anyone who can buy 000660 directly gets the same business for less. PEG is near zero and not meaningful at a cycle peak.`;
+
+// ===================== 6. Industry & peers =====================
+$("industryList").innerHTML=["DRAM market revenue grew 57% QoQ and 385% YoY in Q2 2026 (Counterpoint).","SK hynix expects 2027 bit demand growth of mid-20s % for DRAM and high-teens % for NAND, and demand above supply through 2030.","Cloud providers are expected to lift capex by more than 60% next year; data-center memory estimated at $237B in 2026 (SemiAnalysis).","Supply response: all three majors plan large capex increases for 2027; CXMT's DRAM share rose from 4% to 10% in a year."].map(x=>`<li>${x}</li>`).join("");
+$("peerTable").innerHTML=`<tr><th>Company</th><th>Price (date)</th><th>Market cap</th><th>Operating margin</th><th>HBM share Q2'26</th><th>DRAM share Q2'26</th><th>P/E TTM</th><th>Fwd P/E</th><th>EV/EBITDA</th><th>Net cash</th></tr>`+
+ DATA.peers.map(p=>{const pe=p.self?mcapS/T.np:p.pe, fp=p.self?mcapS/DATA.consensus.fy27NI:p.fpe, ev=p.self?(mcapS-DATA.netCash)/T.ebitda:p.eve;
+ return `<tr${p.self?' style="font-weight:600"':''}><td>${p.name}</td><td>${p.px}</td><td>${p.mcap}</td><td>${p.opm}</td><td>${p.hbm}</td><td>${p.dram}</td><td>${pe?f(pe,1)+"x":"n/a"}</td><td>${fp?f(fp,1)+"x":"n/a"}</td><td>${ev?f(ev,1)+"x":"n/a"}</td><td>${p.netcash}</td></tr>`}).join("");
+$("readPeers").innerHTML=`<b>Read:</b> SK hynix has the best margin and HBM position of the group but the smallest DRAM share; the market prices all three memory makers at 3-4x forward earnings, so there is no SK hynix-specific discount in Seoul. Peer multiples mix fiscal years (Micron FY ends August) and Samsung's forward P/E is derived from a broker's implied multiple; treat them as rough.`;
+
+// ===================== 7. Management =====================
+$("mgmtList").innerHTML=["<b>CEO Kwak Noh-jung</b>: joined the predecessor in 1994 as a researcher, CEO since March 2022 (sole CEO since late 2023), retained in SK Group's Oct 2026 reshuffle.","<b>Ownership</b>: CEO holds about 0.002% of shares. SK Group chairman Chey Tae-won bought his first 3,620 shares in July 2026.","<b>Controlling holder</b>: SK Square owns about 20%, rising as bought-back shares are cancelled. In Sept 2026 SK Group placed three vice chairpersons in strategic roles at SK hynix.","<b>Plan</b>: maximize M15X, raise 1c DRAM share, ramp Yongin Phase 1 in 2027, make HBM4 the mainstream product, build a $10B US AI-solutions unit."].map(x=>`<li>${x}</li>`).join("");
+$("capList").innerHTML=["<b>Policy</b>: return at least 50% of free cash flow.","<b>FY2026</b>: about 100T won of returns: ≥30T dividends (Q3 alone 14T won, 20,000 won/share incl. a 10,000 won Kioxia special) and ≥60T buybacks/cancellations.","<b>Capex</b>: high-40T won in 2026 (about 15% of revenue); 2027 to rise 'significantly'.","<b>Balance sheet</b>: net cash went from 3.8T (Sep-25) to 98.7T won (Sep-26).","<b>Watch</b>: 10T won of buyback shares go to employee compensation, a real cost not visible in SBC."].map(x=>`<li>${x}</li>`).join("");
+$("readMgmt").innerHTML=`<b>Read:</b> A career engineer CEO with negligible ownership, under a controlling group. Capital allocation in this upcycle has been shareholder-friendly (big cancellations, high payout) while keeping a large cash buffer for the next downturn. The key test is 2027 capex discipline.`;
+
+// ===================== 8. Risks =====================
+$("riskTable").innerHTML=`<tr><th>Risk</th><th>What it looks like</th><th>Signal to watch</th></tr>`+[
+ ["Memory price cycle","Operating margin went 52% (2018) to 10% (2019) and -24% (2023). Q3 2026 profit came mostly from price.","DRAM contract prices; Micron's Dec margin guide"],
+ ["Supply response","All majors raise 2027 capex; Yongin, Samsung HBM4, Micron, CXMT capacity.","Capex guides in Jan 2027; inventory days (118 in Q3)"],
+ ["HBM share loss","Share fell from 64% to 50% in a year; brokers (LS) cut 2027 HBM margin assumption from ~80% to ~60%.","Nvidia Vera Rubin supplier split; HBM4 pricing"],
+ ["Customer and AI-spend concentration","Nvidia and hyperscalers dominate HBM demand; Nov 2026 sell-off on US midterm results and data-center limits; Nvidia leadership uncertainty.","Hyperscaler capex guidance; US data-center rules"],
+ ["China exposure","24.3% of Q1 2026 sales from China; China fabs need annual US equipment approval.","US export-control decisions"],
+ ["ADR premium collapse","SKHY trades ~45% above Seoul value because new ADR creation is restricted. If conversion opens, ADR holders could lose that premium even if the business does fine.","ADR premium; depositary/conversion rule changes"],
+ ["Non-operating volatility","22.9T won investment-asset loss and 11.6T won FX loss in Q3; asset not named.","Q4 non-operating line"],
+ ["Currency","Revenue in USD, reporting in KRW; ADR holders also carry KRW/USD.","KRW/USD"]
+].map(r=>`<tr>${r.map(c=>`<td class="l">${c}</td>`).join("")}</tr>`).join("");
+
+// ===================== 9. Scenarios =====================
+const S=[
+ {n:"Bear",p:75,a:["DRAM prices roll over in H2 2027 as new capacity lands; 2027 EPS ~40% below consensus (~$21/ADR)","HBM margins compress toward 60% as Samsung takes share","ADR premium narrows from ~45% to ~15%; 3.5x P/E on falling earnings"]},
+ {n:"Base",p:159,a:["2027 EPS in line with consensus ($35.34/ADR)","Prices plateau, volume growth mid-20s %; LTAs hold","Multiple stays near the 4.0-4.5x seen since listing; premium persists"]},
+ {n:"Bull",p:245,a:["2027 EPS 15% above consensus (~$40.6, back to July estimate) on HBM4 pricing","Shortage persists through 2028 as the company guides","Re-rating to ~6x as investors stop pricing a bust"]}
+];
+$("scen").innerHTML=S.map(s=>`<div class="sc"><h3>${s.n}</h3><div class="p">$${s.p}</div><div class="${cls(s.p/pr.adr-1)}">${pct(s.p/pr.adr-1,0)} vs $${pr.adr}</div><ul>${s.a.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("");
+$("readScen").innerHTML=`<b>Where consensus sits:</b> the average target of ~$${DATA.consensus.avgTarget} (range $${DATA.consensus.low}-$${DATA.consensus.high}; Rosenblatt high at $400 ≈ 9x NTM earnings) is close to my <b>bull</b> case, because it assumes the multiple re-rates. Morningstar's fair value is $${DATA.consensus.morningstarFV}, near the base case. Consensus 2027 EPS has already been cut from $40.47 to $35.34 in three months.`;
+
+// ===================== 10. Takeaways =====================
+$("remember").innerHTML=["A superb business right now: 80% operating margin, ROIC above 100%, 98.7T won net cash.","Not a wide moat: an HBM lead in a commodity industry, and the lead is narrowing.","The stock prices a bust: ~2.5x forward earnings in Seoul, ~3.7x on the ADR, vs a 9.2x long-run average.","The ADR carries a ~45% premium to Seoul shares; that is a separate, avoidable risk.","Net profit is noisy (Kioxia gain, investment and FX losses); use operating profit and FCF."].map(x=>`<li>${x}</li>`).join("");
+$("checkNext").innerHTML=["Q4 2026 results on 28 Jan 2027: did DRAM bits grow mid-20s %? What is the 2027 capex number?","DRAM and HBM contract price trends into 2027; Micron's Dec 2026 results.","HBM4 share at Nvidia Rubin vs Samsung.","Name of the asset behind the 22.9T won investment loss.","ADR premium and any change to ADR conversion rules.","Full quarterly report (cash flow and balance sheet) to firm up TTM FCF and ROIC."].map(x=>`<li>${x}</li>`).join("");
+
+// ===================== Glossary & sources =====================
+$("gloss").innerHTML=[["HBM","High-bandwidth memory: DRAM dies stacked vertically and placed next to an AI chip."],["ASP","Average selling price, here per bit of memory."],["Bit growth","Growth in total memory capacity shipped."],["LTA","Long-term supply agreement with a customer."],["ADR","American depositary receipt; 10 SKHY ADRs = 1 Seoul share."],["NOPAT","Operating profit after tax, before financing items."],["ROIC","NOPAT / invested capital: how much profit each won tied up in the business earns."],["FCF conversion","FCF / NOPAT: how much accounting profit turns into cash."],["PEG","P/E divided by expected EPS growth (in %)."]].map(g=>`<dt>${g[0]}</dt><dd>${g[1]}</dd>`).join("");
+$("sources").innerHTML=[
+ ["SK hynix 3Q26 results release (PR Newswire via Webull)","https://www.webull.com/news/15822865136734208"],
+ ["SK hynix newsroom: Q3 2026 business results","https://news.skhynix.com/q3-2026-business-results/"],
+ ["StockHub: Q3 2026 earnings call notes (D&A, non-operating items)","https://stockhub.kr/en/insights/view_1793152574975_d6cb11f87d"],
+ ["Finsee: SKHY Q3 2026 review (capex, OCF, FCF, pricing)","https://finsee.ai/earnings/skhy/2026/q3/en/"],
+ ["Xenospectrum: Q3 vs Q2 cash, debt, LTAs","https://xenospectrum.com/en/sk-hynix-earnings-supply-contracts/"],
+ ["StorageNewsletter: 1Q26 results","https://www.storagenewsletter.com/2026/04/29/sk-hynix-fiscal-1q26-financial-results/"],
+ ["Webull/PR: 2Q26 results","https://www.webull.com/news/15307406136009728"],
+ ["INDmoney: Q2 2026 cash flow","https://www.indmoney.com/blog/us-stocks/why-sk-hynix-skhy-stock-falling-q2-earnings-analysis"],
+ ["Nasdaq: Q2 2026 call highlights (D&A, guidance)","https://www.nasdaq.com/articles/sk-hynix-q2-earnings-call-highlights"],
+ ["Utusan/PR: FY25 and 4Q25 results","https://www.utusan.com.my/?p=1285705"],
+ ["AlphaSense: Q4 2025 and Q3 2025 call highlights","https://www.alpha-sense.com/earnings/000660.kr"],
+ ["Stock Analysis: SK hynix cash flow (TTM Jun-26, annual)","https://stockanalysis.com/stocks/skhy/financials/cash-flow-statement/"],
+ ["Stock Analysis: SK hynix balance sheet","https://stockanalysis.com/quote/krx/000660/financials/balance-sheet/?p=quarterly"],
+ ["Yahoo Finance: SKHY and 000660.KS quotes, 13 Nov 2026","https://finance.yahoo.com/quote/SKHY/"],
+ ["Money Today: won at 1,337.5 per dollar, 10 Nov 2026","https://www.mt.co.kr/en/economy/2026/11/10/2026111016284356804"],
+ ["TIKR: consensus targets, EPS revisions, P/E history (29 Oct 2026)","https://www.tikr.com/blog/sk-hynix-has-slumped-since-september-why-rosenblatt-sees-175-upside"],
+ ["TIKR: SK hynix down from high (8 Nov 2026)","https://www.tikr.com/blog/sk-hynix-is-down-57-from-its-high-with-half-of-2027-and-2028-capacity-already-contracted"],
+ ["StockAlarm: consensus revenue / net income estimates","https://pro.stockalarm.io/quote/SKHY/analysts"],
+ ["Morningstar: ADR fair value and moat rating","https://global.morningstar.com/en-gb/stocks/sk-hynix-adrs-begin-trading-under-new-ticker"],
+ ["Asia Times: ADR premium mechanics","https://asiatimes.com/2026/10/why-americans-pay-41-more-for-sk-hynix-shares-than-koreans/"],
+ ["Counterpoint: DRAM and HBM market share","https://counterpointresearch.com/insights/global-dram-and-hbm-market-share"],
+ ["sec-api: Micron FY2026 analysis","https://sec-api.io/insights/micron-technology-mu-financial-and-ratio-analysis-q4-fy2026-results-dram-and-nand-pricing-peer-comparison-and-scenarios-to-fy2029"],
+ ["Gotrade: Micron close 10 Nov 2026","https://www.heygotrade.com/en/news/micron-mu-stock-news-november-11-2026/"],
+ ["Samsung Q3 2026 results","https://news.samsung.com/global/samsung-electronics-announces-third-quarter-2026-results"],
+ ["Mirae Asset: Samsung valuation note (30 Oct 2026)","https://securities.miraeasset.com/bbs/download/2148171.pdf?attachmentId=2148171"],
+ ["Hankyung: Samsung close 11 Nov 2026","https://www.hankyung.com/article/2026111106306"],
+ ["Korea Times: CEO retained (30 Oct 2026)","https://www.koreatimes.co.kr/business/companies/20261030/sk-group-reshuffles-energy-leadership"],
+ ["Herald: foreign selling week of 2-6 Nov 2026","https://mbiz.heraldcorp.com/article/10929441"],
+ ["Edaily: LS Securities HBM margin cut","https://en.edaily.co.kr/news/eda202608315033"]
+].map(s=>`<li><a href="${s[1]}">${s[0]}</a></li>`).join("");
+$("disclaimer").textContent="Education and analysis only, not investment advice. Figures are preliminary company results and third-party data as of 13-15 Nov 2026; items marked 'est.' are my derivations. Scenario values are illustrative estimates.";
+</script>
+</body>
+</html>

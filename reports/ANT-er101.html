@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anthropic (ANT) 101</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: a newspaper graphics desk explaining a brand-new mega listing, plain and exact
+   IDEA: a one-page analyst tear sheet
+   PICTURE: quarterly revenue bars against compute cost, the whole story in one chart
+   COLOUR and TYPE: black and white plus one mint field; Space Grotesk 700 + Inter
+   LAYOUT: half mint field with the headline numbers, half white with the chart; then calm sections */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#0c0c0c);--ink:light-dark(#0c0c0c,#f2f2f2);--mute:light-dark(#5b5b5b,#a8a8a8);--line:light-dark(#e3e3e3,#2a2a2a);--mint:#b8f5d0;--field:light-dark(#b8f5d0,#0c0c0c);--fieldink:light-dark(#0c0c0c,#b8f5d0);--neg:light-dark(#b42318,#ff8a7a);--soft:light-dark(#f5f5f5,#161616)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3,.big{font-family:"Space Grotesk",Inter,sans-serif;font-weight:700;letter-spacing:-.01em}
+h1{font-size:clamp(30px,4.4vw,48px);line-height:1.05;margin:0 0 14px;text-wrap:balance}
+h2{font-size:26px;line-height:1.15;margin:0 0 8px;text-wrap:balance}
+h3{font-size:18px;margin:18px 0 6px}
+p{margin:0 0 12px;max-width:72ch}
+.band{padding:clamp(28px,4vw,56px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:0}
+.field{background:var(--field);color:var(--fieldink);padding:clamp(24px,4vw,48px) max(4vw,16px)}
+.field .k{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 20px;margin-top:20px}
+.big{font-size:clamp(26px,3.4vw,38px);line-height:1.05;white-space:nowrap}
+.lab{font-size:13px;opacity:.8}
+.chartside{padding:clamp(20px,3vw,40px) max(3vw,16px)}
+.fig{position:relative;min-height:340px}.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--mute);margin-top:8px}
+.sw{display:inline-block;width:12px;height:12px;vertical-align:-1px;margin-right:6px;border-radius:2px}
+nav.scroll{display:flex;gap:6px;overflow-x:auto;padding:10px max(5vw,16px);border-bottom:1px solid var(--line);background:var(--bg)}
+nav.scroll a{flex:none;color:var(--ink);text-decoration:none;font-size:14px;padding:10px 12px;border-radius:8px;min-height:44px;display:inline-flex;align-items:center}
+nav.scroll a:hover,nav.scroll a:focus-visible{background:var(--soft);outline:2px solid var(--ink)}
+@media(min-width:900px){nav.scroll{position:sticky;top:0;z-index:5}}
+section.band{border-bottom:1px solid var(--line)}
+.read{border-left:4px solid var(--mint);background:var(--soft);padding:12px 16px;margin:14px 0;max-width:80ch}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px 36px}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:8px 0 6px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+th:first-child,td:first-child,th.l,td.l{text-align:left}
+thead th{font-weight:600;color:var(--mute);font-size:13px}
+td.n{white-space:nowrap}
+.neg{color:var(--neg)}
+.small{font-size:13px;color:var(--mute)}
+.tl{list-style:none;padding:0;margin:0;max-width:80ch}
+.tl li{display:grid;grid-template-columns:6.5em minmax(0,1fr);gap:12px;padding:7px 0;border-bottom:1px solid var(--line)}
+.tl b{font-family:"Space Grotesk",sans-serif}
+.scen{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.card{border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.card.base{background:var(--field);color:var(--fieldink);border-color:transparent}
+.card .big{margin:4px 0 8px}
+.bar{height:10px;background:var(--soft);border-radius:5px;position:relative;margin:28px 0 8px}
+.pin{position:absolute;top:-22px;transform:translateX(-50%);font-size:12px;white-space:nowrap}
+.pin::after{content:"";position:absolute;left:50%;top:18px;width:2px;height:16px;background:var(--ink)}
+ul{padding-left:20px;max-width:80ch}li{margin-bottom:6px}
+details{margin-top:10px}summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600}
+a{color:inherit}
+pre,.scroll{overflow-x:auto}code{overflow-wrap:anywhere}html{scroll-padding-top:72px}
+@media(max-width:760px){.hero{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:9em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:8.5em;margin-inline-start:-9em;white-space:normal;color:var(--mute)}.stack td:empty{display:none}}
+@media(prefers-reduced-motion:no-preference){.grow{transform-origin:bottom;animation:g .7s ease-out both}@keyframes g{from{transform:scaleY(0)}}}
+</style><script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script></head><body>
+
+<header class="hero">
+  <div class="field">
+    <div class="lab">Equity research 101 · Nasdaq: ANT · USD · price as of Nov 20, 2026 close</div>
+    <h1>Anthropic: the fastest revenue ramp ever listed, priced for years more of it</h1>
+    <p>Quarterly revenue went from $0.4bn to $17.0bn in six quarters and the business now makes an adjusted profit. At about 26x trailing sales (net of cash) the market is paying for consensus 2027 revenue of roughly $128bn, against $901bn of compute commitments.</p>
+    <div class="k" id="kpis"></div>
+  </div>
+  <div class="chartside">
+    <h3 style="margin-top:0">Revenue vs compute and infrastructure cost, $bn per quarter</h3>
+    <div class="fig" id="qchart"><svg id="qsvg" role="img" aria-label="Quarterly revenue and compute cost, Q1 2025 to Q3 2026"></svg></div>
+    <div class="legend"><span><i class="sw" style="background:var(--ink)"></i>Revenue</span><span><i class="sw" style="background:var(--mint)"></i>Compute and infrastructure expense</span><span>Labels: GAAP operating margin</span></div>
+  </div>
+</header>
+
+<nav class="scroll" aria-label="Sections"><a href="#biz">Business</a><a href="#moat">Moat</a><a href="#drivers">Drivers</a><a href="#earnings">Earnings</a><a href="#valuation">Valuation</a><a href="#peers">Industry and peers</a><a href="#mgmt">Management</a><a href="#risks">Risks</a><a href="#scen">Scenarios</a><a href="#take">Takeaways</a><a href="#method">Method and sources</a></nav>
+
+<main>
+<section class="band" id="biz"><div class="wrap">
+  <h2>1. What it does and how it makes money</h2>
+  <div class="cols">
+    <div>
+      <p>Anthropic, PBC builds the Claude family of AI models and sells access to them. It is a public benefit corporation, founded in January 2021 by seven former OpenAI researchers led by Dario and Daniela Amodei.</p>
+      <p><b>Two revenue streams.</b> Consumption: businesses and developers pay per token (unit of text processed) through the API and through cloud marketplaces. Subscriptions: monthly Claude plans for individuals and teams, plus Claude Code, its agentic coding product.</p>
+      <p>In the first nine months of 2026, consumption revenue grew by $24.2bn and subscriptions by $6.5bn, so roughly four fifths of the growth came from usage-based selling to businesses.</p>
+      <div class="read" id="r-biz"></div>
+    </div>
+    <div><h3 style="margin-top:0">How it got here</h3><ul class="tl" id="timeline"></ul></div>
+  </div>
+</div></section>
+
+<section class="band" id="moat"><div class="wrap">
+  <h2>2. Moat: why it earns its returns, and can rivals copy it?</h2>
+  <div class="cols">
+    <div>
+      <h3>Real advantages</h3>
+      <ul>
+        <li><b>Coding and agent leadership.</b> Menlo Ventures put Claude at 54% of enterprise coding spend vs 21% for OpenAI (Dec 2025), and estimates Claude Code plus OpenAI's Codex take 70% of a $34bn AI coding market (Nov 2026).</li>
+        <li><b>Enterprise trust.</b> Anthropic's share of enterprise LLM API spend rose from 12% in 2023 to 40% (Menlo, Dec 2025). Over 1,900 customers pay $1m+ a year; about 250 pay $10m+.</li>
+        <li><b>Workflow lock-in.</b> Net revenue retention of about 900%: customers who were paying a year ago now pay about 9x more. Agents built around one model family are costly to re-test and re-tune.</li>
+        <li><b>Capital and compute access.</b> $141bn raised before the IPO, plus a $26bn strategic placement from Google, NVIDIA, AMD, Broadcom, Micron, Microsoft and TSMC.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>What is copyable</h3>
+      <ul>
+        <li><b>Model leads decay fast.</b> Frontier capability gaps have historically closed within months; OpenAI, Google and open-weight models compete on every release.</li>
+        <li><b>Low switching cost at the API level.</b> Swapping a model endpoint is cheap; the lock-in sits in tooling, evals and agents, not contracts.</li>
+        <li><b>Price.</b> Analysts cited by The Next Web found businesses hitting AI budget limits and some moving to cheaper models.</li>
+      </ul>
+      <div class="read" id="r-moat"></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="band" id="drivers"><div class="wrap">
+  <h2>3. Drivers: what revenue is made of</h2>
+  <p><b>Revenue = tokens used x price per token x model mix + seats x subscription price.</b> Volume is the engine: every new model release (Claude 4 in May 2025 onward) has lifted usage per customer. Price per token tends to fall each generation, so growth depends on usage rising faster than price falls.</p>
+  <table class="stack"><thead><tr><th class="l">KPI that moves it</th><th>Latest</th><th class="l">Why it matters</th></tr></thead><tbody id="kpitab"></tbody></table>
+  <div class="read" id="r-drivers"></div>
+</div></section>
+
+<section class="band" id="earnings"><div class="wrap">
+  <h2>4. Earnings: Q3 2026 (quarter to Sep 30), from the S-1/A</h2>
+  <p class="small">$ millions. Anthropic reports expenses by nature, so gross profit is only disclosed in a nine-month footnote. Quarterly GAAP EPS is not meaningful: share counts change at the IPO and the net loss is dominated by fair-value changes on convertible notes.</p>
+  <div class="scroll"><table id="headline"></table></div>
+  <h3>Metric scorecard</h3>
+  <p class="small">A prior-year trailing-twelve-month (TTM) figure needs Q4 2024, which the filing does not break out, so the right-hand block compares nine months of 2026 with nine months of 2025.</p>
+  <div class="scroll"><table id="score"></table></div>
+  <div class="read" id="r-earn"></div>
+</div></section>
+
+<section class="band" id="valuation"><div class="wrap">
+  <h2>5. Valuation: what the market is paying</h2>
+  <div class="cols">
+    <div><table id="valtab"></table><p class="small" id="valnote"></p></div>
+    <div>
+      <h3 style="margin-top:0">Against its own short history</h3>
+      <table class="stack"><thead><tr><th class="l">Mark</th><th>Valuation</th><th>Run-rate revenue then</th><th>x run-rate</th></tr></thead><tbody id="histtab"></tbody></table>
+      <p class="small">Private marks are post-money and not like-for-like with a public market cap.</p>
+    </div>
+  </div>
+  <div class="read" id="r-val"></div>
+</div></section>
+
+<section class="band" id="peers"><div class="wrap">
+  <h2>6. Industry and peers</h2>
+  <p>Demand is large and still compounding: Menlo sizes enterprise AI coding alone at $34bn in 2026, up from about $1bn a year earlier. The direct rival, OpenAI, is private (last reported mark $852bn); xAI sits inside SpaceX. Listed peers below are the closest public reference points, none a perfect match.</p>
+  <div class="scroll"><table id="peertab"></table></div>
+  <p class="small">Peers from stockanalysis.com, Nov 20, 2026 close (Palantir Nov 13). Alphabet's trailing P/E is depressed by investment gains. ANT EV is net of pro forma post-IPO cash (estimate, see method).</p>
+  <div class="read" id="r-peers"></div>
+</div></section>
+
+<section class="band" id="mgmt"><div class="wrap">
+  <h2>7. Management and control</h2>
+  <div class="cols">
+    <div>
+      <table class="stack"><thead><tr><th class="l">Person</th><th class="l">Role</th><th class="l">Since</th></tr></thead><tbody>
+        <tr><td class="l">Dario Amodei</td><td class="l">CEO, co-founder, director</td><td class="l">Jan 2021</td></tr>
+        <tr><td class="l">Daniela Amodei</td><td class="l">President, co-founder, Chair</td><td class="l">Jan 2021</td></tr>
+        <tr><td class="l">Krishna Rao</td><td class="l">CFO</td><td class="l">Apr 2024</td></tr>
+        <tr><td class="l">Reed Hastings</td><td class="l">Lead independent director</td><td class="l">May 2025</td></tr>
+      </tbody></table>
+      <p class="small">2025 total pay: Dario Amodei $18.0m, Daniela Amodei $16.4m, Krishna Rao $0.7m (S-1/A).</p>
+    </div>
+    <div>
+      <p><b>Who controls it.</b> Five share classes. Class F, held by the seven co-founders' LLC, carries 50.1% of votes. Class T, held by the Long-Term Benefit Trust (chaired by Neil Buddy Shah; trustees include Ben Bernanke), elects a majority of the board. Public Class A holders get economics, not control. Both F and T have sunset provisions.</p>
+      <p><b>Capital allocation so far:</b> almost all cash goes to compute, through leases and purchase commitments of about $901bn. Acquisitions are small (goodwill $595m). No dividends or buybacks; an April 2026 tender offer let employees sell $4.7bn.</p>
+      <div class="read" id="r-mgmt"></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="band" id="risks"><div class="wrap">
+  <h2>8. Risks that would break the story</h2>
+  <ol style="max-width:84ch">
+    <li><b>Compute commitments outrun revenue.</b> About $70.7bn falls due in the next 12 months and $451.6bn before 2031, against an $81bn run-rate. If growth stalls, these are fixed costs. Q3 compute cost grew 382% YoY and ate 58% of revenue, up from 48% in Q2.</li>
+    <li><b>Growth deceleration is already visible.</b> QoQ growth fell from 144% in Q2 to 47% in Q3. Run-rate grew about 4-5% a month into October by one forecaster's reading.</li>
+    <li><b>Price war and model commoditisation.</b> Cheaper models from OpenAI, Google and open-weight labs compress price per token.</li>
+    <li><b>Government conflict.</b> The Defense Department labelled Anthropic a supply-chain risk in Feb 2026 after it refused autonomous-weapons and mass-surveillance uses; litigation is ongoing.</li>
+    <li><b>Dilution and lock-ups.</b> 1.77bn options and 1.13bn RSUs sit on 13.2bn shares; about $14.2bn of RSU expense is recognised on the IPO. Some 3.7bn shares can be sold before the 180-day lock-up ends.</li>
+    <li><b>Governance.</b> Public holders cannot replace the board; the mission can legally outrank returns in a PBC.</li>
+    <li><b>Customer concentration by size.</b> Customers paying $100k+ make up 74% of revenue; a few large API and cloud channels matter a lot.</li>
+  </ol>
+</div></section>
+
+<section class="band" id="scen"><div class="wrap">
+  <h2>9. Scenarios: value per share at end-2027 on 2028 revenue</h2>
+  <p class="small">My estimates, not forecasts by the company. Value = (2028 revenue x EV/sales + pro forma net cash $243bn) / 16.1bn diluted shares. Not discounted. Consensus 2028 revenue (Koyfin): $220.5bn.</p>
+  <div class="scen" id="scencards"></div>
+  <div class="bar" id="sbar" aria-label="Scenario values vs price and consensus target"></div>
+  <p class="small" style="margin-top:34px">Bar spans $40 to $180 per share. Consensus target: average of 6 analysts (S&P Global via stockanalysis.com), range $92 to $155.</p>
+  <div class="read" id="r-scen"></div>
+</div></section>
+
+<section class="band" id="take"><div class="wrap">
+  <h2>10. Takeaways</h2>
+  <div class="cols">
+    <div><h3 style="margin-top:0">Remember</h3><ul id="tk1"></ul></div>
+    <div><h3 style="margin-top:0">Check next</h3><ul id="tk2"></ul></div>
+  </div>
+</div></section>
+
+<section class="band" id="method"><div class="wrap">
+  <h2>Method, glossary and sources</h2>
+  <details open><summary>Metric definitions</summary><ul class="small" id="defs"></ul></details>
+  <details><summary>Glossary</summary><ul class="small">
+    <li><b>Run-rate revenue:</b> Anthropic's definition, last 28 days of consumption fees x 13 plus current monthly subscriptions x 12.</li>
+    <li><b>Net revenue retention (NRR):</b> this year's revenue from last year's customers divided by their revenue a year ago.</li>
+    <li><b>Adjusted operating income:</b> GAAP operating income plus stock-based compensation, non-cash charitable contributions and the $1.5bn Bartz copyright settlement.</li>
+    <li><b>EV/Sales:</b> enterprise value (market cap minus net cash) divided by revenue; used here because earnings are not yet meaningful.</li>
+    <li><b>PBC:</b> public benefit corporation; directors must balance shareholder returns with a stated public benefit.</li>
+  </ul></details>
+  <details><summary>Sources</summary><ul class="small" id="src"></ul></details>
+  <p class="small" style="margin-top:14px"><b>Disclosure:</b> this page was written by Claude, an AI model made by Anthropic, the company analysed here. Every figure comes from the cited filings and data pages; treat the judgement fields with that in mind. Education and analysis only, not investment advice.</p>
+</div></section>
+</main>
+
+<script>
+{
+const DATA={
+ price:88.91, asOf:"Nov 20, 2026", shares:13.22, dilShares:16.12, ipo:83, first:97.17,
+ proFormaNetCash:243, // $bn, estimate: Sep 30 cash+STI 131.8 + ~116 net primary IPO and placement - 4.5 leases
+ q:[ // $m
+  {p:"Q1 25",rev:376,comp:944,op:-935,adj:-830,ni:-6592,adjni:-786},
+  {p:"Q2 25",rev:787,comp:1390,op:-1200,adj:-1019,ni:-6377,adjni:-957},
+  {p:"Q3 25",rev:1382,comp:2047,op:-3089,adj:-1284,ni:-12138,adjni:-1168},
+  {p:"Q4 25",rev:2040,comp:2945,op:-2836,adj:-1721,ni:-16858,adjni:-1544},
+  {p:"Q1 26",rev:4731,comp:3387,op:-1667,adj:-617,ni:-14439,adjni:-312},
+  {p:"Q2 26",rev:11555,comp:5558,op:974,adj:2235,ni:-66309,adjni:2736},
+  {p:"Q3 26",rev:16956,comp:9863,op:-567,adj:2463,ni:-23291,adjni:3167}],
+ nm:{ // nine months, $m
+  y26:{rev:33242,cor:4812,op:-1260,adj:4081,ocf:6569,capex:925,sbc:3255,da:250,adjni:5591},
+  y25:{rev:2545,cor:1796,op:-5224,adj:-3133,ocf:-2024,capex:111,sbc:584,da:24,adjni:-2911}},
+ fy25ocf:-2637,
+ bs:{ // $m: total assets, cash, STI, total liabilities, convertible notes, op lease liab, finance lease liab
+  d25:{ta:24661,cash:17388,sti:2889,tl:45397,cn:41677,ol:117,fl:0},
+  s26:{ta:154320,cash:95562,sti:36283,tl:146683,cn:130502,ol:2810,fl:1674}},
+ tax:0.21,
+ est:{rev26:54.44,rev27:127.66,rev28:220.54,eps26:0.57,pt:118.93,ptLo:92,ptHi:155,runrate:81},
+ timeline:[
+  ["Jan 2021","Founded by seven ex-OpenAI researchers as a public benefit corporation."],
+  ["2023","First Claude models released; revenue $41m for the year."],
+  ["Jun 2024","Claude 3.5 Sonnet starts a long run at the top of coding benchmarks. 2024 revenue $386m."],
+  ["Feb to May 2025","Claude Code launched, then generally available with Claude 4."],
+  ["Sep 2025","Series F at $183bn. $1.5bn Bartz copyright settlement booked. 2025 revenue $4.6bn."],
+  ["Feb 2026","Series G at $380bn. Pentagon names Anthropic a supply-chain risk; lawsuit filed in March."],
+  ["Q2 2026","First quarterly GAAP operating profit ($974m). Series H-1 raises $45.7bn."],
+  ["Oct 26, 2026","S-1 filed; amended Nov 2 with Q3 results."],
+  ["Nov 19, 2026","Lists on Nasdaq at $83, the largest IPO on record; closes day one at $97.17."]],
+ peers:[
+  {n:"Anthropic (ANT)",gm:85.5,om:null,fcfm:17.0,roic:null,pe:null,eve:null,evs:null,peg:null,cap:1175},
+  {n:"Microsoft",gm:67.7,om:47.1,fcfm:17.3,roic:25.4,pe:23.3,eve:17.8,evs:10.6,peg:1.43,cap:3600},
+  {n:"Alphabet",gm:60.9,om:33.3,fcfm:4.2,roic:23.8,pe:19.3,eve:17.0,evs:6.7,peg:1.40,cap:3260},
+  {n:"Palantir",gm:84.7,om:45.6,fcfm:55.6,roic:386.9,pe:73.1,eve:117.6,evs:54.1,peg:1.25,cap:405},
+  {n:"SpaceX (incl. xAI)",gm:56.8,om:1.8,fcfm:null,roic:null,pe:42.3,eve:143.6,evs:52.6,peg:null,cap:1740}],
+ hist:[["Series F, Sep 2025","$183bn",null,null],["Series G, Feb 2026","$380bn","$14bn","27x"],["Series H-1, mid-2026","~$965bn","$47bn","~21x"],["IPO price, Nov 18","~$1.10T","$81bn","~14x"],["Nov 20 close (basic)","$1.18T","$81bn","~15x"]],
+ read:{
+  biz:"A model lab that sells mostly to businesses, not consumers. Revenue grew from $41m (2023) to $35.3bn TTM, and usage-based API revenue is the engine, so revenue tracks how much work customers hand to Claude.",
+  moat:"The moat is real but young: leadership in coding and agents, plus deep enterprise adoption (NRR ~900%). It rests on staying at the frontier each model cycle, which is a capability race funded by compute, not a structural lock like a network effect.",
+  drivers:"Watch run-rate revenue and $1m+ customer count first; then compute cost as a share of revenue. If revenue keeps outgrowing compute (1,127% vs 382% YoY in Q3) the margin story holds.",
+  earn:"Q3 revenue rose 47% QoQ and 1,127% YoY to $17.0bn. The GAAP operating loss of $567m is mostly an estimated ~$2.0bn non-cash charitable stock gift; adjusted operating margin was 15% (19% in Q2). Cash is real: nine-month free cash flow was $5.6bn, a 17% margin. ROIC on balance-sheet capital is not a useful gauge because the compute is rented: the true capital is the $901bn of commitments off the balance sheet.",
+  val:"At $88.91 the stock trades at about 26x TTM sales and 7.3x consensus 2027 sales on an EV basis. That is between Microsoft (10.6x trailing) and Palantir or SpaceX (52-54x), and cheaper on run-rate than its own Series G. P/E and PEG are not meaningful yet; the price is a bet on 2027-2028 revenue and margins.",
+  peers:"Anthropic grows faster than any peer and already has software-like gross margins on its disclosed cost of revenue, but GAAP operating margin is still negative while Microsoft and Palantir run at 45%+. The valuation gap to Microsoft only closes if margins converge.",
+  mgmt:"Founder-led and mission-bound: the Amodeis have run it since day one, and voting control sits with founders and the Trust. Good for continuity; it means minority holders depend on management's judgement on compute spending and safety trade-offs.",
+  scen:"The current price ($88.91) sits just under my base case ($97), and the consensus target ($118.93) sits between base and bull. The market price already assumes consensus delivery; the upside needs both faster growth and Microsoft-like margins."},
+ tk1:["Revenue: $17.0bn in Q3 2026, $35.3bn TTM, $81bn run-rate (Oct 31).","Profitable on an adjusted basis (15% margin) and FCF positive ($5.6bn in 9M 2026); GAAP still loss-making.","EV about $0.93tn, ~26x TTM and ~7x 2027E sales; consensus target $118.93 (6 analysts).","Biggest risk: $901bn of compute commitments assume growth keeps compounding."],
+ tk2:["Q4 2026 results: QoQ growth vs 47% in Q3, and the ~$14.2bn RSU charge.","Compute and infrastructure as % of revenue (48% Q2, 58% Q3).","Run-rate revenue updates and $1m+ customer count.","Pentagon litigation outcome and lock-up expiry dates.","OpenAI pricing moves and any OpenAI S-1 for a direct comparison."],
+ sources:[
+  ["Anthropic S-1, Oct 26, 2026 (SEC EDGAR)","https://www.sec.gov/Archives/edgar/data/0002130357/000162828026067168/anthropicpbc-sx1.htm"],
+  ["Anthropic S-1/A No. 3 (SEC EDGAR): quarterly table, balance sheet, cash flow, governance","https://www.sec.gov/Archives/edgar/data/0002130357/000162828026074338/anthropicpbc-sx1ax3.htm"],
+  ["Yahoo Finance: Nov 20 close and market cap","https://finance.yahoo.com/markets/stocks/article/anthropic-stock-dives-after-rip-roaring-ipo-095411951.html"],
+  ["CNN: IPO day","https://www.cnn.com/2026/11/19/business/live-news/anthropic-ipo"],
+  ["stockanalysis.com: ANT quote, forecast; MSFT, GOOGL, PLTR, SPCX statistics","https://stockanalysis.com/stocks/ant/forecast/"],
+  ["Koyfin: shares, consensus sales FY26-FY28","https://koyfin.com/blog/anthropic-stock-ipo-what-to-check"],
+  ["Shattered.io: IPO closing share counts","https://shattered.io/anthropic-ipo-closes-1-127-billion-shares-26-billion-private-placement-seven-backers/"],
+  ["FourWeekMBA: Menlo Ventures 2026 State of Enterprise AI","https://fourweekmba.com/ai-menlo-claude-code-and-codex-now-take-70-of-34b-ai-coding/"],
+  ["Value Add VC: Menlo enterprise LLM share","https://valueaddvc.com/blog/anthropic-market-share-2026-40-percent-enterprise-llm-spend-openai"],
+  ["PitchBook: frontier AI valuations","https://pitchbook.brightspotcdn.com/fd/37/0395ac7847ec84a9a6efa0fe11d2/q2-2026-anthropic-the-s-1-expected-to-price-ai.pdf"],
+  ["Lawfare / TechCrunch: Pentagon supply-chain designation","https://www.lawfaremedia.org/article/anthropic-sues-defense-department-over-supply-chain-risk-designation"],
+  ["The Next Web: AI spend limits","https://thenextweb.com/news/anthropic-ipo-2-trillion-october-revenue-multiple"],
+  ["FutureSearch: run-rate growth reading","https://futuresearch.ai/app/p/a/anthropic-total-arr-may-2027"]]
+};
+
+const $=id=>document.getElementById(id);
+const f0=x=>x==null||!isFinite(x)?"n/a":Math.round(x).toLocaleString("en-US");
+const pc=(x,d=1)=>x==null||!isFinite(x)?"n/a":(x*100).toFixed(d)+"%";
+const neg=s=>s.startsWith("-")?`<span class="neg">${s}</span>`:s;
+const m=v=>neg(f0(v)), p=v=>neg(pc(v));
+const g=(a,b)=>b>0&&a!=null?a/b-1:null;
+const Q=DATA.q, L=Q[6], P=Q[5], Y=Q[2];
+const ttm=k=>Q.slice(3).reduce((s,x)=>s+x[k],0);
+const N=DATA.nm.y26, O=DATA.nm.y25, t=DATA.tax;
+const nopat=e=>e>0?e*(1-t):e;
+const ic=b=>(b.ta-b.cash-b.sti)-(b.tl-b.cn-b.ol-b.fl);
+const IC0=ic(DATA.bs.d25), IC1=ic(DATA.bs.s26), ICa=(IC0+IC1)/2;
+const rT=ttm("rev"), opT=ttm("op"), adjT=ttm("adj");
+const mcap=DATA.price*DATA.shares, ev=mcap-DATA.proFormaNetCash;
+
+$("kpis").innerHTML=[
+ ["$"+(L.rev/1000).toFixed(1)+"bn","Q3 2026 revenue, +"+Math.round(g(L.rev,Y.rev)*100).toLocaleString()+"% YoY"],
+ [pc(L.adj/L.rev,0),"Adjusted operating margin (GAAP "+pc(L.op/L.rev)+")"],
+ ["$"+(mcap/1000).toFixed(2)+"tn","Market cap at $"+DATA.price+" (IPO $"+DATA.ipo+")"],
+ [(ev/rT*1000).toFixed(0)+"x","EV / TTM sales; "+(ev/DATA.est.rev27).toFixed(1)+"x 2027E"]
+].map(([a,b])=>`<div><div class="big">${a}</div><div class="lab">${b}</div></div>`).join("");
+
+const s=$("qsvg");
+const draw=()=>{const W=s.clientWidth,H=s.clientHeight;if(!W)return;const pl=34,pb=28,pt=24,mx=18000,bw=(W-pl)/Q.length,y=v=>pt+(H-pt-pb)*(1-v/mx);
+ let h="";[0,5000,10000,15000].forEach(v=>{h+=`<line x1="${pl}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="currentColor" opacity=".12"/><text x="${pl-6}" y="${y(v)+4}" font-size="11" text-anchor="end" fill="currentColor" opacity=".6">${v/1000}</text>`});
+ Q.forEach((q,i)=>{const x=pl+i*bw,w=Math.min(bw*.36,34),cx=x+bw/2;
+  h+=`<rect class="grow" x="${cx-w-1}" y="${y(q.rev)}" width="${w}" height="${y(0)-y(q.rev)}" fill="currentColor"/>`;
+  h+=`<rect class="grow" x="${cx+1}" y="${y(q.comp)}" width="${w}" height="${y(0)-y(q.comp)}" fill="#b8f5d0" stroke="currentColor" stroke-opacity=".25"/>`;
+  const lab=W<520?q.p.replace(" ","'"):q.p;h+=`<text x="${cx}" y="${H-8}" font-size="11" text-anchor="middle" fill="currentColor" opacity=".7">${lab}</text>`;
+  if(W>=420)h+=`<text x="${cx}" y="${Math.min(y(q.rev),y(q.comp))-6}" font-size="11" text-anchor="middle" fill="currentColor">${Math.round(q.op/q.rev*100)}%</text>`;});
+ s.innerHTML=h;s.style.color="var(--ink)"};
+const ro=new ResizeObserver(draw);ro.observe(s);
+
+$("timeline").innerHTML=DATA.timeline.map(([d,x])=>`<li><b>${d}</b><span>${x}</span></li>`).join("");
+
+$("kpitab").innerHTML=[
+ ["Run-rate revenue","$81bn (Oct 31, 2026)","Best real-time read of the top line; Q3 annualised is ~$68bn."],
+ ["Customers paying $1m+ a year","1,900+","Breadth of large enterprise adoption."],
+ ["Customers paying $100k+","11,900+ (74% of revenue)","Up from ~400 in Mar 2025; concentration check."],
+ ["Net revenue retention","~900%","Expansion inside existing accounts."],
+ ["Compute cost growth vs revenue growth","382% vs 1,127% YoY","Whether scale is improving unit economics."]
+].map(r=>`<tr><td class="l">${r[0]}</td><td class="n">${r[1]}</td><td class="l">${r[2]}</td></tr>`).join("");
+
+const hrow=(n,a,b,c,tt,n26,n25)=>`<tr><td>${n}</td><td class="n">${m(a)}</td><td class="n">${m(b)}</td><td class="n">${m(c)}</td><td class="n">${p(g2(a,b))}</td><td class="n">${p(g2(a,c))}</td><td class="n">${m(tt)}</td><td class="n">${m(n26)}</td><td class="n">${m(n25)}</td><td class="n">${p(g2(n26,n25))}</td></tr>`;
+const g2=(a,b)=>a==null||b==null||b<=0?null:a/b-1;
+const fcf26=N.ocf-N.capex, fcf25=O.ocf-O.capex;
+$("headline").innerHTML=`<thead><tr><th>$m</th><th>Q3 26</th><th>Q2 26</th><th>Q3 25</th><th>QoQ</th><th>YoY</th><th>TTM</th><th>9M 26</th><th>9M 25</th><th>9M Δ</th></tr></thead><tbody>`+
+ hrow("Revenue",L.rev,P.rev,Y.rev,rT,N.rev,O.rev)+
+ hrow("Gross profit (cost of revenue footnote)",null,null,null,null,N.rev-N.cor,O.rev-O.cor)+
+ hrow("Revenue less all compute",L.rev-L.comp,P.rev-P.comp,Y.rev-Y.comp,rT-ttm("comp"),null,null)+
+ hrow("Operating income (GAAP)",L.op,P.op,Y.op,opT,N.op,O.op)+
+ hrow("Adjusted operating income",L.adj,P.adj,Y.adj,adjT,N.adj,O.adj)+
+ hrow("Net income (GAAP)",L.ni,P.ni,Y.ni,ttm("ni"),null,null)+
+ hrow("Adjusted net income",L.adjni,P.adjni,Y.adjni,ttm("adjni"),N.adjni,O.adjni)+
+ hrow("Operating cash flow",null,null,null,DATA.fy25ocf-(-2024)+N.ocf,N.ocf,O.ocf)+
+ hrow("Free cash flow (OCF minus capex)",null,null,null,null,fcf26,fcf25)+"</tbody>";
+
+const qn=q=>nopat(q.op), qa=q=>nopat(q.adj);
+const rows=[
+ ["Growth","Revenue growth YoY (reported ≈ organic, est.)",g(L.rev,Y.rev),g(P.rev,Q[1].rev),null,null,g(N.rev,O.rev),null],
+ ["Profitability","Operating margin, GAAP",L.op/L.rev,P.op/P.rev,Y.op/Y.rev,opT/rT,N.op/N.rev,O.op/O.rev],
+ ["Profitability","Operating margin, adjusted",L.adj/L.rev,P.adj/P.rev,Y.adj/Y.rev,adjT/rT,N.adj/N.rev,O.adj/O.rev],
+ ["Profitability","NOPAT margin, GAAP",qn(L)/L.rev,qn(P)/P.rev,qn(Y)/Y.rev,nopat(opT)/rT,nopat(N.op)/N.rev,nopat(O.op)/O.rev],
+ ["Capital efficiency","ROIC, GAAP NOPAT (annualised / TTM)",qn(L)*4/ICa,null,null,nopat(opT)/ICa,null,null],
+ ["Capital efficiency","ROIC, adjusted NOPAT",qa(L)*4/ICa,null,null,nopat(adjT)/ICa,null,null],
+ ["Capital efficiency","Incremental ROIC, adjusted (Q3 26 vs Q4 25, annualised)",null,null,null,(qa(L)-qa(Q[3]))*4/(IC1-IC0),null,null],
+ ["Reinvestment","Sales / capital (x)",null,null,null,{x:rT/ICa},null,null],
+ ["Cash","FCF margin",null,null,null,null,fcf26/N.rev,fcf25/O.rev],
+ ["Quality","FCF conversion (FCF / adjusted NOPAT)",null,null,null,null,fcf26/nopat(N.adj),null],
+ ["Quality","Compute and infra / revenue",L.comp/L.rev,P.comp/P.rev,Y.comp/Y.rev,ttm("comp")/rT,null,null],
+ ["Balance sheet","Net debt / EBITDA",{t:"Net cash"},null,null,{t:"Net cash ~$243bn pro forma"},null,null],
+ ["Capital allocation","Buybacks",{t:"None"},null,null,{t:"$4.7bn employee tender (Apr 26)"},null,null],
+ ["Capital allocation","Acquisition ROIC",{t:"Not determinable"},null,null,{t:"$557m stock issued for deals"},null,null],
+ ["Dilution","SBC / revenue",{t:"~6% (est.)"},null,null,null,N.sbc/N.rev,O.sbc/O.rev]];
+const cell=v=>v==null?"n/a":typeof v==="object"?(v.x!=null?v.x.toFixed(1)+"x":v.t):p(v);
+$("score").innerHTML=`<thead><tr><th class="l">Category</th><th class="l">Metric</th><th>Q3 26</th><th>Q2 26</th><th>Q3 25</th><th>TTM</th><th>9M 26</th><th>9M 25</th></tr></thead><tbody>`+
+ rows.map(r=>`<tr><td class="l">${r[0]}</td><td class="l">${r[1]}</td>${r.slice(2).map(v=>`<td class="n">${cell(v)}</td>`).join("")}</tr>`).join("")+"</tbody>";
+
+$("valtab").innerHTML=`<thead><tr><th class="l">Measure</th><th>Value</th></tr></thead><tbody>`+[
+ ["Share price ("+DATA.asOf+")","$"+DATA.price],["Shares, basic / diluted","13.22bn / 16.1bn"],
+ ["Market cap, basic / diluted","$"+(mcap/1000).toFixed(2)+"tn / $"+(DATA.price*DATA.dilShares/1000).toFixed(2)+"tn"],
+ ["Pro forma net cash (est.)","$"+DATA.proFormaNetCash+"bn"],["Enterprise value (basic, est.)","$"+(ev/1000).toFixed(2)+"tn"],
+ ["EV / TTM sales",(ev/rT*1000).toFixed(1)+"x"],["EV / run-rate ($81bn)",(ev/DATA.est.runrate).toFixed(1)+"x"],
+ ["EV / 2026E sales ($54.4bn)",(ev/DATA.est.rev26).toFixed(1)+"x"],["EV / 2027E sales ($127.7bn)",(ev/DATA.est.rev27).toFixed(1)+"x"],
+ ["EV / TTM adjusted EBITDA",(ev/((adjT+300)/1000)).toFixed(0)+"x"],["P/E, GAAP TTM","n/m (loss)"],
+ ["P/E on 2026E adj. EPS ($0.57)",(DATA.price/DATA.est.eps26).toFixed(0)+"x"],["PEG","n/m"]
+].map(r=>`<tr><td class="l">${r[0]}</td><td class="n">${r[1]}</td></tr>`).join("")+"</tbody>";
+$("valnote").textContent="Adjusted EBITDA = adjusted operating income plus ~$0.3bn D&A (est.). Koyfin shows EV of $1.34tn because it still counts the pre-IPO convertible notes as debt; they convert to equity at the IPO.";
+$("histtab").innerHTML=DATA.hist.map(r=>`<tr><td class="l">${r[0]}</td><td class="n">${r[1]}</td><td class="n">${r[2]||"n/a"}</td><td class="n">${r[3]||"n/a"}</td></tr>`).join("");
+
+const nn=(v,s="")=>v==null?"n/a":v.toFixed(1)+s;
+DATA.peers[0].om=opT/rT*100;DATA.peers[0].evs=ev/rT*1000;
+$("peertab").innerHTML=`<thead><tr><th class="l">Company</th><th>Mkt cap $bn</th><th>Gross margin</th><th>Op margin</th><th>FCF margin</th><th>ROIC</th><th>Fwd P/E</th><th>EV/EBITDA</th><th>EV/Sales</th><th>PEG</th></tr></thead><tbody>`+
+ DATA.peers.map(x=>`<tr><td class="l">${x.n}</td><td class="n">${f0(x.cap)}</td><td class="n">${nn(x.gm,"%")}</td><td class="n">${neg(nn(x.om,"%"))}</td><td class="n">${nn(x.fcfm,"%")}</td><td class="n">${nn(x.roic,"%")}</td><td class="n">${nn(x.pe,"x")}</td><td class="n">${nn(x.eve,"x")}</td><td class="n">${nn(x.evs,"x")}</td><td class="n">${x.peg==null?"n/a":x.peg.toFixed(2)}</td></tr>`).join("")+"</tbody>";
+
+const sc=[["Bear",130,5,"Growth stalls near 2027 consensus as price cuts offset usage; compute commitments keep margins thin."],["Base",220.5,6,"Consensus 2028 revenue; margins improve toward large-cap software, multiple settles near Alphabet's today."],["Bull",300,8,"Agents spread beyond coding; revenue beats consensus by a third and margins approach Microsoft's."]]
+ .map(([n,r,x,d])=>({n,r,x,d,v:(r*x+DATA.proFormaNetCash)/DATA.dilShares}));
+$("scencards").innerHTML=sc.map(c=>`<div class="card ${c.n==="Base"?"base":""}"><div class="lab">${c.n}: 2028 revenue $${c.r}bn, ${c.x}x EV/sales</div><div class="big">$${Math.round(c.v)}</div><div style="font-size:14px">${c.d}</div></div>`).join("");
+const pos=v=>Math.max(0,Math.min(100,(v-40)/140*100));
+$("sbar").innerHTML=[...sc.map(c=>[c.n+" $"+Math.round(c.v),c.v]),["Price $"+DATA.price,DATA.price],["Target $"+DATA.est.pt,DATA.est.pt]]
+ .map(([l,v],i)=>`<span class="pin" style="left:${pos(v)}%;top:${i%2?16:-22}px">${l}</span>`).join("");
+
+Object.entries(DATA.read).forEach(([k,v])=>{const e=$("r-"+k);if(e)e.textContent=v});
+$("tk1").innerHTML=DATA.tk1.map(x=>`<li>${x}</li>`).join("");
+$("tk2").innerHTML=DATA.tk2.map(x=>`<li>${x}</li>`).join("");
+$("src").innerHTML=DATA.sources.map(([n,u])=>`<li><a href="${u}">${n}</a></li>`).join("");
+$("defs").innerHTML=[
+ "Revenue growth: reported. Anthropic does not disclose organic growth; acquisitions are small (goodwill $595m), so reported is used as an estimate of organic.",
+ "Operating margin: GAAP operating income / revenue; adjusted figure is the company's non-GAAP measure.",
+ "NOPAT: operating income x (1 - 21% normalised US tax); losses carry no tax shield because none is recognised.",
+ "Invested capital: total assets minus cash and short-term investments, minus operating liabilities (total liabilities less convertible notes and lease liabilities). Dec 31, 2025: $"+f0(IC0)+"m; Sep 30, 2026: $"+f0(IC1)+"m; average $"+f0(ICa)+"m. Restricted cash kept in. This excludes ~$901bn of off-balance-sheet compute commitments, so ROIC and sales/capital overstate economic returns.",
+ "ROIC: annualised quarterly or TTM NOPAT / average invested capital. Incremental ROIC: change in annualised adjusted NOPAT (Q3 2026 vs Q4 2025) / change in invested capital; noisy.",
+ "FCF: operating cash flow minus purchases of property and equipment. Finance-leased equipment ($1.7bn of finance lease liabilities) is not in capex, so FCF flatters slightly.",
+ "FCF conversion: FCF / adjusted NOPAT (GAAP NOPAT is negative).",
+ "Net debt / EBITDA: not meaningful; net cash. Pro forma net cash = Sep 30 cash and STI $131.8bn + ~$116bn net proceeds from 1.103bn Class A and 0.313bn Class N shares at $83 (gross $117.6bn, fees estimated) - $4.5bn lease liabilities. Estimate.",
+ "Q3 SBC estimated as nine-month SBC ($3,255m) less first-half SBC (~$2.2bn).",
+ "Diluted shares: 13.22bn basic + 1.77bn options + 1.13bn RSUs (S-1/A, Sep 30). Broader fully diluted counts reported in press are ~18bn."
+].map(x=>`<li>${x}</li>`).join("");
+}
+</script>
+</body></html>

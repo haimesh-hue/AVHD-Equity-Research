@@ -1,0 +1,550 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Broadcom AVGO Overview</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single research-note column (max 1040px); each framework question is a numbered band with a "read" verdict line; tables scroll inside their own boxes. Palette: wafer slate + copper interconnect, teal reserved for AI. */
+:root{
+  --bg:#F2F4F6; --surface:#FFFFFF; --fg:#16212C; --muted:#5A6977; --line:#D6DDE3;
+  --copper:#A9581F; --ai:#1C7486; --good:#2F7D4F; --bad:#B23A3A; --warnbg:#FBF1E8;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E151C; --surface:#151F28; --fg:#E2E8EE; --muted:#93A3B2; --line:#28343F;
+  --copper:#E0905A; --ai:#4FB6C9; --good:#62B884; --bad:#E07272; --warnbg:#2A2019; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E151C; --surface:#151F28; --fg:#E2E8EE; --muted:#93A3B2; --line:#28343F;
+  --copper:#E0905A; --ai:#4FB6C9; --good:#62B884; --bad:#E07272; --warnbg:#2A2019; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55}
+.wrap{max-width:1040px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:36px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:clamp(30px,5vw,46px);font-weight:800;font-stretch:80%;letter-spacing:-.01em}
+h2{font-size:22px;font-weight:700;font-stretch:85%;display:flex;gap:12px;align-items:baseline}
+h2 .n{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--copper)}
+h3{font-size:15px;font-weight:700;font-stretch:90%;margin-bottom:6px}
+p{margin:0;max-width:68ch}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+header{display:grid;gap:14px;border-bottom:2px solid var(--fg);padding-bottom:20px}
+.tick{display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+.tick b{color:var(--fg);font-weight:500}
+.verdict{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.verdict div{background:var(--surface);padding:14px 16px;display:grid;gap:4px;align-content:start}
+.verdict .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.verdict .v{font-family:var(--display);font-weight:700;font-stretch:88%;font-size:18px}
+.verdict p{font-size:13.5px;color:var(--muted)}
+section{display:grid;gap:14px}
+.read{border-left:3px solid var(--copper);padding:8px 12px;background:var(--surface);max-width:none}
+.read::before{content:"Read  ";font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--copper);white-space:pre}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.cols>*{min-width:0}
+ul.tight{margin:0;padding-left:18px;display:grid;gap:4px}
+.tbl{overflow-x:auto;border:1px solid var(--line);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--surface)}
+thead th{font-family:var(--mono);font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.04em}
+tr.sub td{color:var(--muted);font-size:12.5px}
+tr.sub td:first-child{padding-left:20px}
+tr.hl td{font-weight:600}
+tr.me td{background:var(--warnbg)}
+tr.me td:first-child{background:var(--warnbg)}
+td.na{color:var(--muted)}
+.timeline{display:grid;gap:0;border-left:2px solid var(--line);margin-left:6px}
+.timeline div{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:5px 0 5px 14px;position:relative}
+.timeline div::before{content:"";position:absolute;left:-6px;top:12px;width:10px;height:10px;border-radius:50%;background:var(--bg);border:2px solid var(--copper)}
+.timeline span{font-family:var(--mono);font-size:13px;color:var(--copper)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.kpi{border-top:2px solid var(--fg);padding-top:8px;display:grid;gap:2px}
+.kpi .v{font-family:var(--display);font-weight:700;font-size:24px;font-stretch:85%}
+.kpi .k{font-size:12.5px;color:var(--muted)}
+.kpi.ai{border-color:var(--ai)} .kpi.ai .v{color:var(--ai)}
+.chart{background:var(--surface);border:1px solid var(--line);padding:12px;overflow-x:auto}
+.chart svg{display:block;width:100%;min-width:420px;height:auto}
+.chart .cap{font-size:12.5px;color:var(--muted);margin-top:6px}
+.legend{display:flex;gap:16px;font-size:12.5px;color:var(--muted);margin-bottom:6px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px}
+.scen{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.scen>div{background:var(--surface);border:1px solid var(--line);padding:14px;display:grid;gap:8px;align-content:start}
+.scen .px{font-family:var(--display);font-size:28px;font-weight:800;font-stretch:80%}
+.scen .tag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.bear .tag{color:var(--bad)} .bull .tag{color:var(--good)} .base .tag{color:var(--copper)}
+.pos{color:var(--good)} .neg{color:var(--bad)}
+.risks{display:grid;gap:10px;counter-reset:r}
+.risks>div{display:grid;grid-template-columns:28px 1fr;gap:10px}
+.risks>div::before{counter-increment:r;content:counter(r);font-family:var(--mono);color:var(--bad);font-size:13px;padding-top:2px}
+details{border-top:1px solid var(--line);padding-top:10px}
+summary{cursor:pointer;font-family:var(--display);font-weight:700;font-stretch:88%}
+summary:focus-visible,a:focus-visible{outline:2px solid var(--copper);outline-offset:2px}
+dl.gloss{display:grid;grid-template-columns:minmax(120px,180px) 1fr;gap:6px 16px;margin:10px 0 0;font-size:13.5px}
+dl.gloss dt{font-weight:600} dl.gloss dd{margin:0;color:var(--muted)}
+.src{font-size:12.5px;color:var(--muted);display:grid;gap:3px;padding-left:18px;margin:0}
+.src a{color:var(--muted)}
+a{color:var(--copper)}
+.disc{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.note{font-size:12.5px;color:var(--muted)}
+@media (max-width:520px){dl.gloss{grid-template-columns:1fr}.timeline div{grid-template-columns:48px 1fr}}
+</style>
+
+<div class="wrap" id="app">
+  <header>
+    <div class="eyebrow">Equity research 101 · first-principles overview</div>
+    <h1>Broadcom Inc. <span style="color:var(--copper)">AVGO</span></h1>
+    <div class="tick" id="tick"></div>
+    <p id="thesis"></p>
+  </header>
+
+  <div class="verdict" id="verdict"></div>
+
+  <section id="s1">
+    <h2><span class="n">01</span>What does it do, and how did it get here?</h2>
+    <div class="cols">
+      <div style="display:grid;gap:10px">
+        <p id="bizDesc"></p>
+        <div class="tbl"><table id="segTbl"></table></div>
+      </div>
+      <div><h3>Timeline</h3><div class="timeline" id="timeline"></div></div>
+    </div>
+    <p class="read" id="r1"></p>
+  </section>
+
+  <section id="s2">
+    <h2><span class="n">02</span>Why does it earn its returns? (moat)</h2>
+    <div class="cols" id="moat"></div>
+    <p class="read" id="r2"></p>
+  </section>
+
+  <section id="s3">
+    <h2><span class="n">03</span>What is revenue made of, and which KPIs move it?</h2>
+    <p id="driverText"></p>
+    <div class="kpis" id="kpis"></div>
+    <div class="chart">
+      <div class="legend"><span><i style="background:var(--ai)"></i>AI semiconductor revenue, $B</span><span><i style="background:var(--muted);opacity:.45"></i>management target</span></div>
+      <svg id="aiChart" viewBox="0 0 640 230" role="img" aria-label="AI semiconductor revenue by fiscal year"></svg>
+      <div class="cap" id="aiCap"></div>
+    </div>
+    <p class="read" id="r3"></p>
+  </section>
+
+  <section id="s4">
+    <h2><span class="n">04</span>Financials: is the profit real cash?</h2>
+    <div class="chart">
+      <div class="legend"><span><i style="background:var(--fg);opacity:.75"></i>Revenue</span><span><i style="background:var(--copper)"></i>Free cash flow</span><span><i style="background:var(--copper);opacity:.35"></i>FCF after stock comp</span></div>
+      <svg id="finChart" viewBox="0 0 640 240" role="img" aria-label="Revenue and free cash flow by year"></svg>
+    </div>
+    <h3>Profit and loss ($M)</h3>
+    <div class="tbl"><table id="plTbl"></table></div>
+    <p class="read" id="r4a"></p>
+    <h3>Balance sheet ($M)</h3>
+    <div class="tbl"><table id="bsTbl"></table></div>
+    <p class="read" id="r4b"></p>
+    <h3>Cash flow and capital allocation ($M)</h3>
+    <div class="tbl"><table id="cfTbl"></table></div>
+    <p class="read" id="r4c"></p>
+  </section>
+
+  <section id="s5">
+    <h2><span class="n">05</span>Ratios: leverage, efficiency, returns</h2>
+    <div class="tbl"><table id="ratioTbl"></table></div>
+    <p class="note" id="ratioNote"></p>
+    <p class="read" id="r5"></p>
+  </section>
+
+  <section id="s6">
+    <h2><span class="n">06</span>What is the market paying?</h2>
+    <div class="cols">
+      <div style="display:grid;gap:8px"><h3>Now</h3><div class="tbl"><table id="valNow"></table></div></div>
+      <div style="display:grid;gap:8px"><h3>Versus its own history (fiscal year-end)</h3><div class="tbl"><table id="valHist"></table></div></div>
+    </div>
+    <p class="read" id="r6"></p>
+  </section>
+
+  <section id="s7">
+    <h2><span class="n">07</span>Industry and competitors</h2>
+    <p id="industryText"></p>
+    <div class="tbl"><table id="peerTbl"></table></div>
+    <p class="note" id="peerNote"></p>
+    <p class="read" id="r7"></p>
+  </section>
+
+  <section id="s8">
+    <h2><span class="n">08</span>Who runs it?</h2>
+    <div class="cols" id="mgmt"></div>
+    <p class="read" id="r8"></p>
+  </section>
+
+  <section id="s9">
+    <h2><span class="n">09</span>What could break the story?</h2>
+    <div class="risks" id="risks"></div>
+  </section>
+
+  <section id="s10">
+    <h2><span class="n">10</span>Scenarios: bear, base, bull</h2>
+    <p id="scenIntro"></p>
+    <div class="scen" id="scen"></div>
+    <p class="read" id="r10"></p>
+  </section>
+
+  <section id="s11">
+    <h2><span class="n">11</span>Takeaways</h2>
+    <div class="cols">
+      <div><h3>Remember</h3><ul class="tight" id="remember"></ul></div>
+      <div><h3>Check next</h3><ul class="tight" id="checkNext"></ul></div>
+    </div>
+  </section>
+
+  <details>
+    <summary>Glossary</summary>
+    <dl class="gloss" id="gloss"></dl>
+  </details>
+  <details>
+    <summary>Sources</summary>
+    <ol class="src" id="sources"></ol>
+  </details>
+  <p class="disc">Education and analysis only, not investment advice. Prices as of the close on 16 Oct 2026. Historical figures are GAAP from company filings and S&amp;P Global data via stockanalysis.com; forward figures are analyst consensus or the author's scenario estimates and are labelled as such.</p>
+</div>
+
+<script>
+/* DATA schema: raw inputs only. Margins, growth, FCF, conversion, working capital, DuPont, ROIC, P/E, EV/EBITDA, PEG are computed below.
+   Units: $M unless noted. Fiscal year ends late Oct / early Nov. Last column = trailing twelve months to 2 Aug 2026 (Q3 FY26). */
+const DATA = {
+  name:"Broadcom Inc.", ticker:"AVGO", exchange:"Nasdaq", currency:"USD",
+  price:328.75, priceDate:"16 Oct 2026", sharesOut:4770, dilutedShares:4887,
+  hq:"Palo Alto, California", employees:"~33,000 (Nov 2025)",
+  years:["FY21","FY22","FY23","FY24","FY25","TTM Q3'26"],
+  revenue:[27450,33203,35819,51574,63887,89104],
+  cogs:[7162,8256,9272,12788,14486,21817],
+  ebit:[8519,14225,16207,13463,25484,42814],
+  da:[6041,4984,3835,10010,8775,8764],
+  netIncome:[6437,11223,14082,5895,23126,38265],
+  ocf:[13764,16736,18085,19962,27537,40653],
+  capex:[443,424,452,548,623,1250],
+  sbc:[1704,1533,2171,5741,7568,8482],
+  dividends:[6212,7032,7645,9814,11142,12078],
+  buybacks:[1299,8455,7685,12392,6310,8450],
+  acquisitions:[8,246,53,25978,0,0],
+  cash:[12163,12416,14189,9348,16178,23975],
+  debt:[40273,39978,39648,68916,66461,59419],
+  receivables:[2071,2958,3154,4416,7145,13707],
+  inventory:[1297,1925,1898,1760,2270,4523],
+  payables:[1086,998,1210,1662,1560,4000],
+  ppe:[2936,2740,2617,3846,3848,3144],
+  gwIntang:[54824,50725,47520,138456,130074,124126],
+  totalAssets:[75570,73249,72861,165645,171092,188148],
+  equity:[24989,22709,23988,67678,81292,99690],
+  dps:[1.49,1.69,1.905,2.17,2.42,2.60],
+  taxRate:0.16,
+  eps:{fy25:6.82, fy26e:11.66, fy27e:19.40, fy28mgmt:30},
+  revCons:{fy26e:105980, fy27e:173970},
+  histVal:{pe:[34.00,17.07,24.57,133.83,75.48], fwdPe:[17.43,11.74,18.77,28.55,44.02], evEbitda:[16.86,11.47,18.17,32.90,51.19], evSales:[9.04,6.66,10.42,16.46,28.16]},
+  ntmPe:18.96,
+  consensus:{analysts:50, rating:"Strong Buy (40 SB, 7 Buy, 3 Hold)", low:215.88, avg:527.59, median:535, high:660},
+  ai:{labels:["FY25","FY26 guide","FY27 target","FY28 target"], values:[20.2,58,115,230], est:[false,true,true,true]},
+  peers:[
+    {n:"Broadcom (AVGO)", me:true, rev:89.1, g:48.7, om:48.0, fcfm:44.2, roic:30.7, nc:-35.4, pe:41.96, fpe:18.96, ev:30.71, peg:0.35},
+    {n:"Nvidia (NVDA)", rev:303.0, g:83.4, om:65.2, fcfm:41.9, roic:92.0, nc:23.6, pe:27.08, fpe:17.70, ev:25.57, peg:0.35},
+    {n:"TSMC (TSM)", rev:155.2, g:36.2, om:58.0, fcfm:30.0, roic:60.3, nc:100.4, pe:26.98, fpe:18.83, ev:16.20, peg:null},
+    {n:"AMD (AMD)", rev:41.3, g:39.5, om:15.8, fcfm:20.3, roic:9.8, nc:8.8, pe:134.96, fpe:47.54, ev:89.35, peg:0.79},
+    {n:"Qualcomm (QCOM)", rev:44.1, g:1.9, om:23.7, fcfm:23.6, roic:25.6, nc:-7.0, pe:20.03, fpe:18.58, ev:15.90, peg:3.01},
+    {n:"Marvell (MRVL)", rev:9.45, g:30.6, om:16.8, fcfm:18.3, roic:6.9, nc:-1.35, pe:76.55, fpe:40.32, ev:70.57, peg:0.81}
+  ],
+  segments:{cols:["FY23","FY24","FY25","Q3 FY26"], semis:[28182,30096,36858,20839], software:[7637,21478,27029,8752]},
+  timeline:[
+    ["1961","Starts as HP Associates, Hewlett-Packard's semiconductor arm."],
+    ["1999","Goes with Agilent when HP spins off its test and components businesses."],
+    ["2005","KKR and Silver Lake buy Agilent's chip unit for $2.6B and name it Avago."],
+    ["2006","Hock Tan becomes CEO."],
+    ["2009","Avago lists on Nasdaq as AVGO."],
+    ["2013","Agrees to buy LSI for $6.6B (storage, networking)."],
+    ["2016","Closes the $37B purchase of Broadcom Corp. and takes its name."],
+    ["2018","Qualcomm bid blocked by US order; buys CA Technologies for $18.9B."],
+    ["2019","Buys Symantec's enterprise security unit for $10.7B."],
+    ["2023","Closes VMware (about $69B incl. debt); HQ moves to Palo Alto."],
+    ["2025–26","Custom AI chips (XPUs) for Google, Meta, OpenAI, Anthropic become the growth engine."]
+  ],
+  sources:[
+    ["Broadcom Q3 FY26 results (8-K exhibit 99), Sep 2026","https://www.sec.gov/Archives/edgar/data/0001730168/000173016826000076/avgo-08022026x8kxex99.htm"],
+    ["Broadcom Q4 FY25 results (8-K exhibit 99), Dec 2025","https://www.sec.gov/Archives/edgar/data/1730168/000173016825000116/avgo-11022025x8kxex99.htm"],
+    ["Broadcom Q4 FY23 results (8-K exhibit 99)","https://www.sec.gov/Archives/edgar/data/1730168/000173016823000093/avgo-10292023x8kxex99.htm"],
+    ["Broadcom FY25 Form 10-K","https://www.sec.gov/Archives/edgar/data/1730168/000173016825000121/avgo-20251102.htm"],
+    ["Broadcom FY26 proxy statement (DEF 14A) summary, Stock Titan","https://www.stocktitan.net/sec-filings/AVGO/def-14a-broadcom-inc-definitive-proxy-statement-0be829438949.html"],
+    ["Q3 FY26 earnings call transcript, Motley Fool","https://www.fool.com/earnings/call-transcripts/2026/09/09/broadcom-avgo-q3-2026-earnings-call-transcript/"],
+    ["Q3 FY26 call summary, BigGo Finance","https://finance.biggo.com/news/US_AVGO_2026-09-02"],
+    ["AVGO income statement, balance sheet, cash flow, ratios, statistics, forecast (stockanalysis.com)","https://stockanalysis.com/stocks/avgo/financials/"],
+    ["AVGO analyst forecast (stockanalysis.com)","https://stockanalysis.com/stocks/avgo/forecast/"],
+    ["Operating income history (macrotrends)","https://www.macrotrends.net/stocks/charts/AVGO/AVGO/operating-income"],
+    ["Peer statistics: NVDA, TSM, AMD, QCOM, MRVL (stockanalysis.com)","https://stockanalysis.com/stocks/nvda/statistics/"],
+    ["CEO AI-revenue award, Nasdaq/MarketBeat","https://www.nasdaq.com/articles/broadcom-hits-record-high-after-ceo-hock-tan-ai-pay-package"],
+    ["Broadcom falls on Tan's capital warning, 24/7 Wall St., 16 Oct 2026","https://247wallst.com/investing/2026/10/16/broadcom-falls-4-as-ceo-hock-tans-capital-warning-hangs-over-ai-chips-marvell-drops-4/"],
+    ["Broadcom down 35% from peak, Benzinga, Oct 2026","https://www.benzinga.com/markets/equities/26/10/62428348/broadcom-stock-is-down-35-from-its-peak-as-ai-bubble-warnings-rise-but-analysts-stay-optimistic"],
+    ["Broadcom history (Wikipedia)","https://en.wikipedia.org/wiki/Broadcom"]
+  ]
+};
+
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);
+const N=DATA.years.length;
+const fmt=(v,d=0)=>v==null||!isFinite(v)?"n/a":v.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct=(v,d=1)=>v==null||!isFinite(v)?"n/a":(v*100).toFixed(d)+"%";
+const x=(v,d=1)=>v==null||!isFinite(v)?"n/a":v.toFixed(d)+"x";
+const D=DATA;
+const map=f=>D.years.map((_,i)=>f(i));
+
+/* ---------- computed series ---------- */
+const C={};
+C.growth=map(i=>i?D.revenue[i]/D.revenue[i-1]-1:null);
+C.growth[N-1]=0.4869; // TTM vs prior-year TTM (S&P Global); FY25 is not the right base for a TTM column
+C.gm=map(i=>1-D.cogs[i]/D.revenue[i]);
+C.ebitda=map(i=>D.ebit[i]+D.da[i]);
+C.ebitdaM=map(i=>C.ebitda[i]/D.revenue[i]);
+C.ebitM=map(i=>D.ebit[i]/D.revenue[i]);
+C.netM=map(i=>D.netIncome[i]/D.revenue[i]);
+C.fcf=map(i=>D.ocf[i]-D.capex[i]);
+C.fcfM=map(i=>C.fcf[i]/D.revenue[i]);
+C.conv=map(i=>C.fcf[i]/D.netIncome[i]);
+C.fcfSbc=map(i=>C.fcf[i]-D.sbc[i]);
+C.wc=map(i=>D.receivables[i]+D.inventory[i]-D.payables[i]);
+C.wcPct=map(i=>C.wc[i]/D.revenue[i]);
+C.netDebt=map(i=>D.debt[i]-D.cash[i]);
+C.ndEbitda=map(i=>C.netDebt[i]/C.ebitda[i]);
+C.assetTurn=map(i=>D.revenue[i]/D.totalAssets[i]);
+C.eqMult=map(i=>D.totalAssets[i]/D.equity[i]);
+C.roe=map(i=>C.netM[i]*C.assetTurn[i]*C.eqMult[i]);
+C.dso=map(i=>D.receivables[i]/D.revenue[i]*365);
+C.dio=map(i=>D.inventory[i]/D.cogs[i]*365);
+C.dpo=map(i=>D.payables[i]/D.cogs[i]*365);
+C.ccc=map(i=>C.dso[i]+C.dio[i]-C.dpo[i]);
+C.ic=map(i=>D.equity[i]+D.debt[i]-D.cash[i]);
+C.roic=map(i=>D.ebit[i]*(1-D.taxRate)/C.ic[i]);
+C.roicTang=map(i=>D.ebit[i]*(1-D.taxRate)/(C.ic[i]-D.gwIntang[i]));
+C.cashReturn=map(i=>D.dividends[i]+D.buybacks[i]);
+const L=N-1;
+const mcap=D.price*D.sharesOut; // $M
+const ev=mcap+D.debt[L]-D.cash[L];
+const ttmEps=D.netIncome[L]/D.dilutedShares;
+const V={pe:D.price/ttmEps, evEbitda:ev/C.ebitda[L], evSales:ev/D.revenue[L], pFcf:mcap/C.fcf[L],
+  fpe26:D.price/D.eps.fy26e, fpe27:D.price/D.eps.fy27e, g27:D.eps.fy27e/D.eps.fy26e-1, yield:D.dps[L]/D.price};
+V.peg=V.fpe26/(V.g27*100);
+
+/* ---------- table builder ---------- */
+function table(el,head,rows){
+  let h="<thead><tr>"+head.map(c=>`<th>${c}</th>`).join("")+"</tr></thead><tbody>";
+  rows.forEach(r=>{h+=`<tr class="${r.cls||""}">`+`<td>${r.l}</td>`+r.v.map(c=>`<td class="${c==="n/a"?"na":""}">${c}</td>`).join("")+"</tr>";});
+  $(el).innerHTML=h+"</tbody>";
+}
+const yrs=["",...D.years];
+
+/* ---------- header & verdict ---------- */
+$("tick").innerHTML=[
+  ["Price",`$${D.price.toFixed(2)} (${D.priceDate})`],["Market cap",`$${fmt(mcap/1e6,2)}T`],["EV",`$${fmt(ev/1e6,2)}T`],
+  ["Exchange",D.exchange],["Reporting",D.currency+", FY ends early Nov"],["HQ",D.hq]
+].map(([k,v])=>`<span>${k} <b>${v}</b></span>`).join("");
+$("thesis").textContent="Broadcom is two businesses under one cash-flow machine: custom AI accelerators and networking chips for a handful of hyperscalers and AI labs, and VMware-led infrastructure software. AI has taken revenue from $64B in FY25 to an $89B run over the last four quarters, and the stock now trades about 35% below its peak on fears that its customers cannot fund the build-out.";
+$("verdict").innerHTML=[
+  ["Business quality","Exceptional, concentrated",`GAAP operating margin ${pct(C.ebitM[L],0)}, FCF margin ${pct(C.fcfM[L],0)}, ROIC ${pct(C.roic[L],0)} even with $124B of acquisition goodwill and intangibles in the base.`],
+  ["Valuation","Cheap if FY27 happens",`${x(V.pe)} trailing GAAP P/E but ${x(V.fpe27)} FY27 consensus EPS. Below its FY24–25 multiples and in line with Nvidia and TSMC on forward P/E.`],
+  ["Main risk","Customer funding",`Six XPU customers drive 73% of AI revenue, and two of the largest (OpenAI, Anthropic) depend on outside capital. The CEO himself flagged capital as the next constraint.`],
+  ["Consensus","Strong Buy, $528 avg",`${D.consensus.analysts} analysts; targets $216–$660. Average implies +${((D.consensus.avg/D.price-1)*100).toFixed(0)}% and sits close to the base case below.`]
+].map(([k,v,p])=>`<div><span class="k">${k}</span><span class="v">${v}</span><p>${p}</p></div>`).join("");
+
+/* ---------- 01 business ---------- */
+$("bizDesc").textContent="Broadcom designs chips and sells enterprise software; it owns no fabs and has TSMC make its silicon. Semiconductor Solutions (70% of Q3 FY26 revenue) sells custom AI accelerators (XPUs) co-designed with each customer, Ethernet switching and optics for AI clusters, plus legacy lines in broadband, wireless, storage and industrial. Infrastructure Software (30%) is mostly VMware Cloud Foundation sold as subscriptions, plus mainframe, security and other acquired franchises. About 48% of revenue goes through distributors, and the top five end customers were roughly 40% of FY25 revenue.";
+table("segTbl",["Revenue $M",...D.segments.cols],[
+  {l:"Semiconductor Solutions",v:D.segments.semis.map(v=>fmt(v))},
+  {l:"Infrastructure Software",v:D.segments.software.map(v=>fmt(v))},
+  {l:"Software share",cls:"sub",v:D.segments.software.map((v,i)=>pct(v/(v+D.segments.semis[i]),0))}
+]);
+$("timeline").innerHTML=D.timeline.map(([y,t])=>`<div><span>${y}</span><p>${t}</p></div>`).join("");
+$("r1").textContent="Broadcom was built by buying franchises with dominant share, cutting costs hard, and harvesting cash. VMware (FY24) lifted software to ~40% of revenue; since then custom AI silicon has flipped the mix back to chips, with AI alone 56% of Q3 FY26 revenue.";
+
+/* ---------- 02 moat ---------- */
+$("moat").innerHTML=[
+  ["Custom silicon know-how","Building a hyperscaler's own accelerator needs high-speed SerDes, advanced packaging and memory integration that few firms can supply at scale. Customers co-design over multiple generations (Google TPU, Meta MTIA), so switching mid-roadmap is costly."],
+  ["Ethernet networking","AI networking grew over 2.5x year on year in Q3 FY26 and management expects it to keep pace with XPUs. Broadcom's switch silicon is the default for open Ethernet AI clusters, the main alternative to Nvidia's proprietary fabric."],
+  ["Supply and financing scale","Broadcom has locked in lasers, substrates (own Singapore substrate fab from FY27) and memory, and set up XPV with Apollo and Blackstone to help fund 20+ GW of customer compute. Smaller rivals cannot promise that capacity."],
+  ["Software lock-in","VMware runs the private data centers of most large enterprises. Ripping it out is slow and risky, which lets Broadcom push bundled subscriptions at about 84% segment operating margin."]
+].map(([h,t])=>`<div><h3>${h}</h3><p>${t}</p></div>`).join("");
+$("r2").textContent="The moat is real but narrow in customers: it rests on deep, multi-year engineering ties with six XPU buyers who are also the most capable firms on earth at designing chips in-house. Pricing power is strongest in software and networking, weaker on XPUs, where gross margin is already falling.";
+
+/* ---------- 03 drivers ---------- */
+$("driverText").textContent="AI revenue = gigawatts of customer compute deployed × Broadcom content per gigawatt (XPUs, switches, optics), split by customer. Software revenue = installed VMware cores × subscription price, which grows as perpetual licences convert. Non-AI chips follow the broadband, enterprise and wireless cycles.";
+$("kpis").innerHTML=[
+  ["$16.7B","AI semis revenue Q3 FY26, +221% YoY",true],
+  ["6","Custom XPU customers; XPUs are 73% of AI revenue",true],
+  ["75% → 73%","Gross margin Q3 actual → Q4 guide (78% a year ago)"],
+  ["+15%","Infrastructure software ARR growth"],
+  ["$4.2B","Non-AI semis Q3 FY26, +5% YoY, flat QoQ"]
+].map(([v,k,ai])=>`<div class="kpi ${ai?"ai":""}"><span class="v">${v}</span><span class="k">${k}</span></div>`).join("");
+(function(){
+  const s=$("aiChart"),W=640,H=230,pl=40,pb=34,pt=14,max=250,bw=90,gap=(W-pl-20-bw*4)/3;
+  let g="";
+  [0,50,100,150,200,250].forEach(t=>{const y=pt+(H-pt-pb)*(1-t/max);g+=`<line x1="${pl}" x2="${W-10}" y1="${y}" y2="${y}" style="stroke:var(--line)"/><text x="${pl-6}" y="${y+4}" text-anchor="end" style="fill:var(--muted);font:11px var(--mono)">${t}</text>`;});
+  D.ai.values.forEach((v,i)=>{const h=(H-pt-pb)*v/max,xx=pl+12+i*(bw+gap),y=pt+(H-pt-pb)-h;
+    g+=`<rect x="${xx}" y="${y}" width="${bw}" height="${h}" style="fill:${D.ai.est[i]&&i>1?"var(--muted)":"var(--ai)"};opacity:${D.ai.est[i]&&i>1?.45:1}"/>`;
+    g+=`<text x="${xx+bw/2}" y="${y-5}" text-anchor="middle" style="fill:var(--fg);font:600 12px var(--mono)">${i===0?"~":""}${v}</text>`;
+    g+=`<text x="${xx+bw/2}" y="${H-12}" text-anchor="middle" style="fill:var(--muted);font:11px var(--mono)">${D.ai.labels[i]}</text>`;});
+  s.innerHTML=g;
+  $("aiCap").textContent="FY25 is approximate (~$20B, per pre-results expectations cited in press). FY26 is management's ~$58B outlook including the Q4 guide of $21.7B. FY27 ($115B) and FY28 ($230B) are management targets given on the Q3 FY26 call, not results.";
+})();
+$("r3").textContent="This is now a volume story: XPU shipments rose over 3.5x year on year. The question is not demand (management says demand exceeds supply) but whether customers can pay for $350B of chips over FY27–28. Watch gross margin: more memory-heavy XPUs mean bigger revenue at lower margin.";
+
+/* ---------- 04 financials ---------- */
+(function(){
+  const s=$("finChart"),W=640,H=240,pl=44,pb=30,pt=14,max=100000,grp=(W-pl-10)/N,bw=grp*0.32;
+  let g="";
+  [0,25,50,75,100].forEach(t=>{const y=pt+(H-pt-pb)*(1-t*1000/max);g+=`<line x1="${pl}" x2="${W-6}" y1="${y}" y2="${y}" style="stroke:var(--line)"/><text x="${pl-6}" y="${y+4}" text-anchor="end" style="fill:var(--muted);font:11px var(--mono)">$${t}B</text>`;});
+  D.years.forEach((yr,i)=>{const x0=pl+i*grp+grp*0.14,ch=H-pt-pb;
+    const hr=ch*D.revenue[i]/max,hf=ch*C.fcf[i]/max,hs=ch*Math.max(C.fcfSbc[i],0)/max;
+    g+=`<rect x="${x0}" y="${pt+ch-hr}" width="${bw}" height="${hr}" style="fill:var(--fg);opacity:.75"/>`;
+    g+=`<rect x="${x0+bw+4}" y="${pt+ch-hf}" width="${bw}" height="${hf}" style="fill:var(--copper);opacity:.35"/>`;
+    g+=`<rect x="${x0+bw+4}" y="${pt+ch-hs}" width="${bw}" height="${hs}" style="fill:var(--copper)"/>`;
+    g+=`<text x="${x0+bw+2}" y="${H-10}" text-anchor="middle" style="fill:var(--muted);font:11px var(--mono)">${yr.replace(" Q3'26","")}</text>`;});
+  s.innerHTML=g;
+})();
+/* note: in the chart the light copper bar is total FCF; the solid copper inside it is FCF after stock comp */
+table("plTbl",yrs,[
+  {l:"Revenue",cls:"hl",v:D.revenue.map(v=>fmt(v))},
+  {l:"Growth",cls:"sub",v:C.growth.map(v=>pct(v))},
+  {l:"Gross margin",cls:"sub",v:C.gm.map(v=>pct(v))},
+  {l:"EBITDA (EBIT + D&amp;A)",v:C.ebitda.map(v=>fmt(v))},
+  {l:"EBITDA margin",cls:"sub",v:C.ebitdaM.map(v=>pct(v))},
+  {l:"Operating income (GAAP EBIT)",v:D.ebit.map(v=>fmt(v))},
+  {l:"Operating margin",cls:"sub",v:C.ebitM.map(v=>pct(v))},
+  {l:"Net income (to common)",cls:"hl",v:D.netIncome.map(v=>fmt(v))},
+  {l:"Net margin",cls:"sub",v:C.netM.map(v=>pct(v))}
+]);
+$("r4a").textContent="Revenue more than tripled since FY21 and GAAP operating margin rose from 31% to 48%. FY24 looks weak only because VMware brought $9.4B of intangible amortization and a large tax charge; Broadcom's own adjusted EBITDA was $43.0B (67% margin) in FY25. Gross margin is sliding (77% in FY25 to 75.5% TTM) as AI hardware grows.";
+table("bsTbl",yrs,[
+  {l:"Cash",v:D.cash.map(v=>fmt(v))},
+  {l:"Total debt",v:D.debt.map(v=>fmt(v))},
+  {l:"Net debt",cls:"hl",v:C.netDebt.map(v=>fmt(v))},
+  {l:"PP&amp;E (fixed assets)",v:D.ppe.map(v=>fmt(v))},
+  {l:"Goodwill + intangibles",v:D.gwIntang.map(v=>fmt(v))},
+  {l:"Trade working capital (AR + inv − AP)",v:C.wc.map(v=>fmt(v))},
+  {l:"as % of revenue",cls:"sub",v:C.wcPct.map(v=>pct(v))},
+  {l:"Total assets",v:D.totalAssets.map(v=>fmt(v))},
+  {l:"Shareholders' equity",v:D.equity.map(v=>fmt(v))}
+]);
+$("r4b").textContent="An asset-light balance sheet: $3.1B of PP&E against $89B of revenue, but $124B of goodwill and intangibles from deals. Net debt has fallen from $59.6B after VMware to $35.4B. Receivables nearly doubled in nine months to $13.7B as AI shipments surged; worth watching. Debt includes leases to FY25; the latest column is reported borrowings only.";
+table("cfTbl",yrs,[
+  {l:"Operating cash flow",v:D.ocf.map(v=>fmt(v))},
+  {l:"Capex",v:D.capex.map(v=>"("+fmt(v)+")")},
+  {l:"Free cash flow",cls:"hl",v:C.fcf.map(v=>fmt(v))},
+  {l:"FCF margin",cls:"sub",v:C.fcfM.map(v=>pct(v))},
+  {l:"FCF conversion (FCF / net income)",cls:"sub",v:C.conv.map(v=>pct(v,0))},
+  {l:"Stock-based comp",v:D.sbc.map(v=>fmt(v))},
+  {l:"FCF after stock comp",cls:"sub",v:C.fcfSbc.map(v=>fmt(v))},
+  {l:"Dividends",v:D.dividends.map(v=>fmt(v))},
+  {l:"Buybacks",v:D.buybacks.map(v=>fmt(v))},
+  {l:"Acquisitions (cash)",v:D.acquisitions.map(v=>v?fmt(v):"–")},
+  {l:"Dividend per share ($)",cls:"sub",v:D.dps.map((v,i)=>v.toFixed(2)+(i===L?" (FY26 rate)":""))}
+]);
+$("r4c").textContent="Profits are real cash: FCF has exceeded net income every year, because amortization of acquired intangibles depresses GAAP profit but costs no cash. Capex is about 1.4% of revenue. The honest haircut is stock comp, now $8.5B a year; FCF after it is still $30.9B. Dividends have risen every year and take about 30% of FCF; buybacks are opportunistic.";
+
+/* ---------- 05 ratios ---------- */
+table("ratioTbl",yrs,[
+  {l:"Net debt / EBITDA",v:C.ndEbitda.map(v=>x(v))},
+  {l:"Asset turnover",v:C.assetTurn.map(v=>x(v,2))},
+  {l:"Receivable days (DSO)",cls:"sub",v:C.dso.map(v=>fmt(v))},
+  {l:"Inventory days (DIO)",cls:"sub",v:C.dio.map(v=>fmt(v))},
+  {l:"Payable days (DPO)",cls:"sub",v:C.dpo.map(v=>fmt(v))},
+  {l:"Cash conversion cycle",cls:"sub",v:C.ccc.map(v=>fmt(v))},
+  {l:"DuPont: net margin",v:C.netM.map(v=>pct(v))},
+  {l:"× asset turnover",cls:"sub",v:C.assetTurn.map(v=>x(v,2))},
+  {l:"× equity multiplier",cls:"sub",v:C.eqMult.map(v=>x(v,2))},
+  {l:"= ROE (book)",cls:"hl",v:C.roe.map(v=>pct(v))},
+  {l:"ROIC (incl. goodwill)",cls:"hl",v:C.roic.map(v=>pct(v))}
+]);
+$("ratioNote").textContent="ROIC = GAAP EBIT × (1 − 16%) / (equity + debt − cash), on year-end capital. 16% is management's non-GAAP tax rate; GAAP tax is distorted by one-offs. Days use year-end balances; TTM days use trailing revenue, which overstates DSO while revenue is ramping. Excluding goodwill, invested capital is near zero or negative, so a tangible ROIC is not a meaningful number here.";
+$("r5").textContent="Even charged for every acquisition premium, ROIC has climbed from 9% in the VMware year to about 27%, comfortably above any reasonable cost of capital and above a 15% quality bar. ROE of 38% comes mostly from margin, not leverage (equity multiplier under 2x). Leverage is light at 0.7x net debt to EBITDA.";
+
+/* ---------- 06 valuation ---------- */
+table("valNow",["Metric","Value"],[
+  {l:"P/E, trailing GAAP",v:[x(V.pe)]},
+  {l:"P/E, FY26E non-GAAP ($11.66)",v:[x(V.fpe26)]},
+  {l:"P/E, FY27E non-GAAP ($19.40)",v:[x(V.fpe27)]},
+  {l:"P/E, next 12 months (S&amp;P Global)",v:[x(D.ntmPe)]},
+  {l:"EV / EBITDA, trailing",v:[x(V.evEbitda)]},
+  {l:"EV / sales, trailing",v:[x(V.evSales)]},
+  {l:"P / FCF, trailing",v:[x(V.pFcf)]},
+  {l:"PEG (FY26E P/E ÷ FY27E EPS growth)",v:[V.peg.toFixed(2)]},
+  {l:"Dividend yield (FY26 rate)",v:[pct(V.yield,2)]}
+]);
+table("valHist",["",...D.years.slice(0,5),"Now"],[
+  {l:"P/E, trailing",v:[...D.histVal.pe.map(v=>x(v)),x(V.pe)]},
+  {l:"P/E, forward",v:[...D.histVal.fwdPe.map(v=>x(v)),x(D.ntmPe)]},
+  {l:"EV / EBITDA",v:[...D.histVal.evEbitda.map(v=>x(v)),x(V.evEbitda)]},
+  {l:"EV / sales",v:[...D.histVal.evSales.map(v=>x(v)),x(V.evSales)]}
+]);
+$("r6").textContent="Trailing multiples look rich, but earnings are compounding so fast that they mislead. On consensus FY27 EPS the stock is about 17x, roughly where it traded in FY21 and FY23 when it was a slow-growth chip and software roll-up. Read as a reverse DCF: at 17x FY27 earnings, the price assumes little growth after FY27, so the FY28 AI target of $230B is largely not paid for.";
+
+/* ---------- 07 peers ---------- */
+$("industryText").textContent="AI accelerator spending is the fastest-growing pool in semiconductors. Nvidia's merchant GPUs still dominate; custom ASICs (Broadcom, Marvell, Asian design houses) are taking share at the largest buyers, who want lower cost per unit of compute. TSMC manufactures for nearly everyone. Qualcomm is a non-AI comparison: mature handset exposure, low growth.";
+table("peerTbl",["Company","TTM rev $B","Rev growth","Op margin","FCF margin","ROIC","Net cash $B","P/E ttm","P/E fwd","EV/EBITDA","PEG"],
+  D.peers.map(p=>({l:p.n,cls:p.me?"me":"",v:[fmt(p.rev,1),p.g.toFixed(1)+"%",p.om.toFixed(1)+"%",p.fcfm.toFixed(1)+"%",p.roic.toFixed(1)+"%",fmt(p.nc,1),x(p.pe),x(p.fpe),x(p.ev),p.peg==null?"n/a":p.peg.toFixed(2)]})));
+$("peerNote").textContent="All peers from S&P Global via stockanalysis.com, closing prices 16 Oct 2026, including Broadcom's ROIC, forward P/E (next 12 months) and PEG, so the row compares like with like. These ROIC figures use S&P's method and differ from section 05. Broadcom operating margin is GAAP (TTM). TSMC revenue growth is in TWD.";
+$("r7").textContent="Broadcom grows faster than every peer except Nvidia, with near-Nvidia FCF margins, yet trades at the same forward P/E as Nvidia, TSMC and slow-growing Qualcomm, and at less than half Marvell's or AMD's. The market is applying a concentration and financing discount, not a growth premium.";
+
+/* ---------- 08 management ---------- */
+$("mgmt").innerHTML=[
+  ["Hock Tan, President &amp; CEO (since 2006)","Architect of the acquire-cut-harvest model from Avago to VMware. A September 2025 performance award pays over 600,000 shares if AI revenue reaches $90B in any 12 months between FY28 and FY30, roughly tripling above $120B; the board framed it as extending his leadership through FY2030. About 96% of his target pay is variable."],
+  ["Henry Samueli, Chairman","Co-founder of the original Broadcom Corp., independent chair. The board is running CEO succession planning and shrinks to eight directors in 2026."],
+  ["Kirsten Spears, CFO","Runs a conservative balance sheet: $59.6B of fixed-rate debt at a ~4% average coupon, $7.1B repaid since Q3 began."],
+  ["Ownership and allocation","Insiders own about 1.1% of shares (S&amp;P Global). Priorities: dividends that rise yearly, debt paydown after deals, opportunistic buybacks ($8.5B in FY26 to date), and large acquisitions when the price is right."]
+].map(([h,t])=>`<div><h3>${h}</h3><p>${t}</p></div>`).join("");
+$("r8").textContent="Twenty years of disciplined capital allocation and pay tied to hard AI-revenue targets align management with owners. Key-person risk is real: the playbook is Tan's, and a successor has not been named.";
+
+/* ---------- 09 risks ---------- */
+$("risks").innerHTML=[
+  ["Customer concentration.","AI is 56% of revenue and six XPU customers are 73% of AI. One customer pausing, insourcing or switching to Nvidia or another ASIC house would hit revenue directly."],
+  ["Customers' ability to pay.","Anthropic and OpenAI are set to be the two largest XPU buyers by 2027 and rely on outside funding. Tan said in October 2026 that capital may become AI's next bottleneck, and Broadcom's XPV vehicle could leave it with residual value guarantees."],
+  ["Margin mix.","Gross margin is guided to 73% in Q4 versus 78% a year ago as memory-heavy XPUs grow. If operating margin cannot hold near 66%, EPS lags revenue."],
+  ["Target credibility.","Analysts questioned the revenue per gigawatt implied by the FY27–28 targets (about $11–12B, versus far higher for Nvidia systems). Missing the $115B FY27 target would reset the multiple."],
+  ["Supply chain and geopolitics.","Manufacturing at TSMC in Taiwan, plus tight lasers, substrates and memory. Export controls or a Taiwan disruption would stop shipments."],
+  ["Software decay.","VMware growth is slowing to mid-teens ARR as licence conversions mature, and price increases have pushed some customers to look for alternatives."]
+].map(([h,t])=>`<div><p><b>${h}</b> ${t}</p></div>`).join("");
+
+/* ---------- 10 scenarios (author estimates; value at end-2027 = FY28E EPS × P/E) ---------- */
+const S=[
+  {c:"bear",t:"Bear",eps:18,pe:15,a:["AI customers stretch out deployments for lack of funding; FY28 AI revenue ~$120B, about half the target","Gross margin slides toward 65% on hardware and memory mix","Multiple de-rates to a Qualcomm-like 15x"]},
+  {c:"base",t:"Base",eps:26,pe:20,a:["FY27 roughly in line with consensus ($174B revenue, $19.40 EPS)","FY28 AI revenue ~$180–190B, below the $230B target on timing slippage","Operating margin ~63%; P/E 20x, slightly above today's forward multiple"]},
+  {c:"bull",t:"Bull",eps:32,pe:22,a:["Management delivers $115B and $230B of AI revenue","FY28 EPS above $30, as Tan said the company is on target for","Operating margin holds ~66%; market pays 22x for visible growth"]}
+];
+$("scenIntro").textContent="Value at end-2027 = FY28 EPS estimate × exit P/E. These are the author's illustrative estimates, not forecasts. Consensus covers FY26–27; management has guided FY28 EPS above $30.";
+$("scen").innerHTML=S.map(s=>{const px=s.eps*s.pe,up=px/D.price-1;
+  return `<div class="${s.c}"><span class="tag">${s.t}</span><span class="px">$${fmt(px)}</span><span class="${up>=0?"pos":"neg"}">${up>=0?"+":""}${(up*100).toFixed(0)}% vs $${D.price}</span><span class="note">FY28E EPS $${s.eps} × ${s.pe}x</span><ul class="tight">${s.a.map(a=>`<li>${a}</li>`).join("")}</ul></div>`}).join("");
+$("r10").textContent="Consensus ($528 average, $535 median) sits on the base case. The skew is favourable: the bull case needs management to hit its own targets, while the bear case needs a funding shock that halves FY28 AI revenue. Most of the debate is about FY28, which the current price barely includes.";
+
+/* ---------- 11 takeaways ---------- */
+$("remember").innerHTML=[
+  "A cash machine: TTM FCF $39.4B at a 44% margin, conversion above 100% of net income.",
+  "AI is now 56% of revenue and the whole growth story; software is the stable floor.",
+  "At ~17x FY27 consensus EPS, the price discounts FY27 but not the FY28 doubling.",
+  "The risk is not demand; it is whether six customers, two of them cash-burning labs, can pay."
+].map(t=>`<li>${t}</li>`).join("");
+$("checkNext").innerHTML=[
+  "Q4 FY26 results (due December): AI revenue vs $21.7B guide and gross margin vs 73%.",
+  "XPV disclosures: size of residual value guarantees and any balance-sheet exposure.",
+  "OpenAI and Anthropic funding news, and whether deployments stay on schedule.",
+  "Receivables growth vs revenue; DSO rising faster would signal customer strain.",
+  "FY27 software guidance: does VMware hold mid-teens growth?"
+].map(t=>`<li>${t}</li>`).join("");
+
+/* ---------- glossary & sources ---------- */
+$("gloss").innerHTML=[
+  ["XPU","A custom AI accelerator chip designed with one customer (e.g. Google's TPU)."],
+  ["EBITDA","Operating profit before depreciation and amortization; here GAAP EBIT + D&A, before stock comp add-backs."],
+  ["FCF conversion","Free cash flow ÷ net income. Above 100% means profits understate cash."],
+  ["ROIC","After-tax operating profit ÷ capital invested by lenders and shareholders."],
+  ["DuPont ROE","Net margin × asset turnover × equity multiplier: shows whether ROE comes from profitability, efficiency or leverage."],
+  ["PEG","P/E divided by expected EPS growth in %. Below 1 suggests growth is cheap, if the growth arrives."],
+  ["Reverse DCF","Starting from the price and asking what growth it already assumes."],
+  ["GW","Gigawatt of data-centre power; AI labs now size compute purchases this way."]
+].map(([t,d])=>`<dt>${t}</dt><dd>${d}</dd>`).join("");
+$("sources").innerHTML=D.sources.map(([t,u])=>`<li><a href="${u}" target="_blank" rel="noopener">${t}</a></li>`).join("");
+</script>
+
+</body></html>
